@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
 
-import { withFirebase } from '../Firebase';
+'use strict';
 
-import { Col,Media,Badge,Button,Alert } from 'reactstrap';
-import { Link } from 'react-router-dom';
+const e = React.createElement;
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
-
-class OrgsPage extends Component {
+class OrgsPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,8 +15,9 @@ class OrgsPage extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-
-    this.props.firebase.orgs().on('value', snapshot => {
+  
+    this.firebaseRef = FIREBASE_ORGS();
+    this.firebaseRef.on('value', snapshot => {
       const orgsObject = snapshot.val();
 
       const orgsList = Object.keys(orgsObject).map(key => ({
@@ -40,20 +36,16 @@ class OrgsPage extends Component {
 
 
   componentWillUnmount() {
-    this.props.firebase.orgs().off();
+    this.firebaseRef.off();
   }
    
  
   render() {
     const { orgs, loading } = this.state;
-
     return (
       <div>
-        <h1>Organizaciones</h1>
-
-        {loading && <div>Loading ...</div>}
+        Organizaciones
         <OrgSList orgs={orgs} />
-
       </div>
     );
   }
@@ -69,30 +61,16 @@ let imgStyle = {
 const OrgSList = ({ orgs }) => (
   <ul>
     {orgs.map(org => (
-      <li key={org.nombre}>
-
-    <Media>
-      <Media left >
-
-        <Media object src={org.logo} style={imgStyle} alt="Generic placeholder image" />
-
-      </Media>
-      <Media body>
-        <Media heading middle>
-         &emsp;
-         <Badge href={org.logo} color="primary">{org.nombre}</Badge>
-        </Media>
-          Descripcion de la organizacion        
-         <Link to={"/organizations/encuestas/"+org.uid } > Ver informacion</Link>
-        </Media>
-    </Media>
-       
-        
-      </li>
+       <li key={org.uid}>
+          <div>
+          {org.nombre}
+          </div>
+       </li>
+      
     ))}
   </ul>
 );
 
 
-
-export default withFirebase(OrgsPage);
+const domContainer = document.querySelector('#aplicacionReact');
+ReactDOM.render(e(OrgsPage),domContainer);
