@@ -1,17 +1,14 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <div id="aplicacionReact">
-
-    </div>
-    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-    <script src="javascripts/ejemplo.js" crossorigin></script>
-  </body>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="stylesheets/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.3/firebaseui.css" />
+<script src="bundle.js"></script>
+<body>
+  <div id="container">
+    <h3>Session Management Demo</h3>
+    <div id="loading">Loading...</div>
+    <div id="redirecting" class="hidden">Redirecting...</div>
+    <div id="firebaseui-container"></div>
+  </div>
+</body>
 </html>

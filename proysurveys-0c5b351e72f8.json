@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "proysurveys",
+  "private_key_id": "0c5b351e72f8279c69745c8106c0e1762fb42907",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC90zIWxGqlQiVK\n8GUsu87nZ/f0rb2kVAVz9VCMfoJIzMRdJl5J4q17h1EnteCt/M4ulOPxH9SBDiNx\nDuWc5TRlCMdtZS3zboxhUe4MGVbimqjOz2RoBKOHZPkS0wVj+LvHbrLCQ+5V1ZeD\nU7Jh+Vrflav4e+dTRQMjJbgmAIKhLydtB121JCD4msxDY3urupxDIxe4kYK1KGdo\n30kt7M1NL/8EzOcohgzww5LN9EfD+Tef53vHs7UWSM4EI58b2zv5KtWuH53Im4wV\n68Kd49Tajhsrn4286QthrotfzKZV1NRzrlfsqsG7h3s1NALy/Y93QCwfVx+FWzgE\nKAjZtKbLAgMBAAECggEAPFKxr7eCdnrjNAHZ/RG/yhzpmKlfwylqRDPYgZUwXOcp\nnbp0K0GsRL23RgnP2Sql8Pqixz0IwGxYSfTkdewGrvbPvU1ygVIHrWOmZNTmngNt\nEq+oZj/XIc8uMdO6ek8QiWt9xitlQYSrbfH6lZTy0muTZ1ckp3seaJxzfSwbVxID\nQdlP9BtzFpn6CvIS+tItBcGyX8NjtFMY7Qycz1y5PLd74ruhjrQgbEWeTpYoDhDd\nEkN88hbFggOfIGNd4mX+C/p6fhlQk/n3h6iARoY6PjRoS94MXQQVGI/PVNBFaGC+\nEtXoY01Jo61qbsQ5rmIJOpEtGEpMrbfJGb0H0hXwTQKBgQDozpnsEXZ8a9aXZonW\nwVmMp3a+ZGr+6oih2r2uB7NuZBT8mramgRCHz1Dye4M5BDVNqVrNcRBIp23LyoVo\n1vX+hj01JXuGOEDMP7Bd6tvZP/OxbpJreFEdQnvzaY5SmpXWMDuAAW4Xem//gr2v\nJamocu3OOuzfTCNpJepeHmKoDwKBgQDQvGaZhAV3iSuTFpWb1UDdKZUBOEyzTcB1\nk0ZnayneiIfK61saUTv95RyfxDFKfFHlwfUUr+TwXCIV7EU+vC3JzLo0J2nTXTaD\nKwDtV+kKXhNK+Wtcmuo5VDIlcRBumysMzD8yGls3th4KJbEiETIOD65FtUUvRDUf\n31CYjng5hQKBgQCBffFlumziVgU9n15KIq/RqZBF5IsTEZdAF/BrbYMjgu2dd9zi\njmWIdQs8ZPEfdLTFZs7H+PyqvN44fYRpRS/9C+PdvOSRSpbYRRCvnKP+mjDNX4h3\n2Kudj85sHSl5ztxLD/b4g1MeIg9L2wfw9Q0CUjLuBB6fMbV8lgdfpJ0RhwKBgBc8\n4i81A2bLXo6BdSZkF1SHzI7WNbPAdCyiuLPKul6L1JJCoWHMqWEaoJUowlQIgxWR\nAjfLXTFlEGZgZ1UUngRZRmGIAcAGIIt5viCuKMN+tacjHVCx7mFzfiGs9Kdbnu9N\nzbtGM+F/5Ng8Wfvw7iGinUQlag5ZCZECy3YwZjIBAoGARk2qyQqdQlV9bJEXB5b5\n7EXxn2c++KsESJqSVXQ80mcTwZMegjnkuPPr/T6cTeZKTImhQHDGGTp8ueSeLfs5\n+/WXLYMuiSWNxjD3VfUnAndnTOdUkiRjcoaGWsq9MyvJt0y+e81YRCyO7BI6XLsN\nDPv/RGzS7hW+mX4V6P0tuJ4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-1tt43@proysurveys.iam.gserviceaccount.com",
+  "client_id": "117428229415167674344",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-1tt43%40proysurveys.iam.gserviceaccount.com"
+}
