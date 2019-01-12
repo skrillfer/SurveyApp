@@ -1,60 +1,16 @@
 var express = require('express');
+var admin = require('firebase-admin');
 var router = express.Router();
 
-/**
- * Renders the profile page and serves it in the response.
- * @param {string} endpoint The get profile endpoint.
- * @param {!Object} req The expressjs request.
- * @param {!Object} res The expressjs response.
- * @param {!firebase.auth.DecodedIdToken} decodedClaims The decoded claims from verified
- *     session cookies.
- * @return {!Promise} A promise that resolves on success.
- */
-function serveContentForUser(endpoint, req, res, decodedClaims) {
-  // Lookup the user information corresponding to cookie and return the profile data for the user.
-  return admin.auth().getUser(decodedClaims.sub).then(function(userRecord) {
-    var html = '<!DOCTYPE html>' +
-      '<html>' +
-      '<meta charset="UTF-8">' +
-      '<link href="stylesheets/style.css" rel="stylesheet" type="text/css" media="screen" />' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-      '<title>Sample Profile Page</title>' +
-      '<body>' +
-      '<div id="container">' +
-      '  <h3>Welcome to Session Management Example App, '+( userRecord.displayName || 'N/A') +'</h3>' +
-      '  <div id="loaded">' +
-      '    <div id="main">' +
-      '      <div id="user-signed-in">' +
-      // Show user profile information.
-      '        <div id="user-info">' +
-      '          <div id="photo-container">' +
-      (userRecord.photoURL ? '      <img id="photo" src=' +userRecord.photoURL+ '>' : '') +
-      '          </div>' +
-      '          <div id="name">' + userRecord.displayName + '</div>' +
-      '          <div id="email">'+
-      userRecord.email + ' (' + (userRecord.emailVerified ? 'verified' : 'unverified') + ')</div>' +
-      '          <div class="clearfix"></div>' +
-      '        </div>' +
-      '        <p>' +
-      // Append button for sign out.
-      '          <button id="sign-out" onClick="window.location.assign(\'/logout\')">Sign Out</button>' +
-      // Append button for deletion.
-      '          <button id="delete-account" onClick="window.location.assign(\'/delete\')">' +
-      'Delete account</button>' +
-      '        </p>' +
-      '      </div>' +
-      '    </div>' +
-      '  </div>' +
-      '</div>' +
-      '</body>' +
-      '</html>';
-    res.set('Content-Type', 'text/html');
-    res.end(html);
-  });
-}
 
 router.get('/',function(req,res){
-  res.render('login', { title: 'Express' });
+    var sessionCookie = req.cookies.session || '';
+      // User already logged in. Redirect to profile page.
+    admin.auth().verifySessionCookie(sessionCookie).then(function(decodedClaims) {
+      res.redirect('/users/profile');
+    }).catch(function(error) {
+        res.render('login', { title: 'Express' });
+    });    
 });
 
 /** Get profile endpoint. */
@@ -66,7 +22,8 @@ router.get('/profile', function (req, res) {
   admin.auth().verifySessionCookie(sessionCookie, true /** check if revoked. */)
     .then(function(decodedClaims) {
       // Serve content for signed in user.
-      return serveContentForUser('/profile', req, res, decodedClaims);
+      //return serveContentForUser('/profile', req, res, decodedClaims);
+      res.render('profile',{'userRecord':decodedClaims})
     }).catch(function(error) {
       // Force user to login.
       res.redirect('/');
