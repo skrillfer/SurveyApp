@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 
 var generalRouter = require('./routes/general');
 var loginRouter = require('./routes/login');
+var dashboardRouter = require('./routes/dashboard');
 var app = express();
 
 // view engine setup
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/",generalRouter);
 app.use("/users",loginRouter);
+app.use("/dashboard",dashboardRouter);
 
 // Initialize Admin SDK.
 admin.initializeApp({
@@ -37,6 +39,13 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function (req, res, next) {
+   res.locals = {
+     "sessionCookie": (req.cookies.session || '')
+   };
+   next();
+});
 
 // Start http server and listen to port 3000.
 app.listen(3000, function () {

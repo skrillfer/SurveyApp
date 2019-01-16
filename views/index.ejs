@@ -1,4 +1,8 @@
+<% if((locals.sessionCookie != undefined)&&(locals.sessionCookie.trim() !="")){ %>
+<%- include common/headerUsuario.ejs %>
+<% }else{ %>
 <%- include common/header.ejs %>
+<% } %>
 		<!-- Slider #1
 		============================================= -->
 		<section id="slider" class="section slider text-center">

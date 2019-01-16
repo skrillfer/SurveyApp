@@ -1,5 +1,5 @@
 var config = {
-  apiKey: "AIzaSyBKgtM-9wAgvRXwzxuj8tLptudvE8DIm7M",
+  apiKey: "AIzaSyBvXXZwnBCJ3Z0iWQAFtqI9Q8ixZelhvGU",
   authDomain: "localhost"
 };
 module.exports = config;

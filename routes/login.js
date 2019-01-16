@@ -23,6 +23,7 @@ router.get('/profile', function (req, res) {
     .then(function(decodedClaims) {
       // Serve content for signed in user.
       //return serveContentForUser('/profile', req, res, decodedClaims);
+      console.log(decodedClaims);
       res.render('profile',{'userRecord':decodedClaims})
     }).catch(function(error) {
       // Force user to login.

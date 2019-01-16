@@ -1,4 +1,8 @@
+<% if(locals.sessionCookie != ""){ %>
+<%- include common/headerUsuario.ejs %>
+<% }else{%>
 <%- include common/header.ejs %>
+<% } %>
     <div id="container">
         <h3>Bienvenido <%= userRecord.displayName %> </h3>
         <div id="loaded">
