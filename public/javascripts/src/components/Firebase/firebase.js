@@ -31,5 +31,8 @@ doPasswordUpdate = password =>
 /* FIREBASE SURVEY APP */
 
 FIREBASE_ORGS = () => this.db.ref('proyectos/');
-FIREBASE_ORGA = uid => this.db.ref(`proyectos/${uid}`);
+
+FIREBASE_ORGA = uid => this.db.ref(`proyectos/${uid}/encuestas`);
+
+//FIREBASE_ORGA_ENCUESTA = uid => this.db.ref(`proyectos/${uid}`);
 

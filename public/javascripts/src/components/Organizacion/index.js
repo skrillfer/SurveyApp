@@ -14,25 +14,43 @@ class OrgsPage extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
-  
-    this.firebaseRef = FIREBASE_ORGS();
-    this.firebaseRef.on('value', snapshot => {
-      const orgsObject = snapshot.val();
+    const { orgs, loading } = this.state;
+    
+    this.setState({ orgs:[],loading: true });
+    this.firebaseRef = db.ref('proyectos/');
+    
+    let ARRAY = [];
+    
 
-      const orgsList = Object.keys(orgsObject).map(key => ({
-        ...orgsObject[key],
-        uid: key,
-      }));
+    this.firebaseRef.on('value', snapshot => {
+      snapshot.forEach(function(childSnapshot) {
+          var childKey = childSnapshot.key;
+          var childData = childSnapshot.val();
+          ARRAY.slice();
+          db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
+            if(xsnapshot.exists())
+            {
+
+              const usersObject = xsnapshot.val();
+              ARRAY=Object.keys(usersObject).map(key => ({
+  
+                ...usersObject[key],
+                uid: key,
+                organizacion: childData.nombre,
+              }));
+            }
+              
+          });
+      });
 
       this.setState({
-        orgs: orgsList,
-        loading: false,
+        loading:false,
+        orgs: ARRAY,
       });
+      
     });
+    
   }
-
-
 
 
   componentWillUnmount() {
@@ -42,34 +60,68 @@ class OrgsPage extends React.Component {
  
   render() {
     const { orgs, loading } = this.state;
+    console.log(orgs);
+    console.log(orgs.length);
+
     return (
       <div>
-        Organizaciones
+        <h1>Informacion</h1>
+        {loading && <div>Loading ...</div>}
         <OrgSList orgs={orgs} />
+        
+        
       </div>
-    );
+     );
+    
+ 
   }
 }
 
 
 
-let imgStyle = {
-  maxHeight: '128px',
-  maxWidth: '128px'
-}
 
 const OrgSList = ({ orgs }) => (
+  <table>
+    <thead>
+        <tr>
+          <th>Organizacion</th>
+          <th>Encuesta</th>     
+        </tr>
+    </thead>
+    
+    <tbody>
+      {orgs.map(item => (
+        
+        <tr key={item.uid}>
+            <td >
+            {item.organizacion}
+            </td>
+            <td>
+            {item.nombre}
+            </td>
+        </tr>
+        
+      ))}
+    </tbody>
+
+  </table>
+);
+
+
+const EncuestaSList = ({ encuestas }) => (
   <ul>
-    {orgs.map(org => (
-       <li key={org.uid}>
+    {encuestas.map(item => (
+      
+      <li key={item.uid}>
           <div>
-          {org.nombre}
+          {item.nombre}
           </div>
        </li>
       
     ))}
   </ul>
 );
+
 
 
 const domContainer = document.querySelector('#aplicacionReact');
