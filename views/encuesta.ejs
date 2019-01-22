@@ -1,0 +1,33 @@
+<% if(locals.sessionCookie != ""){ %>
+    <%- include common/headerUsuario.ejs %>
+    <% }else{%>
+    <%- include common/header.ejs %>
+    <% } %>     
+     
+     <!-- Stylesheets for React Components 
+      ============================================= -->
+      <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+      <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+      <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+      <!-- Firebase -->
+      <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+      <!-- ReactFire -->
+      <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+      <!-- throw-in-the-towel -->
+      <script src="https://unpkg.com/throw-in-the-towel@2"></script>
+      <!-- Initialize the Firebase SDK -->
+      <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
+  
+      </br></br>
+   
+      <div id="container">
+      </div>  
+      <script>
+         var id = "<%= id %>";
+         var org      = "<%= org %>";
+       </script>
+      
+      <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
+      
+  
+  <%- include common/footer.ejs %>

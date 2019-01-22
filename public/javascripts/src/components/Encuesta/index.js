@@ -1,84 +1,87 @@
-import React, { Component } from 'react';
+'use strict';
 
-import { withFirebase } from '../Firebase';
+const e = React.createElement;
 
-import { Col,Media,Badge,Button,Alert } from 'reactstrap';
-import { Link } from 'react-router-dom';
-
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
-
-class EncuestasPage extends Component {
+class EncuestasPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loading: false,
-      org: props.match.params.org,
-      objeto:[],  
-      encuestas : [],
+      uid: id,
+      uid_org: org,
+      nombre : '',
     };
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-           console.log(this.state.org);
-    this.props.firebase.o_rg(this.state.org).on('value', snapshot => {
 
-      const org_object = snapshot.val();
-       console.log(org_object);
+    console.log(this.state.uid);
+    console.log(this.state.uid_org);
 
-      const encuestasObject=org_object.encuestas;
-      const ListaEncuestas = Object.keys(encuestasObject).map(key => ({
+    
+    
 
-        ...encuestasObject[key],
-        uid: key,
-      }));
+    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
+      xsnapshot.forEach(function(childSnapshot) {
 
-        this.setState({
-            loading: false,
-            org: this.state.org,
-            objeto:org_object, 
-            encuestas : ListaEncuestas,
-        });
+          var childKey = childSnapshot.key;
+          var childData = childSnapshot.val();
+          console.log(childKey);
+          /*if(xsnapshot.exists())
+          {
+
+            const usersObject = xsnapshot.val();
+            
+            ARRAY=Object.keys(usersObject).map(key => ({
+
+              ...usersObject[key],
+              uid: key,
+              organizacion: childData.nombre,
+              idorg: childKey,
+            }));
+            
+        }*/
+      });
+        
     });
+     
+    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
+      var childKey = xsnapshot.key;
+      var childData = xsnapshot.val();
+      console.log(childData);
+
+      this.setState({
+        loading:false,
+        nombre: childData.nombre,
+      });
+
+    });
+    
   }
 
 
 
 
   componentWillUnmount() {
-    this.props.firebase.o_rg().off();
+    this.firebaseRef.off();
   }
    
  
   render() {
-    const { org, loading,objeto,encuestas } = this.state;
+    const { uid_org, nombre,loading } = this.state;
 
     return (
 
       <div>
-        <h1>Encuestas de {objeto.nombre}</h1>
+        <h1> {nombre}</h1>
 
-        <EncuMap encuestas={encuestas} />
-
+        
       </div>
     );
   }
 }
 
-
-
-const EncuMap = ({ encuestas }) => (
-  <ul>
-    {encuestas.map(user => (
-      <li key={user.uid}>
-          <strong>Nombre:</strong> {user.uid}
-        
-        
-      </li>
-    ))}
-  </ul>
-);
-
-export default withFirebase(EncuestasPage);
+const domContainer = document.querySelector('#container');
+ReactDOM.render(e(EncuestasPage),domContainer);

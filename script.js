@@ -109,7 +109,7 @@ var postIdTokenToSessionLogin = function(url, idToken, csrfToken) {
  */
 var initApp = function() {
   // Renders sign-in page using FirebaseUI.
-  ui.start('#firebaseui-container', getUiConfig());
+  ui.start('#firebaseui-auth-container', getUiConfig());
 };
 
 // Initialize Firebase app.
