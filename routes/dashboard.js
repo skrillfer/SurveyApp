@@ -118,6 +118,7 @@ router.get('/encuesta/:org/:id', function (req, res) {
        console.log('org:'+req.params.org);
        console.log('id:'+req.params.id);
        res.render('encuesta',{'org':req.params.org,'id':req.params.id})
+       
        //res.redirect('/dashboard/overview');
      }).catch(function(error) {
        // Force user to login.

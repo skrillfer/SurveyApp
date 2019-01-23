@@ -5,7 +5,6 @@ const e = React.createElement;
 class OrgsPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       loading: false,
       orgs: [],
@@ -16,6 +15,7 @@ class OrgsPage extends React.Component {
     const { orgs, loading } = this.state;
     
     this.setState({ orgs:[],loading: true });
+
     this.firebaseRef = db.ref('proyectos/');
     
     let ARRAY = [];
@@ -25,19 +25,22 @@ class OrgsPage extends React.Component {
       snapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
-          ARRAY.slice();
+          //console.log(childKey);
+
           db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
             if(xsnapshot.exists())
             {
-
               const usersObject = xsnapshot.val();
-              ARRAY=Object.keys(usersObject).map(key => ({
-  
+
+
+              let ARRAY2=Object.keys(usersObject).map(key => ({
                 ...usersObject[key],
                 uid: key,
                 organizacion: childData.nombre,
                 idorg: childKey,
               }));
+
+              ARRAY.push(ARRAY2.slice());
             }
               
           });
@@ -63,6 +66,7 @@ class OrgsPage extends React.Component {
     const { orgs, loading } = this.state;
     console.log(orgs);
     console.log(orgs.length);
+
 
     return (
       <div>
@@ -91,7 +95,7 @@ const OrgSList = ({ orgs }) => (
     </thead>
     
     <tbody>
-      {orgs.map(item => (
+      {orgs.map(data => data.map( item =>
         
         <tr key={item.uid}>
             <td >
@@ -109,8 +113,6 @@ const OrgSList = ({ orgs }) => (
 );
 
 
-
-
-
 const domContainer = document.querySelector('#container');
 ReactDOM.render(e(OrgsPage),domContainer);
+
