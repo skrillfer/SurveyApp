@@ -6,6 +6,8 @@ class EncuestasPage extends React.Component {
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
+    this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
+    this.downloadCSV = this.downloadCSV.bind(this);
 
     this.state = {
       loading: false,
@@ -15,11 +17,13 @@ class EncuestasPage extends React.Component {
       respuestas : [],
       encabezados : [],
       listafiltrada : [],
+      listageneral  : [],
     };
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    this.setState({ loading: true,respuestas:[] });
+    let { listageneral } = this.state;
 
     console.log(this.state.uid);
     console.log(this.state.uid_org);
@@ -32,16 +36,7 @@ class EncuestasPage extends React.Component {
 
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
-          
-          
 
-          /*var lista = childSnapshot.child('body').val();
-          console.log(lista);
-          ARRAY=Object.keys(lista).map(key => ({
-            ...lista[key],
-            uid: key,
-          }));*/
-          
           let lista = [];
           ARRAY.push({'lista':lista,'key':index});
           index++;
@@ -56,6 +51,8 @@ class EncuestasPage extends React.Component {
               var childData1 = inSnapshot.val();
 
               lista.push({'pregunta':childKey1,'respuesta':childData1,'key':index2});
+              
+              listageneral.push({'pregunta':childKey1,'respuesta':childData1});
               index2++;
             }
           });
@@ -69,7 +66,6 @@ class EncuestasPage extends React.Component {
     this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
       var childKey = xsnapshot.key;
       var childData = xsnapshot.val();
-      //console.log(childData);
 
       this.setState({
         loading:false,
@@ -85,26 +81,16 @@ class EncuestasPage extends React.Component {
 
 
   filtrar_respuestas(event)
-  {
-
-
-   
+  {   
     var updatedList = this.state.respuestas.slice();
-    
-    
-    //console.log(event.target.value.toLowerCase());
-    const filter = 'Brayan';
-    /*const filteredResult = updatedList.filter((item) => {
-        item.lista.some((respuesta))
-    });*/
 
     const filtrada = [];
     updatedList.map((item) => 
       {
         const v = item.lista.filter(subitem => 
-          subitem.respuesta.toString().toLowerCase().search(
-            event.target.value.toLowerCase()) !== -1);
-          //subitem.respuesta.toString().toLowerCase() === event.target.value.toLowerCase());
+            subitem.respuesta.toString().toLowerCase().search(
+                event.target.value.toLowerCase()) !== -1
+        );
         if(v.length>0)
         {
           filtrada.push({'lista':item.lista,'key':item.key});
@@ -113,6 +99,58 @@ class EncuestasPage extends React.Component {
       }     
     );
     this.setState({listafiltrada: filtrada});
+  }
+
+  convertArrayOfObjectsToCSV(args) {
+    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+    data = args.data || null;
+    if (data == null || !data.length) {
+        return null;
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    keys = Object.keys(data[0]);
+
+    result = '';
+    result += keys.join(columnDelimiter);
+    result += lineDelimiter;
+
+    data.forEach(function(item) {
+        ctr = 0;
+        keys.forEach(function(key) {
+            if (ctr > 0) result += columnDelimiter;
+
+            result += item[key];
+            ctr++;
+        });
+        result += lineDelimiter;
+    });
+
+    return result;
+  }
+
+  downloadCSV(args) {
+    var data, filename, link;
+    console.log(this.state.listageneral);
+    var csv = this.convertArrayOfObjectsToCSV({
+        data: this.state.listageneral
+    });
+    if (csv == null) return;
+
+    filename = args.filename || this.state.nombre+'_export.csv';
+
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    data = encodeURI(csv);
+
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
   }
 
   componentWillUnmount() {
@@ -134,8 +172,9 @@ class EncuestasPage extends React.Component {
         </form>
         <h2> {nombre}</h2>
         {loading && <div>Loading ...</div>}
+        <button onClick={this.downloadCSV}>Descargar csv</button>;
         <ListaRespuestas resp={listafiltrada} enca={encabezados} />
-       
+         
 
       </div>
     );
