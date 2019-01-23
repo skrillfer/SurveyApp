@@ -73,6 +73,11 @@ a {
   text-decoration: none; /* no underline */
 }
 
+.form-control {
+  font-size: 2rem;
+  padding: 25px 15px;
+}
+
 @media (max-width: 300px) {
   #photo-container,
   #photo {

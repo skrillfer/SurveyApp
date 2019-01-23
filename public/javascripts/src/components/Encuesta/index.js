@@ -5,6 +5,7 @@ const e = React.createElement;
 class EncuestasPage extends React.Component {
   constructor(props) {
     super(props);
+    this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
 
     this.state = {
       loading: false,
@@ -13,6 +14,7 @@ class EncuestasPage extends React.Component {
       nombre : '',
       respuestas : [],
       encabezados : [],
+      listafiltrada : [],
     };
   }
 
@@ -74,6 +76,7 @@ class EncuestasPage extends React.Component {
         nombre: childData.nombre,
         respuestas: ARRAY,
         encabezados:ARRAY[0].lista,
+        listafiltrada: ARRAY,
       });
 
     });
@@ -81,7 +84,36 @@ class EncuestasPage extends React.Component {
   }
 
 
+  filtrar_respuestas(event)
+  {
 
+
+   
+    var updatedList = this.state.respuestas.slice();
+    
+    
+    //console.log(event.target.value.toLowerCase());
+    const filter = 'Brayan';
+    /*const filteredResult = updatedList.filter((item) => {
+        item.lista.some((respuesta))
+    });*/
+
+    const filtrada = [];
+    updatedList.map((item) => 
+      {
+        const v = item.lista.filter(subitem => 
+          subitem.respuesta.toString().toLowerCase().search(
+            event.target.value.toLowerCase()) !== -1);
+          //subitem.respuesta.toString().toLowerCase() === event.target.value.toLowerCase());
+        if(v.length>0)
+        {
+          filtrada.push({'lista':item.lista,'key':item.key});
+        }
+        
+      }     
+    );
+    this.setState({listafiltrada: filtrada});
+  }
 
   componentWillUnmount() {
     this.firebaseRef.off();
@@ -89,15 +121,20 @@ class EncuestasPage extends React.Component {
    
  
   render() {
-    const { uid_org, nombre,encabezados,respuestas,loading } = this.state;
-    console.log(respuestas);
-    console.log(encabezados);
+    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading } = this.state;
+    //console.log(respuestas);
+    //console.log(encabezados);
     return (
 
       <div>
+        <form>
+          <fieldset className="form-group">
+          <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
+          </fieldset>
+        </form>
         <h2> {nombre}</h2>
         {loading && <div>Loading ...</div>}
-        <ListaRespuestas resp={respuestas} enca={encabezados} />
+        <ListaRespuestas resp={listafiltrada} enca={encabezados} />
        
 
       </div>
