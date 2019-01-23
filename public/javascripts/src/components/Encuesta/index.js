@@ -17,13 +17,11 @@ class EncuestasPage extends React.Component {
       respuestas : [],
       encabezados : [],
       listafiltrada : [],
-      listageneral  : [],
     };
   }
 
   componentDidMount() {
     this.setState({ loading: true,respuestas:[] });
-    let { listageneral } = this.state;
 
     console.log(this.state.uid);
     console.log(this.state.uid_org);
@@ -50,9 +48,8 @@ class EncuestasPage extends React.Component {
               var childKey1 = inSnapshot.key;
               var childData1 = inSnapshot.val();
 
+
               lista.push({'pregunta':childKey1,'respuesta':childData1,'key':index2});
-              
-              listageneral.push({'pregunta':childKey1,'respuesta':childData1});
               index2++;
             }
           });
@@ -102,8 +99,9 @@ class EncuestasPage extends React.Component {
   }
 
   convertArrayOfObjectsToCSV(args) {
-    var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+    var result, heads, lineDelimiter,columnDelimiter, data;
 
+    heads = args.enca || null;
     data = args.data || null;
     if (data == null || !data.length) {
         return null;
@@ -112,31 +110,36 @@ class EncuestasPage extends React.Component {
     columnDelimiter = args.columnDelimiter || ',';
     lineDelimiter = args.lineDelimiter || '\n';
 
-    keys = Object.keys(data[0]);
-
     result = '';
-    result += keys.join(columnDelimiter);
+    var ct = 0;
+    heads.map(item => 
+    {
+      if(ct>0) result += columnDelimiter;
+      ct++;
+      result += item.pregunta;
+    });
     result += lineDelimiter;
 
-    data.forEach(function(item) {
-        ctr = 0;
-        keys.forEach(function(key) {
-            if (ctr > 0) result += columnDelimiter;
-
-            result += item[key];
-            ctr++;
-        });
+    {data.map( lt => 
+      {
+        ct = 0;
+        lt.lista.map( item =>{
+          if(ct>0) result += columnDelimiter;
+          ct++;
+          result += item.respuesta;
+        })
         result += lineDelimiter;
-    });
+      })
+    };
 
     return result;
   }
 
   downloadCSV(args) {
     var data, filename, link;
-    console.log(this.state.listageneral);
     var csv = this.convertArrayOfObjectsToCSV({
-        data: this.state.listageneral
+        data: this.state.respuestas,
+        enca: this.state.encabezados
     });
     if (csv == null) return;
 
