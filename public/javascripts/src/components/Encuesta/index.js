@@ -1,6 +1,8 @@
-'use strict';
+//'use strict';
+//import Data from './Organizacion/composicion.jsx';
 
-const e = React.createElement;
+//const e = React.createElement;
+
 
 class EncuestasPage extends React.Component {
   constructor(props) {
@@ -8,6 +10,7 @@ class EncuestasPage extends React.Component {
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
+    this.gotoEstaditicas = this.gotoEstaditicas.bind(this);
 
     this.state = {
       loading: false,
@@ -17,6 +20,7 @@ class EncuestasPage extends React.Component {
       respuestas : [],
       encabezados : [],
       listafiltrada : [],
+      show :  false,
     };
   }
 
@@ -135,6 +139,11 @@ class EncuestasPage extends React.Component {
     return result;
   }
 
+  gotoEstaditicas(args) {
+    const {  nombre,encabezados ,respuestas} = this.state;
+    return (ReactDOM.render( <Grafica prueba = {nombre} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+  }
+
   downloadCSV(args) {
     var data, filename, link;
     var csv = this.convertArrayOfObjectsToCSV({
@@ -162,12 +171,13 @@ class EncuestasPage extends React.Component {
    
  
   render() {
-    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading } = this.state;
+    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,show } = this.state;
     //console.log(respuestas);
     //console.log(encabezados);
     return (
 
       <div>
+        <div id="graphic"></div>
         <form>
           <fieldset className="form-group">
           <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
@@ -176,9 +186,9 @@ class EncuestasPage extends React.Component {
         <h2> {nombre}</h2>
         {loading && <div>Loading ...</div>}
         <button onClick={this.downloadCSV}>Descargar csv</button>;
+        <button onClick={this.gotoEstaditicas}>Estadisticas</button>;
         <ListaRespuestas resp={listafiltrada} enca={encabezados} />
-         
-
+      
       </div>
     );
   }
@@ -213,6 +223,9 @@ const ListaRespuestas = ({ resp,enca }) => (
   </table>
 );
 
+ReactDOM.render(<EncuestasPage/>, document.getElementById('container'));  
 
+/*
 const domContainer = document.querySelector('#container');
 ReactDOM.render(e(EncuestasPage),domContainer);
+*/
