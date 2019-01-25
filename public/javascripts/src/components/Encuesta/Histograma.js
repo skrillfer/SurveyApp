@@ -2,7 +2,7 @@ var Grafica = React.createClass({
 
     getInitialState: function() {
         return {    
-                    prueba: this.props.prueba, 
+                    columna: this.props.prueba, 
                     encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas
                 };
@@ -14,7 +14,7 @@ var Grafica = React.createClass({
         });
     },
     handleChange(event) {
-        this.setState({prueba: event.target.value});
+        this.setState({columna: event.target.value});
 
         var x = new Array();
         this.state.respuestas.map(lt =>
@@ -41,6 +41,7 @@ var Grafica = React.createClass({
             type: 'bar',
             x: ejeX,
             y: ejeY,
+            name: 'Cantidad',
             marker: {
                 color: '#C8A2C8',
                 line: {
@@ -52,8 +53,18 @@ var Grafica = React.createClass({
         var data = [ trace1 ];
         
         var layout = {
-          title: 'Responsive to windows size!',
-          font: {size: 18}
+          title: 'Histograma de '+event.target.value,
+          font: {size: 18},
+          yaxis: {
+            title: {
+              text: 'Cantidad',
+              font: {
+                family: 'Courier New, monospace',
+                size: 18,
+                color: '#7f7f7f'
+              }
+            }
+          }
         };
         
         Plotly.newPlot('histograma', data, layout, {responsive: true});
@@ -61,7 +72,7 @@ var Grafica = React.createClass({
 
     render() {
         return (
-            <div >
+            <div id ="contenedorHistograma">
 
                 <h3>Selecciona la columna</h3>
                 <select  onChange={this.handleChange} >

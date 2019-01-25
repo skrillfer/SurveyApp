@@ -10,7 +10,8 @@ class EncuestasPage extends React.Component {
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
-    this.gotoEstaditicas = this.gotoEstaditicas.bind(this);
+
+    this.handleChange = this.handleChange.bind(this);
 
     this.state = {
       loading: false,
@@ -139,10 +140,7 @@ class EncuestasPage extends React.Component {
     return result;
   }
 
-  gotoEstaditicas(args) {
-    const {  nombre,encabezados ,respuestas} = this.state;
-    return (ReactDOM.render( <Grafica prueba = {nombre} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
-  }
+
 
   downloadCSV(args) {
     var data, filename, link;
@@ -168,7 +166,27 @@ class EncuestasPage extends React.Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
-   
+
+  handleChange({target}){
+    
+    if (target.checked){
+      const {  nombre,encabezados ,respuestas} = this.state;
+
+      var element1 = document.getElementById("TablaRespuestas");
+      var element2 = document.getElementById("Search");
+      element1.style.display = "none";  element2.style.display = "none";
+
+      return (ReactDOM.render( <Grafica  encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+
+    } else {
+      var list = document.getElementById("graphic");
+      list.removeChild(list.childNodes[0]);
+
+      var element1 = document.getElementById("TablaRespuestas");
+      var element2 = document.getElementById("Search");
+      element1.style.display = "block";  element2.style.display = "block";
+    }
+  }
  
   render() {
     const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,show } = this.state;
@@ -177,18 +195,31 @@ class EncuestasPage extends React.Component {
     return (
 
       <div>
-        <div id="graphic"></div>
-        <form>
-          <fieldset className="form-group">
-          <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
-          </fieldset>
-        </form>
-        <h2> {nombre}</h2>
-        {loading && <div>Loading ...</div>}
-        <button onClick={this.downloadCSV}>Descargar csv</button>;
-        <button onClick={this.gotoEstaditicas}>Estadisticas</button>;
-        <ListaRespuestas resp={listafiltrada} enca={encabezados} />
-      
+        
+        <div id="Search">
+            <form>
+              <fieldset className="form-group">
+              <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
+              </fieldset>
+            </form>
+        </div>
+        <div id="contenedorFunciones">
+            <h2> {nombre}</h2>
+            {loading && <div>Loading ...</div>}
+            <button onClick={this.downloadCSV}>Descargar csv</button>
+            <div>
+              <div className="pretty p-switch p-fill">
+                  <input type="checkbox" onClick={this.handleChange}/>
+                  <div className="state">
+                      <label>Mostrar Estadisticos</label>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div id="graphic" ref="graphic"></div>
+        <div id="TablaRespuestas">
+          <ListaRespuestas resp={listafiltrada} enca={encabezados} />
+        </div>
       </div>
     );
   }
