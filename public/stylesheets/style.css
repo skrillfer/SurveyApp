@@ -7,7 +7,6 @@ body {
 }
 
 #container {
-  max-width: 600px;
   margin: 0 auto;
   text-align: center;
   margin-top:15px;
@@ -45,6 +44,36 @@ body {
   margin: 0;
   width: 80px;
 }
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #111111;
+  color: white;
+}
+
+
+
+a {
+  color: gray;
+  text-decoration: none; /* no underline */
+}
+
 
 @media (max-width: 300px) {
   #photo-container,
@@ -60,4 +89,9 @@ body {
 
 .btnMenu {
     margin-top:20px;
+}
+
+.tituloLogo {
+  font-size: 3em;
+  color:white;
 }

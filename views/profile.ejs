@@ -1,4 +1,4 @@
-<% if(locals.sessionCookie != ""){ %>
+<% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
 <%- include common/headerUsuario.ejs %>
 <% }else{%>
 <%- include common/header.ejs %>

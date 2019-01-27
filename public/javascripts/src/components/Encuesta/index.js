@@ -1,84 +1,262 @@
-import React, { Component } from 'react';
+//'use strict';
+//import Data from './Organizacion/composicion.jsx';
 
-import { withFirebase } from '../Firebase';
+//const e = React.createElement;
 
-import { Col,Media,Badge,Button,Alert } from 'reactstrap';
-import { Link } from 'react-router-dom';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
-
-class EncuestasPage extends Component {
+class EncuestasPage extends React.Component {
   constructor(props) {
     super(props);
+    this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
+    this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
+    this.downloadCSV = this.downloadCSV.bind(this);
+
+    this.handleChange = this.handleChange.bind(this);
 
     this.state = {
       loading: false,
-      org: props.match.params.org,
-      objeto:[],  
-      encuestas : [],
+      uid: id,
+      uid_org: org,
+      nombre : '',
+      respuestas : [],
+      encabezados : [],
+      listafiltrada : [],
+      show :  false,
     };
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
-           console.log(this.state.org);
-    this.props.firebase.o_rg(this.state.org).on('value', snapshot => {
+    this.setState({ loading: true,respuestas:[] });
 
-      const org_object = snapshot.val();
-       console.log(org_object);
+    console.log(this.state.uid);
+    console.log(this.state.uid_org);
 
-      const encuestasObject=org_object.encuestas;
-      const ListaEncuestas = Object.keys(encuestasObject).map(key => ({
+    let index = 0;    
+    let ARRAY = [];
 
-        ...encuestasObject[key],
-        uid: key,
-      }));
+    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
+      xsnapshot.forEach(function(childSnapshot) {
 
-        this.setState({
-            loading: false,
-            org: this.state.org,
-            objeto:org_object, 
-            encuestas : ListaEncuestas,
-        });
+          var childKey = childSnapshot.key;
+          var childData = childSnapshot.val();
+
+          let lista = [];
+          ARRAY.push({'lista':lista,'key':index});
+          index++;
+
+          let index2=index;
+          childSnapshot.child('body').forEach(function(inSnapshot) {
+            
+            if(inSnapshot.exists())
+            {
+
+              var childKey1 = inSnapshot.key;
+              var childData1 = inSnapshot.val();
+
+
+              lista.push({'pregunta':childKey1,'respuesta':childData1,'key':index2});
+              index2++;
+            }
+          });
+
+      });
+        
     });
+     
+   
+
+    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
+      var childKey = xsnapshot.key;
+      var childData = xsnapshot.val();
+
+      this.setState({
+        loading:false,
+        nombre: childData.nombre,
+        respuestas: ARRAY,
+        encabezados:ARRAY[0].lista,
+        listafiltrada: ARRAY,
+      });
+
+    });
+    
+  }
+
+
+  filtrar_respuestas(event)
+  {   
+    var updatedList = this.state.respuestas.slice();
+
+    const filtrada = [];
+    updatedList.map((item) => 
+      {
+        const v = item.lista.filter(subitem => 
+            subitem.respuesta.toString().toLowerCase().search(
+                event.target.value.toLowerCase()) !== -1
+        );
+        if(v.length>0)
+        {
+          filtrada.push({'lista':item.lista,'key':item.key});
+        }
+        
+      }     
+    );
+    this.setState({listafiltrada: filtrada});
+  }
+
+  convertArrayOfObjectsToCSV(args) {
+    var result, heads, lineDelimiter,columnDelimiter, data;
+
+    heads = args.enca || null;
+    data = args.data || null;
+    if (data == null || !data.length) {
+        return null;
+    }
+
+    columnDelimiter = args.columnDelimiter || ',';
+    lineDelimiter = args.lineDelimiter || '\n';
+
+    result = '';
+    var ct = 0;
+    heads.map(item => 
+    {
+      if(ct>0) result += columnDelimiter;
+      ct++;
+      result += item.pregunta;
+    });
+    result += lineDelimiter;
+
+    {data.map( lt => 
+      {
+        ct = 0;
+        lt.lista.map( item =>{
+          if(ct>0) result += columnDelimiter;
+          ct++;
+          result += item.respuesta;
+        })
+        result += lineDelimiter;
+      })
+    };
+
+    return result;
   }
 
 
 
+  downloadCSV(args) {
+    var data, filename, link;
+    var csv = this.convertArrayOfObjectsToCSV({
+        data: this.state.respuestas,
+        enca: this.state.encabezados
+    });
+    if (csv == null) return;
+
+    filename = args.filename || this.state.nombre+'_export.csv';
+
+    if (!csv.match(/^data:text\/csv/i)) {
+        csv = 'data:text/csv;charset=utf-8,' + csv;
+    }
+    data = encodeURI(csv);
+
+    link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.click();
+  }
 
   componentWillUnmount() {
-    this.props.firebase.o_rg().off();
+    this.firebaseRef.off();
   }
-   
+
+  handleChange({target}){
+    
+    if (target.checked){
+      const {  nombre,encabezados ,respuestas} = this.state;
+
+      var element1 = document.getElementById("TablaRespuestas");
+      var element2 = document.getElementById("Search");
+      element1.style.display = "none";  element2.style.display = "none";
+
+      return (ReactDOM.render( <Grafica  encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+
+    } else {
+      var list = document.getElementById("graphic");
+      list.removeChild(list.childNodes[0]);
+
+      var element1 = document.getElementById("TablaRespuestas");
+      var element2 = document.getElementById("Search");
+      element1.style.display = "block";  element2.style.display = "block";
+    }
+  }
  
   render() {
-    const { org, loading,objeto,encuestas } = this.state;
-
+    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,show } = this.state;
+    //console.log(respuestas);
+    //console.log(encabezados);
     return (
 
       <div>
-        <h1>Encuestas de {objeto.nombre}</h1>
-
-        <EncuMap encuestas={encuestas} />
-
+        
+        <div id="Search">
+            <form>
+              <fieldset className="form-group">
+              <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
+              </fieldset>
+            </form>
+        </div>
+        <div id="contenedorFunciones">
+            <h2> {nombre}</h2>
+            {loading && <div>Loading ...</div>}
+            <button onClick={this.downloadCSV}>Descargar csv</button>
+            <div>
+              <div className="pretty p-switch p-fill">
+                  <input type="checkbox" onClick={this.handleChange}/>
+                  <div className="state">
+                      <label>Mostrar Estadisticos</label>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div id="graphic" ref="graphic"></div>
+        <div id="TablaRespuestas">
+          <ListaRespuestas resp={listafiltrada} enca={encabezados} />
+        </div>
       </div>
     );
   }
 }
 
+const ListaRespuestas = ({ resp,enca }) => (
+  
+  <table id="customers">
+    <thead>
+        <tr>
+          {enca.map( item =>(
+            <th >
+                {item.pregunta}
+            </th>
+          ))}
+        </tr>
+    </thead>
+    
+    <tbody>
+        {resp.map( lt =>(
+          <tr key = {lt.key}>
+          {lt.lista.map( item =>(
+              <td key = {item.key}>
+                {item.respuesta}   
+              </td>
+          ))}
+          </tr>
+        ))}
+      
+    </tbody>
 
-
-const EncuMap = ({ encuestas }) => (
-  <ul>
-    {encuestas.map(user => (
-      <li key={user.uid}>
-          <strong>Nombre:</strong> {user.uid}
-        
-        
-      </li>
-    ))}
-  </ul>
+  </table>
 );
 
-export default withFirebase(EncuestasPage);
+ReactDOM.render(<EncuestasPage/>, document.getElementById('container'));  
+
+/*
+const domContainer = document.querySelector('#container');
+ReactDOM.render(e(EncuestasPage),domContainer);
+*/

@@ -12,10 +12,10 @@
  * limitations under the License.
  */
 
-var firebase = require('firebase');
+/*var firebase = require('firebase');
 var firebaseui = require('firebaseui');
 var config = require('./config.js');
-var $ = require('jquery');
+var $ = require('jquery');*/
 
 /**
  * @param {string} name The cookie name.
@@ -34,7 +34,17 @@ function getUiConfig() {
   return {
     'callbacks': {
       // Called when the user has been successfully signed in.
+      'signInSuccessWithAuthResult':function(authResult, redirectUrl) {
+        if(authResult.user){
+          handleSignedInUser(authResult.user);
+          console.log('hay usuario');
+        }else{
+          console.log('no hay usuario');
+        }
+        return false;
+      },
       'signInSuccess': function(user, credential, redirectUrl) {
+        console.log("evento signInSuccess");
         // Handle signed in user.
         handleSignedInUser(user);
         // Do not automatically redirect.
@@ -42,7 +52,7 @@ function getUiConfig() {
       },
       'uiShown': function() {
         // Remove progress bar when the UI is ready.
-        document.getElementById('loading').classList.add('hidden');
+        $('#loading').addClass('hidden');
       }
     },
     'signInFlow': 'popup',
@@ -68,6 +78,7 @@ function getUiConfig() {
  * @param {!firebase.User} user
  */
 var handleSignedInUser = function(user) {
+  console.log("handle");
   // Show redirection notice.
   document.getElementById('redirecting').classList.remove('hidden');
   // Set session cookie
@@ -75,15 +86,16 @@ var handleSignedInUser = function(user) {
     // Session login endpoint is queried and the session cookie is set.
     // CSRF token should be sent along with request.
     var csrfToken = getCookie('csrfToken')
-    return postIdTokenToSessionLogin('/sessionLogin', idToken, csrfToken)
+    return postIdTokenToSessionLogin('/users/sessionLogin', idToken, csrfToken)
       .then(function() {
         // Redirect to profile on success.
-        window.location.assign('/profile');
+        window.location.assign('/dashboard/');
       }, function(error) {
+        console.log("error al iniciar sesión");
         // Refresh page on error.
         // In all cases, client side state should be lost due to in-memory
         // persistence.
-        window.location.assign('/');
+        //window.location.assign('/');
       });
   });
 };
@@ -104,18 +116,74 @@ var postIdTokenToSessionLogin = function(url, idToken, csrfToken) {
   });
 };
 
+var globalUserObject = {};
+
+
 /**
  * Initializes the app.
  */
 var initApp = function() {
   // Renders sign-in page using FirebaseUI.
   ui.start('#firebaseui-container', getUiConfig());
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {      
+      // User is signed in.
+      console.log(user);
+      var displayName = user.displayName;
+      if((displayName==null || displayName=='')) displayName='(no name)';
+      var email = user.email;
+      $('#nomUsuario').html(displayName+'<br/>('+email+')');
+      var emailVerified = user.emailVerified;
+      var photoURL = user.photoURL;
+      var uid = user.uid;
+      globalUserObject['uid']=uid;
+      var phoneNumber = user.phoneNumber;
+      var providerData = user.providerData;
+      user.getIdToken().then(function(accessToken) {
+        //ESTA FORMA PODRÍA ACELERAR LA DESCARGA DEL USUARIO
+        //database.ref('/proyectos').orderByChild('usuarios/BWz5IL9oc0Nq84uxVd3T3x528I03').startAt('').once('value').then(function(snap){ console.log('hola'); snap.forEach(function(child){ console.log(child.key); }) })
+        console.log("/usuarios/"+globalUserObject['uid']+"/organizaciones");
+        database.ref('/usuarios/'+globalUserObject['uid']+'/organizaciones').once('value').then(function(snapshot) {
+            console.log("trae la data de colecciones");
+            var collOrganizaciones = [];
+            snapshot.forEach(function(childSnapshot) {
+                var childKey = childSnapshot.key;
+                collOrganizaciones.push(childKey);
+            });
+            database.ref('/proyectos').once('value').then(function(snapshot){
+              var collOrgs = [];
+              snapshot.forEach(function(childSnapshot){
+                if(collOrganizaciones.indexOf(childSnapshot.key)){
+                  collOrgs.push(childSnapshot);
+                }
+              });
+              globalUserObject['organizaciones']=collOrgs;
+            });
+        });
+        document.getElementById('account-details').textContent = JSON.stringify({
+          displayName: displayName,
+          email: email,
+          emailVerified: emailVerified,
+          phoneNumber: phoneNumber,
+          photoURL: photoURL,
+          uid: uid,
+          accessToken: accessToken,
+          providerData: providerData
+        }, null, '  ');
+      });
+    } else {
+      console.log("no hay usuario");
+    }
+  }, function(error) {
+    console.log(error);
+  });
 };
 
 // Initialize Firebase app.
 firebase.initializeApp(config);
+var database = firebase.database();
 // Set persistence to none.
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+//firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 // Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 // On page ready, initialize app.

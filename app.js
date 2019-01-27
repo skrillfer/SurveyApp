@@ -12,6 +12,8 @@ var bodyParser = require('body-parser');
 var generalRouter = require('./routes/general');
 var loginRouter = require('./routes/login');
 var dashboardRouter = require('./routes/dashboard');
+var builderRouter = require('./routes/builder');
+
 var app = express();
 
 // view engine setup
@@ -23,13 +25,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(function (req, res, next) {
+  res.cookie('csrfToken', (Math.random()* 100000000000000000).toString());
+  res.locals = {
+    "localsSessionCookie": req.cookies.session    
+  };
+  next();
+});
+
 app.use("/",generalRouter);
 app.use("/users",loginRouter);
 app.use("/dashboard",dashboardRouter);
+app.use("/builder",builderRouter);
 
 // Initialize Admin SDK.
 admin.initializeApp({
-  credential: admin.credential.cert('proysurveys-0c5b351e72f8.json')
+  credential: admin.credential.cert('bdsurvey-4d97c-firebase-adminsdk-upi86-f83f38b991.json')
 });
 // Support JSON-encoded bodies.
 app.use(bodyParser.json());
@@ -39,13 +50,6 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(function (req, res, next) {
-   res.locals = {
-     "sessionCookie": (req.cookies.session || '')
-   };
-   next();
-});
 
 // Start http server and listen to port 3000.
 app.listen(3000, function () {

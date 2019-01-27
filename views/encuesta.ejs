@@ -1,0 +1,56 @@
+<% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
+  <%- include common/headerUsuario.ejs %>
+  <% }else{%>
+  <%- include common/header.ejs %>
+  <% } %>   
+
+     
+     <!-- Stylesheets for React Components 
+      ============================================= -->
+      <meta charset="utf-8">
+
+
+        <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.5/react-bootstrap.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" type='text/css'/>
+
+      <!-- Firebase -->
+      <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+      <!-- ReactFire -->
+      <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
+      <!-- throw-in-the-towel -->
+      <script src="https://unpkg.com/throw-in-the-towel@2"></script>
+      <!-- Initialize the Firebase SDK -->
+      <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
+  
+      </br></br>
+   
+
+      <div id="container">
+      </div>  
+      <script>
+         var id       = "<%= id %>";
+         var org      = "<%= org %>";
+       </script>
+
+      <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/Encuesta/Histograma.js" crossorigin></script>
+
+      <!--
+        <script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>
+
+        <script  type="text/babel" src="/javascripts/src/components/Organizacion/composicion.jsx" crossorigin></script>
+      
+
+      
+    -->
+    
+    
+      
+      
+      
+  
+  <%- include common/footer.ejs %>

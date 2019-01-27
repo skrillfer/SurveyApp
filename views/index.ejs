@@ -1,8 +1,8 @@
-<% if((locals.sessionCookie != undefined)&&(locals.sessionCookie.trim() !="")){ %>
-<%- include common/headerUsuario.ejs %>
-<% }else{ %>
-<%- include common/header.ejs %>
-<% } %>
+<% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
+	<%- include common/headerUsuario.ejs %>
+	<% }else{%>
+	<%- include common/header.ejs %>
+	<% } %>
 		<!-- Slider #1
 		============================================= -->
 		<section id="slider" class="section slider text-center">
@@ -13,10 +13,10 @@
 				<div class="container">
 					<div class="row row-content mt-30">
 						<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-10 col-md-offset-1 pt-100">
-							<div class="slide--headline">Present your software with <span class="typed-text" data-typed-string="greate landing, amazing UI, responsive design, free mockups,Sware"></span> </div>
-							<div class="slide--bio">This should be used to tell a story app benefits & more</div>
+							<div class="slide--headline">Recolecta información <span class="typed-text" data-typed-string="online, offline, en todo momento, a tu gusto"></span> </div>
+							<div class="slide--bio">Con la herramienta Survy diseñe su encuesta y distribuyala con su equipo de trabajo</div>
 							<div class="slide--action">
-								<a class="btn btn--primary btn--rounded" href="#">Get Started</a>
+								<a class="btn btn--primary btn--rounded" href="#">Iniciar</a>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-12 wow fadeInUp" data-wow-duration="1s">
@@ -41,8 +41,8 @@
 				<div class="row clearfix">
 					<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 						<div class="heading heading-1 mb-80 text--center wow fadeInUp" data-wow-duration="1s">
-							<h2 class="heading--title">Top features</h2>
-							<p class="heading--desc">we shows only the best websites, portfolios ans landing pages built completely with passion, simplicity & creativity !</p>
+							<h2 class="heading--title">Características</h2>
+							<p class="heading--desc">Deja que las capacidades hablen por nuestro producto !</p>
 							<div class="divider--line divider--center"></div>
 						</div>
 					</div>
@@ -57,8 +57,8 @@
 								<i class="lnr lnr-screen"></i>
 							</div>
 							<div class="feature--content">
-								<h3>Register to get start</h3>
-								<p>Sware impresses you with fully responsiveness and highly customization. We did it in combination of very clean and flexible design.</p>
+								<h3>Diseña tu encuesta</h3>
+								<p>Con nuestra herramienta, diseña tu propia encuesta seleccionando diferentes tipos de preguntas que pueden adaptarse al diseño de tu instrumento</p>
 							</div>
 						</div>
 						<!-- .feature-panel end -->
@@ -69,11 +69,11 @@
 					<div class="col-xs-12 col-sm-4 col-md-4">
 						<div class="feature-panel wow fadeInUp" data-wow-duration="1s">
 							<div class="feature--icon">
-								<i class="lnr lnr-chart-bars"></i>
+								<i class="lnr lnr-pie-chart"></i>
 							</div>
 							<div class="feature--content">
-								<h3>Analysis your data</h3>
-								<p>Sware impresses you with fully responsiveness and highly customization. We did it in combination of very clean and flexible design.</p>
+								<h3>Analiza tu data</h3>
+								<p>Utiliza la información recolectada para poder generar gráficas que puedan ayudarte a entender lo que tu público objetivo opinó</p>
 							</div>
 						</div>
 						<!-- .feature-panel end -->
@@ -84,11 +84,11 @@
 					<div class="col-xs-12 col-sm-4 col-md-4">
 						<div class="feature-panel wow fadeInUp" data-wow-duration="1s">
 							<div class="feature--icon">
-								<i class="lnr lnr-pie-chart"></i>
+								<i class="lnr lnr-chart-bars"></i>
 							</div>
 							<div class="feature--content">
-								<h3>Use the results</h3>
-								<p>Sware impresses you with fully responsiveness and highly customization. We did it in combination of very clean and flexible design.</p>
+								<h3>Comparte tu información</h3>
+								<p>Descarga tu información a Excel o cualquier otro software de análisis para poder extender tu trabajo y crear informes sorprendentes</p>
 							</div>
 						</div>
 						<!-- .feature-panel end -->
@@ -110,8 +110,8 @@
 						<div class="wow fadeInUp" data-wow-duration="1s">
 							<i class="lnr lnr-rocket"></i>
 							<div class="divider--line"></div>
-							<h2 class="">Works on all platforms</h2>
-							<p class="">Duis aute irure dolor in reprehenderit in voluptate esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui official.</p>
+							<h2 class="">Aprovecha cada plataforma</h2>
+							<p class="">Nuestra herramienta se adapta para que puedas aprovechar las herramientas de escritorio y móviles para el diseño de la encuesta y la recolección de datos. Es así de fácil!</p>
 						</div>
 					</div><!-- .col-md-6 end -->
 					<div class="col-xs-12 col-sm-6 col-md-7 wow fadeInUp">
@@ -145,8 +145,8 @@
 						<div class="wow fadeInUp" data-wow-duration="1s">
 							<i class="lnr lnr-pointer-up"></i>
 							<div class="divider--line"></div>
-							<h2 class="">Easy & secure access</h2>
-							<p class="">Duis aute irure dolor in reprehenderit in voluptate esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui official.</p>
+							<h2 class="">Sincroniza tus datos</h2>
+							<p class="">Te ofrecemos la habilidad de trabajar online / offline, para que tu equipo pueda movilizarse a zonas remotas sin Internet y aún así no perder el trabajo</p>
 						</div>
 					</div><!-- .col-md-6 end -->
 					
@@ -162,8 +162,8 @@
 				<div class="row clearfix">
 					<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 						<div class="heading heading-1 mb-80 text--center wow fadeInUp" data-wow-duration="1s">
-							<h2 class="heading--title">How it works ?</h2>
-							<p class="heading--desc">we shows only the best websites, portfolios ans landing pages built completely with passion, simplicity & creativity !</p>
+							<h2 class="heading--title">¿Cómo funciona?</h2>
+							<p class="heading--desc">Una imagen vale mas que mil palabras, aprende con nuestros expertos!</p>
 							<div class="divider--line divider--center"></div>
 						</div>
 					</div>
@@ -194,8 +194,8 @@
 				<div class="row clearfix">
 					<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 						<div class="heading heading-1 mb-80 text--center wow fadeInUp" data-wow-duration="1s">
-							<h2 class="heading--title">What users say ?</h2>
-							<p class="heading--desc">we shows only the best websites, portfolios ans landing pages built completely with passion, simplicity & creativity !</p>
+							<h2 class="heading--title">Deja que nuestros clientes te cuenten</h2>
+							<p class="heading--desc">Nuestra experiencia en el campo nos ayuda a crecer día con día</p>
 							<div class="divider--line divider--center"></div>
 						</div>
 					</div>
@@ -276,8 +276,8 @@
 				<div class="row clearfix">
 					<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 						<div class="heading heading-1 mb-80 text--center wow fadeInUp" data-wow-duration="1s">
-							<h2 class="heading--title">Pricing plans</h2>
-							<p class="heading--desc">we shows only the best websites, portfolios ans landing pages built completely with passion, simplicity & creativity !</p>
+							<h2 class="heading--title">Precio</h2>
+							<p class="heading--desc">Nos adaptamos a tus necesidades y tu ritmo de crecimiento</p>
 							<div class="divider--line divider--center"></div>
 						</div>
 					</div>
@@ -291,19 +291,19 @@
 						<div class="pricing-panel">
 							<!--  Pricing heading  -->
 							<div class="pricing--heading text--center">
-								<h4>Starter</h4>
+								<h4>Curioso</h4>
 								<div class="pricing--heading">
-									<p>free</p>
+									<p><span class="currency">Q</span>2,500</p>
 									<div class="pricing--desc">
-										per month
+										Recolección menor de datos
 									</div>
 								</div>
 							</div>
 							<!--  Pricing body  -->
 							<div class="pricing--body">
 								<ul class="list-unstyled">
-									<li>Up to 4 users monthly</li>
-									<li>Limited updates</li>
+									<li>Hasta 5 encuestas</li>
+									<li>Cantidad limitada de respuestas</li>
 									<li><i class="lnr lnr-cross"></i></li>
 									<li><i class="lnr lnr-cross"></i></li>
 								</ul>
@@ -320,21 +320,21 @@
 						<div class="pricing-panel pricing-active">
 							<!--  Pricing heading  -->
 							<div class="pricing--heading text--center">
-								<h4>Premium</h4>
+								<h4>Profesional</h4>
 								<div class="pricing--heading">
-									<p><span class="currency">$</span>39</p>
+									<p><span class="currency">Q</span>5,000</p>
 									<div class="pricing--desc">
-										per month
+										Recolección moderada de datos
 									</div>
 								</div>
 							</div>
 							<!--  Pricing body  -->
 							<div class="pricing--body">
 								<ul class="list-unstyled">
-									<li>Up to 10 users monthly</li>
-									<li>Unlimited updates</li>
-									<li>A/B Testing</li>
-									<li>Email Integration</li>
+									<li>Hasta 40 encuestas</li>
+									<li>Cantidad ilimitada de respuestas</li>
+									<li>División por proyectos</li>
+									<li>Usuarios divididos por proyectos</li>
 								</ul>
 								<a class="btn btn--primary btn--rounded" href="#">Get Started Now</a>
 							</div>
@@ -349,21 +349,22 @@
 						<div class="pricing-panel">
 							<!--  Pricing heading  -->
 							<div class="pricing--heading text--center">
-								<h4>Company</h4>
+								<h4>Investigador</h4>
 								<div class="pricing--heading">
-									<p><span class="currency">$</span>59</p>
+									<p><span class="currency">Q</span>15,000</p>
 									<div class="pricing--desc">
-										per month
+										Cantidad masiva de datos
 									</div>
 								</div>
 							</div>
 							<!--  Pricing body  -->
 							<div class="pricing--body">
 								<ul class="list-unstyled">
-									<li>Up to 30 users monthly</li>
-									<li>Unlimited updates</li>
-									<li>A/B Testing</li>
-									<li>Email Integration</li>
+									<li>Hasta 40 encuestas</li>
+									<li>Cantidad ilimitada de respuestas</li>
+									<li>División por proyectos</li>
+									<li>Usuarios divididos por proyectos</li>
+									<li>Integración con sistemas internos</li>
 								</ul>
 								<a class="btn btn--secondary btn--bordered btn--rounded" href="#">Get Started</a>
 							</div>
@@ -385,8 +386,8 @@
 				<div class="row clearfix">
 					<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 						<div class="heading heading-1 mb-60 text--center wow fadeInUp" data-wow-duration="1s">
-							<h2 class="heading--title">Subscribe to get updates</h2>
-							<p class="heading--desc">Lorem ipsum dolor amet, consectetur adipisice elite sede eiusmod tempor incidide labeore dolore magna</p>
+							<h2 class="heading--title">Hablemos de opciones</h2>
+							<p class="heading--desc">Envíanos tu email y con gusto nos pondremos en contacto para aclarar todas tus dudas </p>
 						</div>
 					</div>
 					<!-- .col-md-6 end -->

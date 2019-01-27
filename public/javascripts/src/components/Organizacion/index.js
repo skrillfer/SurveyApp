@@ -1,17 +1,10 @@
-import React, { Component } from 'react';
+'use strict';
 
-import { withFirebase } from '../Firebase';
+const e = React.createElement;
 
-import { Col,Media,Badge,Button,Alert } from 'reactstrap';
-import { Link } from 'react-router-dom';
-
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
-
-class OrgsPage extends Component {
+class OrgsPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       loading: false,
       orgs: [],
@@ -19,80 +12,107 @@ class OrgsPage extends Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    const { orgs, loading } = this.state;
+    
+    this.setState({ orgs:[],loading: true });
 
-    this.props.firebase.orgs().on('value', snapshot => {
-      const orgsObject = snapshot.val();
+    this.firebaseRef = db.ref('proyectos/');
+    
+    let ARRAY = [];
+    
 
-      const orgsList = Object.keys(orgsObject).map(key => ({
-        ...orgsObject[key],
-        uid: key,
-      }));
+    this.firebaseRef.on('value', snapshot => {
+      snapshot.forEach(function(childSnapshot) {
+          var childKey = childSnapshot.key;
+          var childData = childSnapshot.val();
+          //console.log(childKey);
+
+          db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
+            if(xsnapshot.exists())
+            {
+              const usersObject = xsnapshot.val();
+
+
+              let ARRAY2=Object.keys(usersObject).map(key => ({
+                ...usersObject[key],
+                uid: key,
+                organizacion: childData.nombre,
+                idorg: childKey,
+              }));
+
+              ARRAY.push(ARRAY2.slice());
+            }
+              
+          });
+      });
 
       this.setState({
-        orgs: orgsList,
-        loading: false,
+        loading:false,
+        orgs: ARRAY,
       });
+      
     });
+    
   }
 
 
 
-
   componentWillUnmount() {
-    this.props.firebase.orgs().off();
+    this.firebaseRef.off();
   }
    
  
   render() {
     const { orgs, loading } = this.state;
+    console.log(orgs);
+    console.log(orgs.length);
+
 
     return (
       <div>
-        <h1>Organizaciones</h1>
-
+        <h1>Informacion</h1>
         {loading && <div>Loading ...</div>}
         <OrgSList orgs={orgs} />
-
+        
+        
       </div>
-    );
+     );
+    
+ 
   }
 }
 
 
 
-let imgStyle = {
-  maxHeight: '128px',
-  maxWidth: '128px'
-}
 
 const OrgSList = ({ orgs }) => (
-  <ul>
-    {orgs.map(org => (
-      <li key={org.nombre}>
-
-    <Media>
-      <Media left >
-
-        <Media object src={org.logo} style={imgStyle} alt="Generic placeholder image" />
-
-      </Media>
-      <Media body>
-        <Media heading middle>
-         &emsp;
-         <Badge href={org.logo} color="primary">{org.nombre}</Badge>
-        </Media>
-          Descripcion de la organizacion        
-         <Link to={"/organizations/encuestas/"+org.uid } > Ver informacion</Link>
-        </Media>
-    </Media>
-       
+  <table id="customers">
+    <thead>
+        <tr>
+          <th>Organizacion</th>
+          <th>Encuesta</th>     
+        </tr>
+    </thead>
+    
+    <tbody>
+      {orgs.map(data => data.map( item =>
         
-      </li>
-    ))}
-  </ul>
+        <tr key={item.uid}>
+            <td >
+            {item.organizacion}
+            </td>
+            <td>
+            <a href={'/dashboard/encuesta/'+item.idorg+'/'+item.uid} >{item.nombre}</a>
+            </td>
+        </tr>
+        
+      ))}
+    </tbody>
+
+  </table>
 );
 
 
+const domContainer = document.querySelector('#container');
+ReactDOM.render(e(OrgsPage),domContainer);
 
-export default withFirebase(OrgsPage);

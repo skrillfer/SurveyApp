@@ -17,6 +17,7 @@ router.get('/',function(req,res){
 router.get('/profile', function (req, res) {
   // Get session cookie.
   var sessionCookie = req.cookies.session || '';
+  console.log(sessionCookie);
   // Get the session cookie and verify it. In this case, we are verifying if the
   // Firebase session was revoked, user deleted/disabled, etc.
   admin.auth().verifySessionCookie(sessionCookie, true /** check if revoked. */)
@@ -38,7 +39,12 @@ router.post('/sessionLogin', function (req, res) {
   var csrfToken = req.body.csrfToken.toString();
   
   // Guard against CSRF attacks.
+  console.log("verificación csrfToken");
+  console.log(csrfToken);
+  console.log(req.cookies.csrfToken);
+
   if (!req.cookies || csrfToken !== req.cookies.csrfToken) {
+    console.log("error 1");
     res.status(401).send('UNAUTHORIZED REQUEST!');
     return;
   }
@@ -52,6 +58,7 @@ router.post('/sessionLogin', function (req, res) {
     if (new Date().getTime() / 1000 - decodedClaims.auth_time < 5 * 60) {
       return admin.auth().createSessionCookie(idToken, {expiresIn: expiresIn});
     }
+    console.log("error 2");
     throw new Error('UNAUTHORIZED REQUEST!');
   })
   .then(function(sessionCookie) {
@@ -62,7 +69,9 @@ router.post('/sessionLogin', function (req, res) {
     res.end(JSON.stringify({status: 'success'}));
   })
   .catch(function(error) {
-    res.status(401).send('UNAUTHORIZED REQUEST!');
+    console.log("error 3");
+    console.log(error);
+    res.status(401).send('UNAUTHORIZED REQUEST!:');
   });
 });
 

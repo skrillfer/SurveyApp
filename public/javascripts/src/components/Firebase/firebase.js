@@ -1,50 +1,37 @@
-import app from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
-
 const config = {
-     apiKey: "AIzaSyBvXXZwnBCJ3Z0iWQAFtqI9Q8ixZelhvGU",
-    authDomain: "bdsurvey-4d97c.firebaseapp.com",
-    databaseURL: "https://bdsurvey-4d97c.firebaseio.com",
-    projectId: "bdsurvey-4d97c",
-    storageBucket: "bdsurvey-4d97c.appspot.com",
-    messagingSenderId: "792353618616"
+  apiKey: "AIzaSyBvXXZwnBCJ3Z0iWQAFtqI9Q8ixZelhvGU",
+  authDomain: "bdsurvey-4d97c.firebaseapp.com",
+  databaseURL: "https://bdsurvey-4d97c.firebaseio.com",
+  projectId: "bdsurvey-4d97c",
+  storageBucket: "bdsurvey-4d97c.appspot.com",
+  messagingSenderId: "792353618616"
 };
+firebase.initializeApp(config);
 
-class Firebase {
-  constructor() {
-    app.initializeApp(config);
+this.db = firebase.database();
+this.auth = firebase.auth();
 
-    this.auth = app.auth();
-    this.db = app.database();
-  }
+/* API AUTH */
 
-  // *** Auth API ***
+doCreateUserWithEmailAndPassword = (email, password) =>
+  this.auth.createUserWithEmailAndPassword(email, password);
 
-  doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+doSignInWithEmailAndPassword = (email, password) =>
+  this.auth.signInWithEmailAndPassword(email, password);
 
-  doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+doSignOut = () => this.auth.signOut();
 
-  doSignOut = () => this.auth.signOut();
+doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+
+doPasswordUpdate = password =>
+  this.auth.currentUser.updatePassword(password);
 
 
+/* FIREBASE SURVEY APP */
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+FIREBASE_ORGS = () => this.db.ref('proyectos/');
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+FIREBASE_ORGA = uid => this.db.ref(`proyectos/${uid}/encuestas`);
 
-  // *** User API ***
+//FIREBASE_ORGA_ENCUESTA = uid => this.db.ref(`proyectos/${uid}`);
 
-  user = uid => this.db.ref(`users/${uid}`);
-
-  //USUARIOS
-  users = () => this.db.ref('usuarios');
-  //ORGANIZACIONES
-  orgs = () => this.db.ref('proyectos/');
-  o_rg = uid => this.db.ref(`proyectos/${uid}`);
-}
-
-export default Firebase;
