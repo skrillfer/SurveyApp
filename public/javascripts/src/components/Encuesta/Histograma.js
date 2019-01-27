@@ -2,25 +2,35 @@ var Grafica = React.createClass({
 
     getInitialState: function() {
         return {    
-                    columna: this.props.prueba, 
+                    pregunta: this.props.pregunta, 
                     encabezados: this.props.encabezados,
-                    respuestas : this.props.respuestas
+                    respuestas : this.props.respuestas,
+                    tipo: this.props.tipo,
                 };
-      },
+    },
+    componentDidMount: function()
+    {
+        console.log('VAMOS A GENERAR:'+this.state.tipo);
+        this.mostrarGraficaDeColumna();   
+    }
+    ,
     uniq(a) {
         var seen = {};
         return a.filter(function(item) {
             return seen.hasOwnProperty(item) ? false : (seen[item] = true);
         });
     },
-    handleChange(event) {
-        this.setState({columna: event.target.value});
 
+    mostrarGraficaDeColumna: function()
+    {
         var x = new Array();
         this.state.respuestas.map(lt =>
             {
-                var LTFilter=lt.lista.filter( subitem => subitem.pregunta==event.target.value);
-                x.push(LTFilter[0].respuesta);
+                console.log(this.state.pregunta);
+                var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
+                if(LTFilter.length>0){
+                    x.push(LTFilter[0].respuesta);
+                }                
             }
 
         );
@@ -35,10 +45,48 @@ var Grafica = React.createClass({
             }
         );
 
-        console.log(x);
+        if(this.state.tipo=='pie')
+        {
+            this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);
+        }else
+        {
+            this.generarHistograma(ejeX,ejeY,this.state.pregunta);
+        }
         
+    },
+    generarGraficaPie(ejeX,ejeY,pregunta)
+    {
+        var total=ejeY.reduce(this.getSum);
+        var porcentajes = [];
+        ejeY.map(
+            item =>
+            {
+                porcentajes.push((item/total)*100);
+            }
+        );
+
+        var data = [{
+            values: porcentajes,
+            labels: ejeX,
+            type: this.state.tipo
+          }];
+          
+        var layout = {
+        height: 400,
+        width: 500
+        };
+        
+        Plotly.newPlot('histograma', data, layout);
+    },
+    getSum(total, num) 
+    {
+        return total + num;
+    }      
+    ,
+    generarHistograma(ejeX,ejeY,pregunta)
+    {
         var trace1 = {
-            type: 'bar',
+            type: this.state.tipo,
             x: ejeX,
             y: ejeY,
             name: 'Cantidad',
@@ -52,8 +100,9 @@ var Grafica = React.createClass({
         
         var data = [ trace1 ];
         
+       
         var layout = {
-          title: 'Histograma de '+event.target.value,
+          title: 'Histograma de '+pregunta,
           font: {size: 18},
           yaxis: {
             title: {
@@ -64,24 +113,15 @@ var Grafica = React.createClass({
                 color: '#7f7f7f'
               }
             }
-          }
+          },
+          
         };
-        
-        Plotly.newPlot('histograma', data, layout, {responsive: true});
+        Plotly.newPlot('histograma', data, layout, {responsive: true});    
     },
-
     render() {
         return (
             <div id ="contenedorHistograma">
-
-                <h3>Selecciona la columna</h3>
-                <select  onChange={this.handleChange} >
-                {
-                    this.state.encabezados.map( item =>
-                        <option value={item.pregunta}>{item.pregunta}</option>
-                    )
-                }
-                </select>
+                <h3>GRAFICOS</h3>
                 <div id="histograma">
 
                 </div>

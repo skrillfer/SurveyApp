@@ -1,7 +1,3 @@
-//'use strict';
-//import Data from './Organizacion/composicion.jsx';
-
-//const e = React.createElement;
 
 
 class EncuestasPage extends React.Component {
@@ -12,6 +8,11 @@ class EncuestasPage extends React.Component {
     this.downloadCSV = this.downloadCSV.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
+    this.clickColumn = this.clickColumn.bind(this);
+
+          /*        Funciones de PopUp Menu       */
+    this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
 
     this.state = {
       loading: false,
@@ -21,7 +22,9 @@ class EncuestasPage extends React.Component {
       respuestas : [],
       encabezados : [],
       listafiltrada : [],
-      show :  false,
+      showPopup: false,
+      pregunta: '',
+      respuesta: '',
     };
   }
 
@@ -187,9 +190,11 @@ class EncuestasPage extends React.Component {
       element1.style.display = "block";  element2.style.display = "block";
     }
   }
+
+  
  
   render() {
-    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,show } = this.state;
+    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,togglePopup } = this.state;
     //console.log(respuestas);
     //console.log(encabezados);
     return (
@@ -218,14 +223,76 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas resp={listafiltrada} enca={encabezados} />
+          <ListaRespuestas resp={listafiltrada} enca={encabezados} handle = {this.togglePopup} />
         </div>
+        <div id="menuEx" ref="menuEx"></div>
+
+        {this.state.showPopup ? 
+          <ListBox
+            text='Graficos'
+            closePopup={this.togglePopup.bind(this)}
+            clickGenerarGrafico = {this.clickGenerarGrafico}
+            clickGraficaPie = {this.clickGraficaPie}
+          />
+          : null
+        }
+        
       </div>
     );
+    
   }
+
+
+  clickColumn(event)
+  {
+
+  
+    ReactDOM.render( <ListBox/>, document.getElementById('menuEx'));
+    
+    /*
+    var list = document.getElementById("graphic");
+    if(list.childNodes.length>0)
+    {
+      list.removeChild(list.childNodes[0]);
+    }    
+
+    const {  nombre,encabezados ,respuestas} = this.state;
+    var respuesta = event.target.id; 
+    var pregunta  = event.target.getAttribute('name');
+    
+    return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+    */
+  }
+
+  /*Funciones de PopUp Menu */
+  clickGenerarGrafico(event)
+  {
+    
+    var list = document.getElementById("graphic");
+    if(list.childNodes.length>0)
+    {
+      list.removeChild(list.childNodes[0]);
+    }    
+    this.setState({showPopup: !this.state.showPopup,});
+    const {  encabezados ,respuestas,pregunta} = this.state;
+    
+   
+    return (ReactDOM.render( <Grafica tipo= {event.target.id} pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+  }
+
+
+
+  togglePopup(event) {
+    this.setState({
+      showPopup: !this.state.showPopup,
+      pregunta:   event.target.getAttribute('name'),
+      respuesta : event.target.id,
+    });
+  }
+
 }
 
-const ListaRespuestas = ({ resp,enca }) => (
+const ListaRespuestas = ({ resp,enca , handle }) => (
   
   <table id="customers">
     <thead>
@@ -242,9 +309,10 @@ const ListaRespuestas = ({ resp,enca }) => (
         {resp.map( lt =>(
           <tr key = {lt.key}>
           {lt.lista.map( item =>(
-              <td key = {item.key}>
+              <td key = {item.key} onClick={handle} id={item.respuesta} name={item.pregunta}>
                 {item.respuesta}   
               </td>
+
           ))}
           </tr>
         ))}
@@ -254,9 +322,6 @@ const ListaRespuestas = ({ resp,enca }) => (
   </table>
 );
 
+
 ReactDOM.render(<EncuestasPage/>, document.getElementById('container'));  
 
-/*
-const domContainer = document.querySelector('#container');
-ReactDOM.render(e(EncuestasPage),domContainer);
-*/
