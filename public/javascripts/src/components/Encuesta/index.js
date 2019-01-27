@@ -13,6 +13,7 @@ class EncuestasPage extends React.Component {
           /*        Funciones de PopUp Menu       */
     this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.generateHead = this.generateHead.bind(this);
 
     this.state = {
       loading: false,
@@ -25,8 +26,23 @@ class EncuestasPage extends React.Component {
       showPopup: false,
       pregunta: '',
       respuesta: '',
+
+      //refactor
+      headers : [],
+      data : []
     };
   }
+
+
+  generateHead(head){
+    if(this.state.headers.includes(head)){
+        return this.state.headers.indexOf(head);
+    }else{
+        return this.state.headers.push(head)-1;
+    }
+  }
+
+  
 
   componentDidMount() {
     this.setState({ loading: true,respuestas:[] });
@@ -34,9 +50,10 @@ class EncuestasPage extends React.Component {
     console.log(this.state.uid);
     console.log(this.state.uid_org);
 
-    let index = 0;    
     let ARRAY = [];
 
+
+    let current = this;
     this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
       xsnapshot.forEach(function(childSnapshot) {
 
@@ -44,10 +61,8 @@ class EncuestasPage extends React.Component {
           var childData = childSnapshot.val();
 
           let lista = [];
-          ARRAY.push({'lista':lista,'key':index});
-          index++;
+          ARRAY.push(lista);
 
-          let index2=index;
           childSnapshot.child('body').forEach(function(inSnapshot) {
             
             if(inSnapshot.exists())
@@ -55,10 +70,7 @@ class EncuestasPage extends React.Component {
 
               var childKey1 = inSnapshot.key;
               var childData1 = inSnapshot.val();
-
-
-              lista.push({'pregunta':childKey1,'respuesta':childData1,'key':index2});
-              index2++;
+              lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
             }
           });
 
@@ -76,6 +88,7 @@ class EncuestasPage extends React.Component {
         loading:false,
         nombre: childData.nombre,
         respuestas: ARRAY,
+        data : ARRAY,
         encabezados:ARRAY[0].lista,
         listafiltrada: ARRAY,
       });
@@ -223,7 +236,7 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas resp={listafiltrada} enca={encabezados} handle = {this.togglePopup} />
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.data} handle = {this.togglePopup} lt ={[]}/>
         </div>
         <div id="menuEx" ref="menuEx"></div>
 
@@ -282,6 +295,7 @@ class EncuestasPage extends React.Component {
 
 
 
+
   togglePopup(event) {
     this.setState({
       showPopup: !this.state.showPopup,
@@ -292,30 +306,50 @@ class EncuestasPage extends React.Component {
 
 }
 
-const ListaRespuestas = ({ resp,enca , handle }) => (
+const ListaRespuestas = ({ headers,matrix , handle,lt }) => (
   
   <table id="customers">
     <thead>
         <tr>
-          {enca.map( item =>(
+          {headers.map( item =>(
             <th >
-                {item.pregunta}
+                {item}
             </th>
           ))}
         </tr>
     </thead>
     
     <tbody>
-        {resp.map( lt =>(
-          <tr key = {lt.key}>
-          {lt.lista.map( item =>(
-              <td key = {item.key} onClick={handle} id={item.respuesta} name={item.pregunta}>
-                {item.respuesta}   
-              </td>
+        {
+          matrix.map((row) => (
+            <tr>
+            {
+                  
+                  headers.forEach(function(value,i){
+                    
+                          var tempElement = row.find(function(element) {
+                            return element.index == i;
+                          });
 
-          ))}
-          </tr>
-        ))}
+                          if(tempElement)
+                          {
+                            
+                            lt.push(<td>{tempElement.respuesta}</td>);
+                          }
+                          else
+                          {
+                            lt.push(<td></td>);
+                          }
+                  })
+            }
+            {
+              lt = []
+            }
+            </tr>
+            )
+          )
+          
+        }
       
     </tbody>
 
