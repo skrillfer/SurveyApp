@@ -10,6 +10,11 @@ class EncuestasPage extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.clickColumn = this.clickColumn.bind(this);
 
+          /*        Funciones de PopUp Menu       */
+    this.clickHistograma =  this.clickHistograma.bind(this);
+    this.clickGraficaPie = this.clickGraficaPie.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
+
     this.state = {
       loading: false,
       uid: id,
@@ -18,7 +23,9 @@ class EncuestasPage extends React.Component {
       respuestas : [],
       encabezados : [],
       listafiltrada : [],
-      show :  false,
+      showPopup: false,
+      pregunta: '',
+      respuesta: '',
     };
   }
 
@@ -184,9 +191,11 @@ class EncuestasPage extends React.Component {
       element1.style.display = "block";  element2.style.display = "block";
     }
   }
+
+  
  
   render() {
-    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,show } = this.state;
+    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,togglePopup } = this.state;
     //console.log(respuestas);
     //console.log(encabezados);
     return (
@@ -215,15 +224,33 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas resp={listafiltrada} enca={encabezados} handle = {this.clickColumn} />
+          <ListaRespuestas resp={listafiltrada} enca={encabezados} handle = {this.togglePopup} />
         </div>
+        <div id="menuEx" ref="menuEx"></div>
+
+        {this.state.showPopup ? 
+          <ListBox
+            text='Graficos'
+            closePopup={this.togglePopup.bind(this)}
+            clickHistograma = {this.clickHistograma}
+            clickGraficaPie = {this.clickGraficaPie}
+          />
+          : null
+        }
+        
       </div>
     );
+    
   }
 
 
   clickColumn(event)
   {
+
+  
+    ReactDOM.render( <ListBox/>, document.getElementById('menuEx'));
+    
+    /*
     var list = document.getElementById("graphic");
     if(list.childNodes.length>0)
     {
@@ -235,8 +262,38 @@ class EncuestasPage extends React.Component {
     var pregunta  = event.target.getAttribute('name');
     
     return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+    */
   }
 
+  /*Funciones de PopUp Menu */
+  clickHistograma()
+  {
+    
+    var list = document.getElementById("graphic");
+    if(list.childNodes.length>0)
+    {
+      list.removeChild(list.childNodes[0]);
+    }    
+    this.setState({showPopup: !this.state.showPopup,});
+    const {  encabezados ,respuestas,pregunta} = this.state;
+    
+    console.log(pregunta);
+    return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+  }
+
+  clickGraficaPie()
+  {
+    console.log('grafica de pie');
+  }
+
+
+  togglePopup(event) {
+    this.setState({
+      showPopup: !this.state.showPopup,
+      pregunta:   event.target.getAttribute('name'),
+      respuesta : event.target.id,
+    });
+  }
 
 }
 
@@ -260,6 +317,7 @@ const ListaRespuestas = ({ resp,enca , handle }) => (
               <td key = {item.key} onClick={handle} id={item.respuesta} name={item.pregunta}>
                 {item.respuesta}   
               </td>
+
           ))}
           </tr>
         ))}

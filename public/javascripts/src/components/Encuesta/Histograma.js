@@ -24,8 +24,11 @@ var Grafica = React.createClass({
         var x = new Array();
         this.state.respuestas.map(lt =>
             {
+                console.log(this.state.pregunta);
                 var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
-                x.push(LTFilter[0].respuesta);
+                if(LTFilter.length>0){
+                    x.push(LTFilter[0].respuesta);
+                }                
             }
 
         );
@@ -42,7 +45,11 @@ var Grafica = React.createClass({
 
         this.generarHistograma(ejeX,ejeY,this.state.pregunta);
     },
-
+    prueba()
+    {
+        console.log('NXO');
+    }
+    ,
     generarHistograma(ejeX,ejeY,pregunta)
     {
         var trace1 = {
@@ -60,6 +67,7 @@ var Grafica = React.createClass({
         
         var data = [ trace1 ];
         
+       
         var layout = {
           title: 'Histograma de '+pregunta,
           font: {size: 18},
@@ -72,16 +80,17 @@ var Grafica = React.createClass({
                 color: '#7f7f7f'
               }
             }
-          }
+          },
+          
         };
         Plotly.newPlot('histograma', data, layout, {responsive: true});    
     },
     render() {
         return (
             <div id ="contenedorHistograma">
-
                 <h3>GRAFICOS</h3>
-                
+                <button id="xml">CERRAR</button>
+
                 <div id="histograma">
 
                 </div>
