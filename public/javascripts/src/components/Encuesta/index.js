@@ -335,7 +335,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     <thead>
         <tr>
           {headers.map( item =>(
-            <th >
+            <th onClick = {handle} >
                 {item}
             </th>
           ))}
