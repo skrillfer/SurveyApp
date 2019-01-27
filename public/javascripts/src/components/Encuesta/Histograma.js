@@ -4,12 +4,14 @@ var Grafica = React.createClass({
         return {    
                     pregunta: this.props.pregunta, 
                     encabezados: this.props.encabezados,
-                    respuestas : this.props.respuestas
+                    respuestas : this.props.respuestas,
+                    tipo: this.props.tipo,
                 };
     },
     componentDidMount: function()
     {
-        this.mostrarGraficaDeColumna();
+        console.log('VAMOS A GENERAR:'+this.state.tipo);
+        this.mostrarGraficaDeColumna();   
     }
     ,
     uniq(a) {
@@ -43,17 +45,48 @@ var Grafica = React.createClass({
             }
         );
 
-        this.generarHistograma(ejeX,ejeY,this.state.pregunta);
+        if(this.state.tipo=='pie')
+        {
+            this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);
+        }else
+        {
+            this.generarHistograma(ejeX,ejeY,this.state.pregunta);
+        }
+        
     },
-    prueba()
+    generarGraficaPie(ejeX,ejeY,pregunta)
     {
-        console.log('NXO');
-    }
+        var total=ejeY.reduce(this.getSum);
+        var porcentajes = [];
+        ejeY.map(
+            item =>
+            {
+                porcentajes.push((item/total)*100);
+            }
+        );
+
+        var data = [{
+            values: porcentajes,
+            labels: ejeX,
+            type: this.state.tipo
+          }];
+          
+        var layout = {
+        height: 400,
+        width: 500
+        };
+        
+        Plotly.newPlot('histograma', data, layout);
+    },
+    getSum(total, num) 
+    {
+        return total + num;
+    }      
     ,
     generarHistograma(ejeX,ejeY,pregunta)
     {
         var trace1 = {
-            type: 'bar',
+            type: this.state.tipo,
             x: ejeX,
             y: ejeY,
             name: 'Cantidad',
@@ -89,8 +122,6 @@ var Grafica = React.createClass({
         return (
             <div id ="contenedorHistograma">
                 <h3>GRAFICOS</h3>
-                <button id="xml">CERRAR</button>
-
                 <div id="histograma">
 
                 </div>

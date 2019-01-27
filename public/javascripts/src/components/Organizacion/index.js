@@ -27,23 +27,26 @@ class OrgsPage extends React.Component {
           var childData = childSnapshot.val();
           //console.log(childKey);
 
-          db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
-            if(xsnapshot.exists())
-            {
-              const usersObject = xsnapshot.val();
+          if(childSnapshot.hasChild('encuestas'))
+          {
+              db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
+                if(xsnapshot.exists())
+                {
+                  const usersObject = xsnapshot.val();
 
 
-              let ARRAY2=Object.keys(usersObject).map(key => ({
-                ...usersObject[key],
-                uid: key,
-                organizacion: childData.nombre,
-                idorg: childKey,
-              }));
+                  let ARRAY2=Object.keys(usersObject).map(key => ({
+                    ...usersObject[key],
+                    uid: key,
+                    organizacion: childData.nombre,
+                    idorg: childKey,
+                  }));
 
-              ARRAY.push(ARRAY2.slice());
-            }
-              
-          });
+                  ARRAY.push(ARRAY2.slice());
+                }
+                  
+              });
+          }
       });
 
       this.setState({

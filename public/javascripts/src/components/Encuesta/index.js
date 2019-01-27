@@ -11,8 +11,7 @@ class EncuestasPage extends React.Component {
     this.clickColumn = this.clickColumn.bind(this);
 
           /*        Funciones de PopUp Menu       */
-    this.clickHistograma =  this.clickHistograma.bind(this);
-    this.clickGraficaPie = this.clickGraficaPie.bind(this);
+    this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
 
     this.state = {
@@ -232,7 +231,7 @@ class EncuestasPage extends React.Component {
           <ListBox
             text='Graficos'
             closePopup={this.togglePopup.bind(this)}
-            clickHistograma = {this.clickHistograma}
+            clickGenerarGrafico = {this.clickGenerarGrafico}
             clickGraficaPie = {this.clickGraficaPie}
           />
           : null
@@ -266,7 +265,7 @@ class EncuestasPage extends React.Component {
   }
 
   /*Funciones de PopUp Menu */
-  clickHistograma()
+  clickGenerarGrafico(event)
   {
     
     var list = document.getElementById("graphic");
@@ -277,14 +276,10 @@ class EncuestasPage extends React.Component {
     this.setState({showPopup: !this.state.showPopup,});
     const {  encabezados ,respuestas,pregunta} = this.state;
     
-    console.log(pregunta);
-    return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+   
+    return (ReactDOM.render( <Grafica tipo= {event.target.id} pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
   }
 
-  clickGraficaPie()
-  {
-    console.log('grafica de pie');
-  }
 
 
   togglePopup(event) {
