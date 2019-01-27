@@ -14,6 +14,8 @@ class EncuestasPage extends React.Component {
     this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
     this.generateHead = this.generateHead.bind(this);
+    this.renderizarColumna = this.renderizarColumna.bind(this);
+
 
     this.state = {
       loading: false,
@@ -236,7 +238,7 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.data} handle = {this.togglePopup} lt ={[]}/>
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.data} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
         </div>
         <div id="menuEx" ref="menuEx"></div>
 
@@ -295,6 +297,27 @@ class EncuestasPage extends React.Component {
 
 
 
+  renderizarColumna(row,i)
+  {
+
+    var tempElement = row.find(function(element) {
+      return element.index == i;
+    });
+
+    
+    if(tempElement)
+    {
+      
+      return tempElement.respuesta;
+    }
+    else
+    {
+      return "";
+    }
+
+    
+  }
+
 
   togglePopup(event) {
     this.setState({
@@ -306,7 +329,7 @@ class EncuestasPage extends React.Component {
 
 }
 
-const ListaRespuestas = ({ headers,matrix , handle,lt }) => (
+const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
   
   <table id="customers">
     <thead>
@@ -321,29 +344,16 @@ const ListaRespuestas = ({ headers,matrix , handle,lt }) => (
     
     <tbody>
         {
-          matrix.map((row) => (
+          matrix.map(row => (
             <tr>
             {
                   
-                  headers.forEach(function(value,i){
-                    
-                          var tempElement = row.find(function(element) {
-                            return element.index == i;
-                          });
-
-                          if(tempElement)
-                          {
-                            
-                            lt.push(<td>{tempElement.respuesta}</td>);
-                          }
-                          else
-                          {
-                            lt.push(<td></td>);
-                          }
-                  })
-            }
-            {
-              lt = []
+                  headers.map((value,i) => (
+                    <td>
+                       {renderizarColumna(row,i)}
+                    </td>
+                  )
+                  )
             }
             </tr>
             )
@@ -357,5 +367,10 @@ const ListaRespuestas = ({ headers,matrix , handle,lt }) => (
 );
 
 
+
+
+
+
 ReactDOM.render(<EncuestasPage/>, document.getElementById('container'));  
 
+/**/
