@@ -1,7 +1,3 @@
-//'use strict';
-//import Data from './Organizacion/composicion.jsx';
-
-//const e = React.createElement;
 
 
 class EncuestasPage extends React.Component {
@@ -12,6 +8,7 @@ class EncuestasPage extends React.Component {
     this.downloadCSV = this.downloadCSV.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
+    this.clickColumn = this.clickColumn.bind(this);
 
     this.state = {
       loading: false,
@@ -218,14 +215,32 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas resp={listafiltrada} enca={encabezados} />
+          <ListaRespuestas resp={listafiltrada} enca={encabezados} handle = {this.clickColumn} />
         </div>
       </div>
     );
   }
+
+
+  clickColumn(event)
+  {
+    var list = document.getElementById("graphic");
+    if(list.childNodes.length>0)
+    {
+      list.removeChild(list.childNodes[0]);
+    }    
+
+    const {  nombre,encabezados ,respuestas} = this.state;
+    var respuesta = event.target.id; 
+    var pregunta  = event.target.getAttribute('name');
+    
+    return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+  }
+
+
 }
 
-const ListaRespuestas = ({ resp,enca }) => (
+const ListaRespuestas = ({ resp,enca , handle }) => (
   
   <table id="customers">
     <thead>
@@ -242,7 +257,7 @@ const ListaRespuestas = ({ resp,enca }) => (
         {resp.map( lt =>(
           <tr key = {lt.key}>
           {lt.lista.map( item =>(
-              <td key = {item.key}>
+              <td key = {item.key} onClick={handle} id={item.respuesta} name={item.pregunta}>
                 {item.respuesta}   
               </td>
           ))}
@@ -254,9 +269,6 @@ const ListaRespuestas = ({ resp,enca }) => (
   </table>
 );
 
+
 ReactDOM.render(<EncuestasPage/>, document.getElementById('container'));  
 
-/*
-const domContainer = document.querySelector('#container');
-ReactDOM.render(e(EncuestasPage),domContainer);
-*/

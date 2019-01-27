@@ -2,24 +2,29 @@ var Grafica = React.createClass({
 
     getInitialState: function() {
         return {    
-                    columna: this.props.prueba, 
+                    pregunta: this.props.pregunta, 
                     encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas
                 };
-      },
+    },
+    componentDidMount: function()
+    {
+        this.mostrarGraficaDeColumna();
+    }
+    ,
     uniq(a) {
         var seen = {};
         return a.filter(function(item) {
             return seen.hasOwnProperty(item) ? false : (seen[item] = true);
         });
     },
-    handleChange(event) {
-        this.setState({columna: event.target.value});
 
+    mostrarGraficaDeColumna: function()
+    {
         var x = new Array();
         this.state.respuestas.map(lt =>
             {
-                var LTFilter=lt.lista.filter( subitem => subitem.pregunta==event.target.value);
+                var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
                 x.push(LTFilter[0].respuesta);
             }
 
@@ -35,8 +40,11 @@ var Grafica = React.createClass({
             }
         );
 
-        console.log(x);
-        
+        this.generarHistograma(ejeX,ejeY,this.state.pregunta);
+    },
+
+    generarHistograma(ejeX,ejeY,pregunta)
+    {
         var trace1 = {
             type: 'bar',
             x: ejeX,
@@ -53,7 +61,7 @@ var Grafica = React.createClass({
         var data = [ trace1 ];
         
         var layout = {
-          title: 'Histograma de '+event.target.value,
+          title: 'Histograma de '+pregunta,
           font: {size: 18},
           yaxis: {
             title: {
@@ -66,22 +74,14 @@ var Grafica = React.createClass({
             }
           }
         };
-        
-        Plotly.newPlot('histograma', data, layout, {responsive: true});
+        Plotly.newPlot('histograma', data, layout, {responsive: true});    
     },
-
     render() {
         return (
             <div id ="contenedorHistograma">
 
-                <h3>Selecciona la columna</h3>
-                <select  onChange={this.handleChange} >
-                {
-                    this.state.encabezados.map( item =>
-                        <option value={item.pregunta}>{item.pregunta}</option>
-                    )
-                }
-                </select>
+                <h3>GRAFICOS</h3>
+                
                 <div id="histograma">
 
                 </div>
