@@ -31,7 +31,8 @@ class EncuestasPage extends React.Component {
 
       //refactor
       headers : [],
-      data : []
+      data : [],
+      queryHash: {}
     };
   }
 
@@ -73,11 +74,15 @@ class EncuestasPage extends React.Component {
               var childKey1 = inSnapshot.key;
               var childData1 = inSnapshot.val();
               lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
+              if(current.state.queryHash[childKey1]){
+                current.state.queryHash[childKey1].push(childData1);
+              }else{
+                current.state.queryHash[childKey1] = [childData1];
+              }
             }
           });
 
       });
-        
     });
      
    
