@@ -107,18 +107,20 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
-    var updatedList = this.state.respuestas.slice();
+    var updatedList = this.state.data.slice();
 
     const filtrada = [];
     updatedList.map((item) => 
       {
-        const v = item.lista.filter(subitem => 
+        const v = item.filter(subitem => 
             subitem.respuesta.toString().toLowerCase().search(
                 event.target.value.toLowerCase()) !== -1
         );
+
+        console.log();
         if(v.length>0)
         {
-          filtrada.push({'lista':item.lista,'key':item.key});
+          filtrada.push(item);
         }
         
       }     
@@ -137,7 +139,7 @@ class EncuestasPage extends React.Component {
 
     columnDelimiter = args.columnDelimiter || ',';
     lineDelimiter = args.lineDelimiter || '\n';
-
+   
     result = '';
     var ct = 0;
     headers.map(item => 
@@ -218,7 +220,7 @@ class EncuestasPage extends React.Component {
   
  
   render() {
-    const { uid_org, nombre,listafiltrada,encabezados,respuestas,loading,togglePopup } = this.state;
+    const { nombre,listafiltrada,loading } = this.state;
     //console.log(respuestas);
     //console.log(encabezados);
     return (
@@ -247,7 +249,7 @@ class EncuestasPage extends React.Component {
         </div>
         <div id="graphic" ref="graphic"></div>
         <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.data} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
         </div>
         <div id="menuEx" ref="menuEx"></div>
 
@@ -272,20 +274,7 @@ class EncuestasPage extends React.Component {
 
   
     ReactDOM.render( <ListBox/>, document.getElementById('menuEx'));
-    
-    /*
-    var list = document.getElementById("graphic");
-    if(list.childNodes.length>0)
-    {
-      list.removeChild(list.childNodes[0]);
-    }    
-
-    const {  nombre,encabezados ,respuestas} = this.state;
-    var respuesta = event.target.id; 
-    var pregunta  = event.target.getAttribute('name');
-    
-    return (ReactDOM.render( <Grafica  pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
-    */
+   
   }
 
   /*Funciones de PopUp Menu */
