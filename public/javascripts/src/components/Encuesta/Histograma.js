@@ -23,27 +23,30 @@ var Grafica = React.createClass({
 
     mostrarGraficaDeColumna: function()
     {
-        var x = new Array();
-        this.state.respuestas.map(lt =>
-            {
-                console.log(this.state.pregunta);
-                var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
-                if(LTFilter.length>0){
-                    x.push(LTFilter[0].respuesta);
-                }                
-            }
+        var x = [];
+        // this.state.respuestas.map(lt =>
+        //     {
+        //         console.log(this.state.pregunta);
+        //         var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
+        //         if(LTFilter.length>0){
+        //             x.push(LTFilter[0].respuesta);
+        //         }                
+        //     }
 
-        );
+        // );
+        x = this.state.respuestas[this.state.pregunta];
         x = x.sort();
         
         
         var ejeX = this.uniq(x);
+
         var ejeY = [];
         ejeX.map(item =>
             {
                 ejeY.push(x.filter(subitem => subitem === item).length);
             }
         );
+        
 
         if(this.state.tipo=='pie')
         {
@@ -86,7 +89,7 @@ var Grafica = React.createClass({
     generarHistograma(ejeX,ejeY,pregunta)
     {
         var trace1 = {
-            type: this.state.tipo,
+            type: 'bar',
             x: ejeX,
             y: ejeY,
             name: 'Cantidad',

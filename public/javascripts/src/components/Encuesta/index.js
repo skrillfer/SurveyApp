@@ -294,10 +294,10 @@ class EncuestasPage extends React.Component {
       list.removeChild(list.childNodes[0]);
     }    
     this.setState({showPopup: !this.state.showPopup,});
-    const {  encabezados ,respuestas,pregunta} = this.state;
+    const {  encabezados ,respuestas,pregunta, headers, queryHash} = this.state;
     
    
-    return (ReactDOM.render( <Grafica tipo= {event.target.id} pregunta = {pregunta} encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <Grafica tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {queryHash}/>, document.getElementById('graphic')));
   }
 
 
@@ -325,6 +325,7 @@ class EncuestasPage extends React.Component {
 
 
   togglePopup(event) {
+
     this.setState({
       showPopup: !this.state.showPopup,
       pregunta:   event.target.getAttribute('name'),
@@ -340,7 +341,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     <thead>
         <tr>
           {headers.map( item =>(
-            <th onClick = {handle} >
+            <th name = {item} onClick = {handle} >
                 {item}
             </th>
           ))}
@@ -354,7 +355,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
             {
                   
                   headers.map((value,i) => (
-                    <td>
+                    <td  >
                        {renderizarColumna(row,i)}
                     </td>
                   )
