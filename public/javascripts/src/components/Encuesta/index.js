@@ -7,7 +7,6 @@ class EncuestasPage extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
 
-    this.handleChange = this.handleChange.bind(this);
     this.clickColumn = this.clickColumn.bind(this);
 
           /*        Funciones de PopUp Menu       */
@@ -196,26 +195,7 @@ class EncuestasPage extends React.Component {
     this.firebaseRef.off();
   }
 
-  handleChange({target}){
-    
-    if (target.checked){
-      const {  nombre,encabezados ,respuestas} = this.state;
-
-      var element1 = document.getElementById("TablaRespuestas");
-      var element2 = document.getElementById("Search");
-      element1.style.display = "none";  element2.style.display = "none";
-
-      return (ReactDOM.render( <Grafica  encabezados = {encabezados} respuestas = {respuestas}/>, document.getElementById('graphic')));
-
-    } else {
-      var list = document.getElementById("graphic");
-      list.removeChild(list.childNodes[0]);
-
-      var element1 = document.getElementById("TablaRespuestas");
-      var element2 = document.getElementById("Search");
-      element1.style.display = "block";  element2.style.display = "block";
-    }
-  }
+  
 
   
  
@@ -239,12 +219,6 @@ class EncuestasPage extends React.Component {
             {loading && <div>Loading ...</div>}
             <button onClick={this.downloadCSV}>Descargar csv</button>
             <div>
-              <div className="pretty p-switch p-fill">
-                  <input type="checkbox" onClick={this.handleChange}/>
-                  <div className="state">
-                      <label>Mostrar Estadisticos</label>
-                  </div>
-              </div>
             </div>
         </div>
         <div id="graphic" ref="graphic"></div>
