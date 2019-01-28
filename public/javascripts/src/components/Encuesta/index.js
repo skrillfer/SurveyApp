@@ -127,9 +127,9 @@ class EncuestasPage extends React.Component {
   }
 
   convertArrayOfObjectsToCSV(args) {
-    var result, heads, lineDelimiter,columnDelimiter, data;
+    var result, headers, lineDelimiter,columnDelimiter, data;
 
-    heads = args.enca || null;
+    headers = args.headers || null;
     data = args.data || null;
     if (data == null || !data.length) {
         return null;
@@ -140,26 +140,30 @@ class EncuestasPage extends React.Component {
 
     result = '';
     var ct = 0;
-    heads.map(item => 
+    headers.map(item => 
     {
       if(ct>0) result += columnDelimiter;
       ct++;
-      result += item.pregunta;
+      result += item;
     });
     result += lineDelimiter;
 
-    {data.map( lt => 
-      {
-        ct = 0;
-        lt.lista.map( item =>{
-          if(ct>0) result += columnDelimiter;
-          ct++;
-          result += item.respuesta;
-        })
-        result += lineDelimiter;
-      })
-    };
+    data.map(
+      row => {
+      
+          ct = 0;
+  
+          headers.map(
+            (value,i) => {
+              if(ct>0) result += columnDelimiter
+              ct++;
+              result += this.renderizarColumna(row,i);
+            }
+          )
+          result += lineDelimiter;
 
+      }
+    );
     return result;
   }
 
@@ -168,8 +172,8 @@ class EncuestasPage extends React.Component {
   downloadCSV(args) {
     var data, filename, link;
     var csv = this.convertArrayOfObjectsToCSV({
-        data: this.state.respuestas,
-        enca: this.state.encabezados
+        data: this.state.data,
+        headers: this.state.headers
     });
     if (csv == null) return;
 
