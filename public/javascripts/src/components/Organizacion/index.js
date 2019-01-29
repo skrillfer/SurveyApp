@@ -8,6 +8,7 @@ class OrgsPage extends React.Component {
     this.state = {
       loading: false,
       orgs: [],
+      headers : [],
       userKey: UserID,
     };
   }
@@ -24,6 +25,9 @@ class OrgsPage extends React.Component {
         current.setState({ 
           orgs: []
         });
+        current.setState({ 
+          orgs: current.state.orgs[current.state.userKey]=([])
+        })
         snapshot.forEach(function(childSnapshot) {
           var orgKey = childSnapshot.key;
           
@@ -33,6 +37,7 @@ class OrgsPage extends React.Component {
             var childKey = childSnapshot.key;
             var childData = childSnapshot.val();
 
+            
 
             if(childSnapshot.hasChild('encuestas'))
             {
@@ -41,15 +46,16 @@ class OrgsPage extends React.Component {
                   {
                     const usersObject = xsnapshot.val();
 
-                    let ARRAY2=Object.keys(usersObject).map(key => ({
+                    const ARRAY2=Object.keys(usersObject).map(key => ({
                       ...usersObject[key],
                       uid: key,
                       organizacion: childData.nombre,
                       idorg: childKey,
                     }));
-
+                    var HashTmp = current.state.orgs;
+                    HashTmp[childKey] = ARRAY2;
                     current.setState({ 
-                      orgs: current.state.orgs.concat([ARRAY2.slice()])
+                      orgs: HashTmp
                     })
                   }
                     
@@ -58,14 +64,11 @@ class OrgsPage extends React.Component {
           });
           
         });
-        
     }
     
     );
 
-    this.setState({
-      loading:false,
-    });
+    
 
   }
 
@@ -78,17 +81,15 @@ class OrgsPage extends React.Component {
  
   render() {
     const { orgs, loading } = this.state;
+    console.log('----------------');
     console.log(orgs);
-    console.log(orgs.length);
+    //console.log(Object.keys(orgs));
 
 
     return (
       <div>
         <h1>Informacion</h1>
-        {loading && <div>Loading ...</div>}
-        <OrgSList orgs={orgs} />
-        
-        
+        <OrgSList orgs={orgs} />  
       </div>
      );
     
@@ -96,6 +97,8 @@ class OrgsPage extends React.Component {
   }
 }
 
+
+//        <OrgSList orgs={orgs} />        
 
 
 
@@ -109,16 +112,25 @@ const OrgSList = ({ orgs }) => (
     </thead>
     
     <tbody>
-      {orgs.map(data => data.map( item =>
+      {Object.keys(orgs).map( key => ( 
         
-        <tr key={item.uid}>
-            <td >
-            {item.organizacion}
-            </td>
-            <td>
-            <a href={'/dashboard/encuesta/'+item.idorg+'/'+item.uid} >{item.nombre}</a>
-            </td>
-        </tr>
+        
+            
+              orgs[key].map(
+                  item =>
+                  ( <tr key={key+item.uid}>
+                      <td ket = {key+item.uid}>
+                      {item.organizacion}
+                      </td>
+                      <td>
+                        <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
+                      </td>
+                    </tr>
+
+                  )
+              ) 
+
+            
         
       ))}
     </tbody>
