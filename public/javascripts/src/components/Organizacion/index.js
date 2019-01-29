@@ -113,25 +113,18 @@ const OrgSList = ({ orgs }) => (
     
     <tbody>
       {Object.keys(orgs).map( key => ( 
-        
-        
-            
-              orgs[key].map(
-                  item =>
-                  ( <tr key={key+item.uid}>
-                      <td ket = {key+item.uid}>
-                      {item.organizacion}
-                      </td>
-                      <td>
-                        <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
-                      </td>
-                    </tr>
-
-                  )
-              ) 
-
-            
-        
+          orgs[key].map(
+              item =>
+              ( <tr key={key+item.uid}>
+                  <td ket = {key+item.uid}>
+                  {item.organizacion}
+                  </td>
+                  <td>
+                    <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
+                  </td>
+                </tr>
+              )
+          ) 
       ))}
     </tbody>
 

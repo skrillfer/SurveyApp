@@ -122,27 +122,28 @@ h1 {
 
 .popup {
   position: fixed;
-  width: 30%;
-  height: 30%;
+  width: 27%;
+  height: 25%;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 60%;
   margin: auto;
-  background-color: rgba(0,0,0, 0.5);
+  background-color:white;
 }
 .popup_inner {
   position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
+  left: 5%;
+  right: 5%;
+  top: 5%;
+  bottom: 5%;
   margin: auto;
   background: white;
+  width: 90%;
 }
 
 .popup .btn {
-  background-color: #4CAF50;
+  background-color: #111111;
   color: white;
   padding: 16px 20px;
   border: none;
@@ -150,6 +151,7 @@ h1 {
   width: 100%;
   margin-bottom:10px;
   opacity: 0.8;
+  
 }
 
 .popup .cancel {
@@ -167,4 +169,10 @@ h1 {
   margin-bottom:10px;
   padding-top: 34px;
   opacity: 0.8;
+}
+
+.graphicss {
+  text-align: center;
+  border: '2px solid gray';
+
 }

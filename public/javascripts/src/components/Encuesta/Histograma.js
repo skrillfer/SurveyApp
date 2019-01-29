@@ -6,6 +6,7 @@ var Grafica = React.createClass({
                     encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
                     tipo: this.props.tipo,
+                    cerrarGrafica : this.props.cerrarGrafica,
                 };
     },
     componentDidMount: function()
@@ -123,9 +124,10 @@ var Grafica = React.createClass({
     },
     render() {
         return (
-            <div id ="contenedorHistograma">
-                <h3>GRAFICOS</h3>
-                <div id="histograma">
+            <div id ="contenedorHistograma" >
+                <h3>GRAFICOS <button onClick = {this.state.cerrarGrafica} style={{color:"red"}} > X</button></h3>
+                
+                <div id="histograma" >
 
                 </div>
             </div>

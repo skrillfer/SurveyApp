@@ -7,7 +7,7 @@ class EncuestasPage extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
 
-    this.clickColumn = this.clickColumn.bind(this);
+    this.cerrarGrafica = this.cerrarGrafica.bind(this);
 
           /*        Funciones de PopUp Menu       */
     this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
@@ -31,7 +31,8 @@ class EncuestasPage extends React.Component {
       //refactor
       headers : [],
       data : [],
-      queryHash: {}
+      queryHash: {},
+      posicion : '',
     };
   }
 
@@ -194,9 +195,6 @@ class EncuestasPage extends React.Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
-
-  
-
   
  
   render() {
@@ -221,18 +219,18 @@ class EncuestasPage extends React.Component {
             <div>
             </div>
         </div>
-        <div id="graphic" ref="graphic"></div>
+        <div id="graphic" className="graphicss"></div>
         <div id="TablaRespuestas">
           <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
         </div>
-        <div id="menuEx" ref="menuEx"></div>
 
         {this.state.showPopup ? 
           <ListBox
-            text='Graficos'
+            text='Que Tipo de Grafica?'
             closePopup={this.togglePopup.bind(this)}
             clickGenerarGrafico = {this.clickGenerarGrafico}
             clickGraficaPie = {this.clickGraficaPie}
+            posicion = {this.state.posicion}
           />
           : null
         }
@@ -243,13 +241,7 @@ class EncuestasPage extends React.Component {
   }
 
 
-  clickColumn(event)
-  {
-
-  
-    ReactDOM.render( <ListBox/>, document.getElementById('menuEx'));
-   
-  }
+ 
 
   /*Funciones de PopUp Menu */
   clickGenerarGrafico(event)
@@ -264,7 +256,7 @@ class EncuestasPage extends React.Component {
     const {  encabezados ,respuestas,pregunta, headers, queryHash} = this.state;
     
    
-    return (ReactDOM.render( <Grafica tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {queryHash}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {queryHash}/>, document.getElementById('graphic')));
   }
 
 
@@ -290,13 +282,28 @@ class EncuestasPage extends React.Component {
     
   }
 
+  cerrarGrafica()
+  {
+    var list = document.getElementById("graphic");
+    if(list.childNodes.length>0)
+    {
+      list.removeChild(list.childNodes[0]);
+    }    
+  }
 
   togglePopup(event) {
+    var posicionM = '';
+    try{
+      var elemento = document.getElementById(event.target.id);
+      posicionM = elemento.getBoundingClientRect();
+    }catch(ex){}
+    
 
     this.setState({
       showPopup: !this.state.showPopup,
       pregunta:   event.target.getAttribute('name'),
       respuesta : event.target.id,
+      posicion :  posicionM,
     });
   }
 
@@ -308,7 +315,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     <thead>
         <tr>
           {headers.map( item =>(
-            <th name = {item} onClick = {handle} >
+            <th name = {item} id = {item} onClick = {handle} >
                 {item}
             </th>
           ))}
