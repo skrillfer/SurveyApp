@@ -8,54 +8,65 @@ class OrgsPage extends React.Component {
     this.state = {
       loading: false,
       orgs: [],
+      userKey: UserID,
     };
   }
 
   componentDidMount() {
     const { orgs, loading } = this.state;
-    
+    console.log('KEY:'+this.state.userKey);
     this.setState({ orgs:[],loading: true });
 
     this.firebaseRef = db.ref('proyectos/');
     
-    let ARRAY = [];
+    var current = this;
+    db.ref('usuarios/'+this.state.userKey+'/organizaciones').on('value', snapshot => {
+        current.setState({ 
+          orgs: []
+        });
+        snapshot.forEach(function(childSnapshot) {
+          var orgKey = childSnapshot.key;
+          
+
+          db.ref('proyectos/'+orgKey).on('value',childSnapshot =>{
+
+            var childKey = childSnapshot.key;
+            var childData = childSnapshot.val();
+
+
+            if(childSnapshot.hasChild('encuestas'))
+            {
+                db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
+                  if(xsnapshot.exists())
+                  {
+                    const usersObject = xsnapshot.val();
+
+                    let ARRAY2=Object.keys(usersObject).map(key => ({
+                      ...usersObject[key],
+                      uid: key,
+                      organizacion: childData.nombre,
+                      idorg: childKey,
+                    }));
+
+                    current.setState({ 
+                      orgs: current.state.orgs.concat([ARRAY2.slice()])
+                    })
+                  }
+                    
+                });
+            }
+          });
+          
+        });
+        
+    }
     
+    );
 
-    this.firebaseRef.on('value', snapshot => {
-      snapshot.forEach(function(childSnapshot) {
-          var childKey = childSnapshot.key;
-          var childData = childSnapshot.val();
-          //console.log(childKey);
-
-          if(childSnapshot.hasChild('encuestas'))
-          {
-              db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
-                if(xsnapshot.exists())
-                {
-                  const usersObject = xsnapshot.val();
-
-
-                  let ARRAY2=Object.keys(usersObject).map(key => ({
-                    ...usersObject[key],
-                    uid: key,
-                    organizacion: childData.nombre,
-                    idorg: childKey,
-                  }));
-
-                  ARRAY.push(ARRAY2.slice());
-                }
-                  
-              });
-          }
-      });
-
-      this.setState({
-        loading:false,
-        orgs: ARRAY,
-      });
-      
+    this.setState({
+      loading:false,
     });
-    
+
   }
 
 

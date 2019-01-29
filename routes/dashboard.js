@@ -35,7 +35,7 @@ router.get('/overview', function (req, res) {
       // Serve content for signed in user.
       //return serveContentForUser('/profile', req, res, decodedClaims);
       console.log(decodedClaims);
-      res.render('dashboard')
+      res.render('dashboard',{'UserID':decodedClaims.uid})
     }).catch(function(error) {
       // Force user to login.
       res.redirect('/');
