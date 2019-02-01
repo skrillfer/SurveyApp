@@ -14,7 +14,7 @@ var ListBox = React.createClass({
         var color = 'green';
         console.log(right);
         const divStyle = {
-            top: '100',
+            top: '100px',
             border: '2px solid gray',
             
           }; 

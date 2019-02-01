@@ -1,6 +1,8 @@
 
 
 class EncuestasPage extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
@@ -21,8 +23,6 @@ class EncuestasPage extends React.Component {
       uid: id,
       uid_org: org,
       nombre : '',
-      respuestas : [],
-      encabezados : [],
       listafiltrada : [],
       showPopup: false,
       pregunta: '',
@@ -48,7 +48,9 @@ class EncuestasPage extends React.Component {
   
 
   componentDidMount() {
-    this.setState({ loading: true,respuestas:[] });
+    this._isMounted = true;
+
+    this.setState({ loading: true });
 
     console.log(this.state.uid);
     console.log(this.state.uid_org);
@@ -57,7 +59,7 @@ class EncuestasPage extends React.Component {
 
 
     let current = this;
-    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
+    this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
       xsnapshot.forEach(function(childSnapshot) {
 
           var childKey = childSnapshot.key;
@@ -87,23 +89,28 @@ class EncuestasPage extends React.Component {
      
    
 
-    this.firebaseRef = db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
+    this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
       var childKey = xsnapshot.key;
       var childData = xsnapshot.val();
 
-      this.setState({
-        loading:false,
-        nombre: childData.nombre,
-        respuestas: ARRAY,
-        data : ARRAY,
-        encabezados:ARRAY[0].lista,
-        listafiltrada: ARRAY,
-      });
+      if (this._isMounted) {
+        this.setState({
+          loading:false,
+          nombre: childData.nombre,
+          data : ARRAY,
+          listafiltrada: ARRAY,
+        });
+      }
+      
 
     });
     
   }
 
+  componentWillUnmount()
+  {
+    this._isMounted = false;
+  }
 
   filtrar_respuestas(event)
   {   
@@ -125,7 +132,11 @@ class EncuestasPage extends React.Component {
         
       }     
     );
-    this.setState({listafiltrada: filtrada});
+    if(this._isMounted)
+    {
+      this.setState({listafiltrada: filtrada});
+
+    }
   }
 
   convertArrayOfObjectsToCSV(args) {
@@ -192,15 +203,10 @@ class EncuestasPage extends React.Component {
     link.click();
   }
 
-  componentWillUnmount() {
-    this.db.off();
-  }
   
  
   render() {
     const { nombre,listafiltrada,loading } = this.state;
-    //console.log(respuestas);
-    //console.log(encabezados);
     return (
 
       <div>
@@ -260,7 +266,7 @@ class EncuestasPage extends React.Component {
       list.removeChild(list.childNodes[0]);
     }    
     this.setState({showPopup: !this.state.showPopup,});
-    const {  encabezados ,respuestas,pregunta, headers, queryHash} = this.state;
+    const { pregunta, headers, queryHash} = this.state;
     
    
     return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {queryHash}/>, document.getElementById('graphic')));
@@ -322,7 +328,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     <thead>
         <tr>
           {headers.map( item =>(
-            <th name = {item} id = {item} onClick = {handle} >
+            <th name = {item} id = {item} onClick = {handle} key = {item}>
                 {item}
             </th>
           ))}
@@ -331,12 +337,12 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     
     <tbody>
         {
-          matrix.map(row => (
-            <tr>
+          matrix.map((row,x) => (
+            <tr key ={x}>
             {
                   
                   headers.map((value,i) => (
-                    <td  >
+                    <td  key ={value+'_'+i}>
                        {renderizarColumna(row,i)}
                     </td>
                   )
