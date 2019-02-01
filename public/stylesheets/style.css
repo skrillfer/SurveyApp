@@ -123,40 +123,26 @@ h1 {
 .popup {
   position: fixed;
   width: 27%;
-  height: 25%;
+  height: 27%;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 60%;
+  bottom: 10%;
   margin: auto;
-  background-color:white;
+  background-color:gray;
 }
 .popup_inner {
   position: absolute;
   left: 5%;
   right: 5%;
-  top: 5%;
+  top: 12%;
   bottom: 5%;
   margin: auto;
   background: white;
   width: 90%;
 }
 
-.popup .btn {
-  background-color: #111111;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-  
-}
 
-.popup .cancel {
-  background-color: red;
-}
 
 #xml {
   position: relative;

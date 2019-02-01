@@ -11,8 +11,8 @@ var Grafica = React.createClass({
     },
     componentDidMount: function()
     {
-        console.log('VAMOS A GENERAR:'+this.state.tipo);
-        this.mostrarGraficaDeColumna();   
+        //console.log('VAMOS A GENERAR:'+this.state.tipo);
+        this.mostrarGraficaDeColumna("histograma");   
     }
     ,
     uniq(a) {
@@ -22,19 +22,10 @@ var Grafica = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function()
+    mostrarGraficaDeColumna: function(tipo)
     {
         var x = [];
-        // this.state.respuestas.map(lt =>
-        //     {
-        //         console.log(this.state.pregunta);
-        //         var LTFilter=lt.lista.filter( subitem => subitem.pregunta==this.state.pregunta);
-        //         if(LTFilter.length>0){
-        //             x.push(LTFilter[0].respuesta);
-        //         }                
-        //     }
-
-        // );
+    
         x = this.state.respuestas[this.state.pregunta];
         x = x.sort();
         
@@ -49,7 +40,7 @@ var Grafica = React.createClass({
         );
         
 
-        if(this.state.tipo=='pie')
+        if(tipo=='pie')
         {
             this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);
         }else
@@ -72,7 +63,7 @@ var Grafica = React.createClass({
         var data = [{
             values: porcentajes,
             labels: ejeX,
-            type: this.state.tipo
+            type: "pie"
           }];
           
         var layout = {
@@ -124,12 +115,23 @@ var Grafica = React.createClass({
     },
     render() {
         return (
-            <div id ="contenedorHistograma" >
-                <h3>GRAFICOS <button onClick = {this.state.cerrarGrafica} style={{color:"red"}} > X</button></h3>
-                
-                <div id="histograma" >
-
+            <div id ="contenedorHistograma" className = "center-block">
+            <div className="btn-group btn-group-justified" role="group" aria-label="...">
+                <div className="btn-group" role="group">
+                    <button type="button" onClick = {() =>this.mostrarGraficaDeColumna("histograma")} className="btn btn-link">Histograma</button>
                 </div>
+                <div className="btn-group" role="group">
+                    <button type="button"  onClick = {() =>this.mostrarGraficaDeColumna("pie")} className="btn btn-link">Pie</button>
+                </div>
+                <div className="btn-group" role="group">
+                    <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+                
+            <div  id="histograma" >
+
+            </div>
+            <hr />
             </div>
         )
     }

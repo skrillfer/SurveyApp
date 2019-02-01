@@ -3,7 +3,23 @@
   <% }else{%>
   <%- include common/header.ejs %>
   <% } %>   
+  
 
+    <!--
+      BOOSTRAP
+    -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+    integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+    crossorigin="anonymous"></script>
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+    
 
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
@@ -44,7 +60,7 @@
          var org      = "<%= org %>";
        </script>
 
-<script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>  
+      <script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>  
       <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
       <script  type="text/babel" src="/javascripts/src/components/Encuesta/Histograma.js" crossorigin></script>
       

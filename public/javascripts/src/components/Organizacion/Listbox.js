@@ -14,19 +14,18 @@ var ListBox = React.createClass({
         var color = 'green';
         console.log(right);
         const divStyle = {
-            top: '140px',
+            top: '100',
             border: '2px solid gray',
             
           }; 
         return (
             <div className='popup' style={divStyle} >
                 <div className='popup_inner'>
-                <span>{this.props.text}</span>
-                <button className="btn" id="histogram" onClick={this.props.clickGenerarGrafico}>Histrograma</button>
-                <button className="btn" id="pie" onClick={this.props.clickGenerarGrafico}>Grafica de Pie</button>
-                <button className="cancel" onClick={this.props.closePopup}>Cerrar</button>
+                <h4>{this.props.text}</h4>
+                <button className="btn btn-success btn-md" id="histogram" onClick={this.props.clickGenerarGrafico}>Aceptar</button>
+                <button className="btn btn-danger btn-xs" onClick={this.props.closePopup}>Cancelar</button>
                 </div>
-            </div>
+            </div>    
         );
     }
 });

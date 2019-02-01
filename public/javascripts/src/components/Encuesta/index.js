@@ -193,7 +193,7 @@ class EncuestasPage extends React.Component {
   }
 
   componentWillUnmount() {
-    this.firebaseRef.off();
+    this.db.off();
   }
   
  
@@ -213,9 +213,12 @@ class EncuestasPage extends React.Component {
             </form>
         </div>
         <div id="contenedorFunciones">
-            <h2> {nombre}</h2>
+            <h2> {nombre} <button onClick={this.downloadCSV} className="btn btn-link">
+            <span className="glyphicon glyphicon-save"></span> Descargar csv
+            </button>
+            </h2>
             {loading && <div>Loading ...</div>}
-            <button onClick={this.downloadCSV}>Descargar csv</button>
+            
             <div>
             </div>
         </div>
@@ -225,13 +228,17 @@ class EncuestasPage extends React.Component {
         </div>
 
         {this.state.showPopup ? 
+          (
+            this.cerrarGrafica,
           <ListBox
-            text='Que Tipo de Grafica?'
+            text={'Estadisticas Graficas de '+this.state.pregunta+'?'}
             closePopup={this.togglePopup.bind(this)}
             clickGenerarGrafico = {this.clickGenerarGrafico}
             clickGraficaPie = {this.clickGraficaPie}
             posicion = {this.state.posicion}
           />
+           
+          )
           : null
         }
         
