@@ -11,8 +11,10 @@ var Grafica = React.createClass({
     },
     componentDidMount: function()
     {
-        //console.log('VAMOS A GENERAR:'+this.state.tipo);
-        this.mostrarGraficaDeColumna("histograma");   
+        try{
+            this.mostrarGraficaDeColumna("histograma");   
+        }catch(ex){}
+        
     }
     ,
     uniq(a) {
@@ -42,10 +44,12 @@ var Grafica = React.createClass({
 
         if(tipo=='pie')
         {
-            this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);
+            try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex){}
+            
         }else
-        {
-            this.generarHistograma(ejeX,ejeY,this.state.pregunta);
+        {   
+            try{this.generarHistograma(ejeX,ejeY,this.state.pregunta);}catch(ex){}
+            
         }
         
     },

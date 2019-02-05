@@ -16,6 +16,7 @@ class EncuestasPage extends React.Component {
     this.togglePopup = this.togglePopup.bind(this);
     this.generateHead = this.generateHead.bind(this);
     this.renderizarColumna = this.renderizarColumna.bind(this);
+    this.obtenerEncabezado = this.obtenerEncabezado.bind(this);
 
 
     this.state = {
@@ -33,6 +34,8 @@ class EncuestasPage extends React.Component {
       data : [],
       queryHash: {},
       posicion : '',
+      HashFilter: {},
+      showGraphic :false,
     };
   }
 
@@ -112,8 +115,26 @@ class EncuestasPage extends React.Component {
     this._isMounted = false;
   }
 
+  obtenerEncabezado(index)
+  {
+    var encabezado= '';
+    this.state.headers.map( (head,i) =>
+      {
+        if(i==index)
+        {
+          encabezado = head;
+          return;
+        }
+      }
+    );
+    return encabezado;
+  }
+
   filtrar_respuestas(event)
   {   
+    var QueryHASH = {};
+    this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
+
     var updatedList = this.state.data.slice();
 
     const filtrada = [];
@@ -124,9 +145,17 @@ class EncuestasPage extends React.Component {
                 event.target.value.toLowerCase()) !== -1
         );
 
-        console.log();
         if(v.length>0)
         {
+
+          item.map(
+            element =>
+            {
+              var keyHash=this.obtenerEncabezado(element.index);
+              QueryHASH[keyHash].push(element.respuesta);
+            }
+          );
+
           filtrada.push(item);
         }
         
@@ -134,8 +163,24 @@ class EncuestasPage extends React.Component {
     );
     if(this._isMounted)
     {
-      this.setState({listafiltrada: filtrada});
-
+      
+      this.setState({listafiltrada: filtrada,HashFilter:QueryHASH});
+      if(this.state.showGraphic)
+      {
+        var HashFilter = QueryHASH;
+        if(Object.keys(this.state.HashFilter).length==0)
+        {
+          HashFilter = this.state.queryHash;
+        }
+    
+        var list = document.getElementById("graphic");
+        if(list.childNodes.length>0)
+        {
+          list.removeChild(list.childNodes[0]);
+        }    
+        const { pregunta, headers} = this.state;
+        return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
+      }
     }
   }
 
@@ -259,17 +304,24 @@ class EncuestasPage extends React.Component {
   /*Funciones de PopUp Menu */
   clickGenerarGrafico(event)
   {
-    
+    this.setState({showGraphic:true});
+
+    var HashFilter = this.state.HashFilter;
+    if(Object.keys(this.state.HashFilter).length==0)
+    {
+      HashFilter = this.state.queryHash;
+    }
+
     var list = document.getElementById("graphic");
     if(list.childNodes.length>0)
     {
       list.removeChild(list.childNodes[0]);
     }    
     this.setState({showPopup: !this.state.showPopup,});
-    const { pregunta, headers, queryHash} = this.state;
+    const { pregunta, headers} = this.state;
     
    
-    return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {queryHash}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
   }
 
 
@@ -297,6 +349,8 @@ class EncuestasPage extends React.Component {
 
   cerrarGrafica()
   {
+
+    this.setState({showGraphic:false});
     var list = document.getElementById("graphic");
     if(list.childNodes.length>0)
     {
