@@ -17,6 +17,7 @@ class EncuestasPage extends React.Component {
     this.generateHead = this.generateHead.bind(this);
     this.renderizarColumna = this.renderizarColumna.bind(this);
     this.obtenerEncabezado = this.obtenerEncabezado.bind(this);
+    this.actualizarGrafico = this.actualizarGrafico.bind(this);
 
 
     this.state = {
@@ -36,6 +37,7 @@ class EncuestasPage extends React.Component {
       posicion : '',
       HashFilter: {},
       showGraphic :false,
+      textSearch : '',
     };
   }
 
@@ -53,6 +55,8 @@ class EncuestasPage extends React.Component {
   componentDidMount() {
     this._isMounted = true;
 
+    var control = false;
+
     this.setState({ loading: true });
 
     console.log(this.state.uid);
@@ -60,53 +64,79 @@ class EncuestasPage extends React.Component {
 
     let ARRAY = [];
 
-
+    console.log('comenzamos');
     let current = this;
     this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
       xsnapshot.forEach(function(childSnapshot) {
-
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
+          
+          if(control)
+          {
+            ARRAY = [];
+            current.state.queryHash = {};
+            control=false;
+          }
+          
 
           let lista = [];
           ARRAY.push(lista);
+          
+          db.ref('proyectos/'+current.state.uid_org+'/respuestas/'+current.state.uid+'/'+childKey+'/body').on('value', 
+              bodyxnapshot=>{
+                bodyxnapshot.forEach(function(inSnapshot) {
+                    if(inSnapshot.exists())
+                    {
+        
+                      var childKey1 = inSnapshot.key;
+                      var childData1 = inSnapshot.val();
+                      lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
+                      if(current.state.queryHash[childKey1]){
+                        current.state.queryHash[childKey1].push(childData1);
+                      }else{
+                        current.state.queryHash[childKey1] = [childData1];
+                      }
+                    }
 
-          childSnapshot.child('body').forEach(function(inSnapshot) {
-            
-            if(inSnapshot.exists())
-            {
-
-              var childKey1 = inSnapshot.key;
-              var childData1 = inSnapshot.val();
-              lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
-              if(current.state.queryHash[childKey1]){
-                current.state.queryHash[childKey1].push(childData1);
-              }else{
-                current.state.queryHash[childKey1] = [childData1];
+                });
               }
-            }
-          });
-
+          );
+         
       });
+
+      this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
+        var childKey = xsnapshot.key;
+        var childData = xsnapshot.val();
+        if (this._isMounted) {
+          this.setState({
+            loading:false,
+            nombre: childData.nombre,
+            data : ARRAY,
+            listafiltrada: ARRAY,
+          },s=>{
+                  control=true;
+                  //idSearch
+                  if(current.state.textSearch!='')
+                  {
+                    var element = document.getElementById('idSearch');
+                    element.value = '';
+                    this.cerrarGrafica();
+                  }else
+                  {
+                    this.actualizarGrafico(current.state.HashFilter);
+                  }
+                  
+
+               }
+          );
+        }
+      });
+
     });
      
    
 
-    this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
-      var childKey = xsnapshot.key;
-      var childData = xsnapshot.val();
-
-      if (this._isMounted) {
-        this.setState({
-          loading:false,
-          nombre: childData.nombre,
-          data : ARRAY,
-          listafiltrada: ARRAY,
-        });
-      }
-      
-
-    });
+    
     
   }
 
@@ -132,6 +162,10 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
+    
+    this.setState({textSearch:event.target.value});
+
+
     var QueryHASH = {};
     this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
 
@@ -165,6 +199,12 @@ class EncuestasPage extends React.Component {
     {
       
       this.setState({listafiltrada: filtrada,HashFilter:QueryHASH});
+      this.actualizarGrafico(QueryHASH);
+    }
+  }
+
+  actualizarGrafico(QueryHASH)
+  {
       if(this.state.showGraphic)
       {
         var HashFilter = QueryHASH;
@@ -181,7 +221,6 @@ class EncuestasPage extends React.Component {
         const { pregunta, headers} = this.state;
         return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
       }
-    }
   }
 
   convertArrayOfObjectsToCSV(args) {
@@ -259,7 +298,7 @@ class EncuestasPage extends React.Component {
         <div id="Search">
             <form>
               <fieldset className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filtrar_respuestas}/>
+              <input type="text" className="form-control form-control-lg" id="idSearch" placeholder="Search" onChange={this.filtrar_respuestas}/>
               </fieldset>
             </form>
         </div>
