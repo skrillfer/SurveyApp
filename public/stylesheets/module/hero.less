@@ -1,0 +1,97 @@
+/*------------------------------------*\
+    #Hero
+\*------------------------------------*/
+
+.header-transparent + .slider {
+	margin-top: -100px;
+}
+
+.slider {
+	height: 850px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.slider .slide--item {
+	height: 850px;
+}
+
+.slider .row-content{
+	padding-top:80px;
+}
+
+.slider .slide--headline {
+	color: @color-white;
+	font-family: @font-heading;
+	font-size: 45px;
+	font-weight: 400;
+	line-height: 60px;
+	margin-bottom: 10px;
+	text-transform: capitalize;
+}
+
+.slider .slide--bio {
+	color:@color-white;
+	font-family: @font-body;
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 32px;
+	margin-bottom: 50px;
+}
+
+.slider .slide--holder {position: relative}
+.slider .input-group{
+	border: none;
+}
+.slider .input-group .form-control{
+	background-color: @color-white;
+}
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px) and (max-width : 767px) {
+	.slider .row-content{
+		padding-top:60px;
+	}
+	.slider .slide--headline {
+		font-size: 30px;
+		line-height: 1.2;
+		text-align: center;
+		margin-top: 0;
+	}
+
+	.slider .slide--bio {
+		font-size: 14px;
+		line-height: 1.5;
+		padding: 0 10px;
+		text-align: center;
+		 margin-bottom: 20px;
+	}
+
+	.slider,
+	.slider .slide--item {
+		height: 600px;
+	}
+	.slider .btn{ width: 130px; }
+	.slider form{margin-bottom: 30px !important;}
+
+}
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+	.slider,
+	.slider .slide--item {
+		height: 700px;
+	}
+	.slider .row-content{
+		padding-top: 30px;
+	}
+		.slider .slide--headline {
+		font-size: 30px;
+			line-height: 1.2;
+	}
+	.slider .slide--bio {
+		font-size: 14px;
+		line-height: 1.5;
+		    margin-bottom: 20px;
+	}
+	
+
+}

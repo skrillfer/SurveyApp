@@ -1,8 +1,164 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+}
+
+#container {
+  margin: 0 auto;
+  text-align: center;
+  margin-top:15px;
+  margin-bottom:15px;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.hidden {
+  display: none;
+}
+
+#user-info {
+  border: 1px solid #CCC;
+  clear: both;
+  margin: 0 auto 20px;
+  max-width: 400px;
+  padding: 10px;
+  text-align: left;
+}
+
+#photo-container {
+  background-color: #EEE;
+  border: 1px solid #CCC;
+  float: left;
+  height: 80px;
+  margin-right: 10px;
+  width: 80px;
+}
+
+#photo {
+  height: 80px;
+  margin: 0;
+  width: 80px;
+}
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #111111;
+  color: white;
+}
+
+
+
 a {
-  color: #00B7FF;
+  color: gray;
+  text-decoration: none; /* no underline */
+}
+
+
+@media (max-width: 300px) {
+  #photo-container,
+  #photo {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.navbar {
+    background-color:#000;
+}
+
+.btnMenu {
+    margin-top:20px;
+}
+
+.tituloLogo {
+  font-size: 3em;
+  color:white;
+}
+
+
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+
+
+/* The popup form - hidden by default */
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+.popup {
+  position: fixed;
+  width: 27%;
+  height: 27%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+  margin: auto;
+  background-color:gray;
+}
+.popup_inner {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 12%;
+  bottom: 5%;
+  margin: auto;
+  background: white;
+  width: 90%;
+}
+
+
+
+#xml {
+  position: relative;
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+  margin-bottom:10px;
+  padding-top: 34px;
+  opacity: 0.8;
+}
+
+.graphicss {
+  text-align: center;
+  border: '2px solid gray';
+
 }
