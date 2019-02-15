@@ -1,17 +1,46 @@
-<html>
-  <head>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!-- Main styles for this application-->
-    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.3/firebaseui.css" />
-    <script src="/javascripts/jquery-2.2.4.min.js"></script>
-<link href="/coreui/css/style.css" rel="stylesheet">
-<link href="/coreui/vendors/pace-progress/css/pace.min.css" rel="stylesheet">
-  </head>
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v2.1.11
+* @link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
 
-<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<html lang="en">
+  <head>
+    <base href="./../">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>CoreUI Free Bootstrap Admin Template</title>
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      // Shared ID
+      gtag('config', 'UA-118965717-3');
+      // Bootstrap ID
+      gtag('config', 'UA-118965717-5');
+    </script>
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <header class="app-header navbar">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
@@ -310,31 +339,59 @@
         <button class="sidebar-minimizer brand-minimizer" type="button"></button>
       </div>
       <main class="main">
-   <!-- Stylesheets for React Components 
-    ============================================= -->
-    <script src="https://unpkg.com/react@16/umd/react.development.js" ></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" ></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
-    <!-- ReactFire -->
-    <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
-    <!-- throw-in-the-towel -->
-    <script src="https://unpkg.com/throw-in-the-towel@2"></script>
-    <!-- Initialize the Firebase SDK -->
-    <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
-
-
-    <script>
-        var UserID = "<%= UserID %>";
-    </script>
-    </br></br>
-    <div align="right">
-        <a class="btn btn-default" href="/builder/">Crear Encuesta</a>
-    </div>
-    <div id="container">
-    </div>  
-    <script  type="text/jsx" src="/javascripts/src/components/Organizacion/index.js" crossorigin></script>
+        <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item">
+            <a href="#">Admin</a>
+          </li>
+          <li class="breadcrumb-item active">Dashboard</li>
+          <!-- Breadcrumb Menu-->
+          <li class="breadcrumb-menu d-md-down-none">
+            <div class="btn-group" role="group" aria-label="Button group">
+              <a class="btn" href="#">
+                <i class="icon-speech"></i>
+              </a>
+              <a class="btn" href="./">
+                <i class="icon-graph"></i>  Dashboard</a>
+              <a class="btn" href="#">
+                <i class="icon-settings"></i>  Settings</a>
+            </div>
+          </li>
+        </ol>
+        <div class="container-fluid">
+          <div class="animated fadeIn">
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-align-justify"></i> Popovers
+                <div class="card-header-actions">
+                  <a class="card-header-action" href="http://coreui.io/docs/components/bootstrap-popover/popovers.html" target="_blank">
+                    <small class="text-muted">docs</small>
+                  </a>
+                </div>
+              </div>
+              <div class="card-body">
+                <button class="btn btn-lg btn-danger" type="button" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+                <hr>
+                <a class="btn btn-lg btn-danger" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
+                  Dismissible popover
+                </a>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-align-justify"></i> Popovers
+                <small>directions</small>
+              </div>
+              <div class="card-body">
+                <button class="btn btn-secondary" type="button" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Popover on top</button>
+                <button class="btn btn-secondary" type="button" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Popover on right</button>
+                <button class="btn btn-secondary" type="button" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Popover on bottom</button>
+                <button class="btn btn-secondary" type="button" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">Popover on left</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
       <aside class="aside-menu">
         <ul class="nav nav-tabs" role="tablist">
@@ -367,9 +424,9 @@
                   <strong>Lucas</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  1 - 3pm</small>
+                  <i class="icon-calendar"></i>  1 - 3pm</small>
                 <small class="text-muted">
-                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
+                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
               </div>
               <div class="list-group-item list-group-item-accent-info">
                 <div class="avatar float-right">
@@ -379,9 +436,9 @@
                   <strong>Megan</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  4 - 5pm</small>
+                  <i class="icon-calendar"></i>  4 - 5pm</small>
                 <small class="text-muted">
-                  <i class="icon-social-skype"></i>  On-line</small>
+                  <i class="icon-social-skype"></i>  On-line</small>
               </div>
               <div class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">Tomorrow</div>
               <div class="list-group-item list-group-item-accent-danger list-group-item-divider">
@@ -389,9 +446,9 @@
                   <strong>deadline</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  10 - 11pm</small>
+                  <i class="icon-calendar"></i>  10 - 11pm</small>
                 <small class="text-muted">
-                  <i class="icon-home"></i>  creativeLabs HQ</small>
+                  <i class="icon-home"></i>  creativeLabs HQ</small>
                 <div class="avatars-stack mt-2">
                   <div class="avatar avatar-xs">
                     <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com">
@@ -414,18 +471,18 @@
                 <div>
                   <strong>#10 Startups.Garden</strong> Meetup</div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  1 - 3pm</small>
+                  <i class="icon-calendar"></i>  1 - 3pm</small>
                 <small class="text-muted">
-                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
+                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
               </div>
               <div class="list-group-item list-group-item-accent-primary list-group-item-divider">
                 <div>
                   <strong>Team meeting</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  4 - 6pm</small>
+                  <i class="icon-calendar"></i>  4 - 6pm</small>
                 <small class="text-muted">
-                  <i class="icon-home"></i>  creativeLabs HQ</small>
+                  <i class="icon-home"></i>  creativeLabs HQ</small>
                 <div class="avatars-stack mt-2">
                   <div class="avatar avatar-xs">
                     <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com">
@@ -627,10 +684,19 @@
         <a href="https://coreui.io">CoreUI</a>
         <span>&copy; 2018 creativeLabs.</span>
       </div>
-      <div class="ml-auto"> 
+      <div class="ml-auto">
         <span>Powered by</span>
         <a href="https://coreui.io">CoreUI</a>
       </div>
     </footer>
-</body>
+    <!-- CoreUI and necessary plugins-->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/pace-progress/pace.min.js"></script>
+    <script src="node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+    <script src="node_modules/@coreui/coreui/dist/js/coreui.min.js"></script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="js/popovers.js"></script>
+  </body>
 </html>

@@ -1,17 +1,46 @@
-<html>
-  <head>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!-- Main styles for this application-->
-    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.3/firebaseui.css" />
-    <script src="/javascripts/jquery-2.2.4.min.js"></script>
-<link href="/coreui/css/style.css" rel="stylesheet">
-<link href="/coreui/vendors/pace-progress/css/pace.min.css" rel="stylesheet">
-  </head>
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v2.1.11
+* @link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
 
-<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+<html lang="en">
+  <head>
+    <base href="./../">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>CoreUI Free Bootstrap Admin Template</title>
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      // Shared ID
+      gtag('config', 'UA-118965717-3');
+      // Bootstrap ID
+      gtag('config', 'UA-118965717-5');
+    </script>
+  </head>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <header class="app-header navbar">
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
@@ -310,31 +339,388 @@
         <button class="sidebar-minimizer brand-minimizer" type="button"></button>
       </div>
       <main class="main">
-   <!-- Stylesheets for React Components 
-    ============================================= -->
-    <script src="https://unpkg.com/react@16/umd/react.development.js" ></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" ></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
-    <!-- ReactFire -->
-    <script src="https://cdn.firebase.com/libs/reactfire/1.0.0/reactfire.min.js"></script>
-    <!-- throw-in-the-towel -->
-    <script src="https://unpkg.com/throw-in-the-towel@2"></script>
-    <!-- Initialize the Firebase SDK -->
-    <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
-
-
-    <script>
-        var UserID = "<%= UserID %>";
-    </script>
-    </br></br>
-    <div align="right">
-        <a class="btn btn-default" href="/builder/">Crear Encuesta</a>
-    </div>
-    <div id="container">
-    </div>  
-    <script  type="text/jsx" src="/javascripts/src/components/Organizacion/index.js" crossorigin></script>
+        <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item">
+            <a href="#">Admin</a>
+          </li>
+          <li class="breadcrumb-item active">Dashboard</li>
+          <!-- Breadcrumb Menu-->
+          <li class="breadcrumb-menu d-md-down-none">
+            <div class="btn-group" role="group" aria-label="Button group">
+              <a class="btn" href="#">
+                <i class="icon-speech"></i>
+              </a>
+              <a class="btn" href="./">
+                <i class="icon-graph"></i>  Dashboard</a>
+              <a class="btn" href="#">
+                <i class="icon-settings"></i>  Settings</a>
+            </div>
+          </li>
+        </ol>
+        <div class="container-fluid">
+          <div class="animated fadeIn">
+            <div class="row">
+              <div class="col-sm-12 col-xl-6">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <div class="card-header-actions">
+                      <a class="card-header-action" href="http://coreui.io/docs/components/bootstrap-navs/" target="_blank">
+                        <small class="text-muted">docs</small>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                    <hr>
+                    <nav class="nav">
+                      <a class="nav-link active" href="#">Active</a>
+                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                    <hr>
+                    <ul class="nav justify-content-center">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                    <hr>
+                    <ul class="nav justify-content-end">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-xl-3">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>vertical</small>
+                  </div>
+                  <div class="card-body">
+                    <nav class="nav flex-column">
+                      <a class="nav-link active" href="#">Active</a>
+                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-xl-3">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>vertical</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-xl-6">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>tabs</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-xl-6">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>pills</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>fill and justify</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-pills nav-fill">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Longer nav link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                    <hr>
+                    <nav class="nav nav-pills nav-fill">
+                      <a class="nav-item nav-link active" href="#">Active</a>
+                      <a class="nav-item nav-link" href="#">Link</a>
+                      <a class="nav-item nav-link" href="#">Link</a>
+                      <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                    <hr>
+                    <nav class="nav nav-pills nav-justified">
+                      <a class="nav-link active" href="#">Active</a>
+                      <a class="nav-link" href="#">Longer nav link</a>
+                      <a class="nav-link" href="#">Link</a>
+                      <a class="nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                    <hr>
+                    <nav class="nav nav-pills nav-justified">
+                      <a class="nav-item nav-link active" href="#">Active</a>
+                      <a class="nav-item nav-link" href="#">Link</a>
+                      <a class="nav-item nav-link" href="#">Link</a>
+                      <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>with flex</small>
+                  </div>
+                  <div class="card-body">
+                    <nav class="nav nav-pills flex-column flex-sm-row">
+                      <a class="flex-sm-fill text-sm-center nav-link active" href="#">Active</a>
+                      <a class="flex-sm-fill text-sm-center nav-link" href="#">Link</a>
+                      <a class="flex-sm-fill text-sm-center nav-link" href="#">Link</a>
+                      <a class="flex-sm-fill text-sm-center nav-link disabled" href="#">Disabled</a>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>tabs with dropdowns</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>pills with dropdowns</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-pills">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Navs
+                    <small>with tab JavaScript plugin</small>
+                  </div>
+                  <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab1" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="myTab1Content">
+                      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater
+                        eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+                      </div>
+                      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo
+                        enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny
+                        pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+                      </div>
+                      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy
+                        hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't
+                        heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col">
+                        <ul class="nav nav-pills mb-1" id="pills-tab" role="tablist">
+                          <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Home</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+                          </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater
+                            eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+                          </div>
+                          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo
+                            enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan
+                            fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+                          </div>
+                          <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                            Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy
+                            hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably
+                            haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
       <aside class="aside-menu">
         <ul class="nav nav-tabs" role="tablist">
@@ -367,9 +753,9 @@
                   <strong>Lucas</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  1 - 3pm</small>
+                  <i class="icon-calendar"></i>  1 - 3pm</small>
                 <small class="text-muted">
-                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
+                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
               </div>
               <div class="list-group-item list-group-item-accent-info">
                 <div class="avatar float-right">
@@ -379,9 +765,9 @@
                   <strong>Megan</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  4 - 5pm</small>
+                  <i class="icon-calendar"></i>  4 - 5pm</small>
                 <small class="text-muted">
-                  <i class="icon-social-skype"></i>  On-line</small>
+                  <i class="icon-social-skype"></i>  On-line</small>
               </div>
               <div class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">Tomorrow</div>
               <div class="list-group-item list-group-item-accent-danger list-group-item-divider">
@@ -389,9 +775,9 @@
                   <strong>deadline</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  10 - 11pm</small>
+                  <i class="icon-calendar"></i>  10 - 11pm</small>
                 <small class="text-muted">
-                  <i class="icon-home"></i>  creativeLabs HQ</small>
+                  <i class="icon-home"></i>  creativeLabs HQ</small>
                 <div class="avatars-stack mt-2">
                   <div class="avatar avatar-xs">
                     <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com">
@@ -414,18 +800,18 @@
                 <div>
                   <strong>#10 Startups.Garden</strong> Meetup</div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  1 - 3pm</small>
+                  <i class="icon-calendar"></i>  1 - 3pm</small>
                 <small class="text-muted">
-                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
+                  <i class="icon-location-pin"></i>  Palo Alto, CA</small>
               </div>
               <div class="list-group-item list-group-item-accent-primary list-group-item-divider">
                 <div>
                   <strong>Team meeting</strong>
                 </div>
                 <small class="text-muted mr-3">
-                  <i class="icon-calendar"></i>  4 - 6pm</small>
+                  <i class="icon-calendar"></i>  4 - 6pm</small>
                 <small class="text-muted">
-                  <i class="icon-home"></i>  creativeLabs HQ</small>
+                  <i class="icon-home"></i>  creativeLabs HQ</small>
                 <div class="avatars-stack mt-2">
                   <div class="avatar avatar-xs">
                     <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com">
@@ -627,10 +1013,17 @@
         <a href="https://coreui.io">CoreUI</a>
         <span>&copy; 2018 creativeLabs.</span>
       </div>
-      <div class="ml-auto"> 
+      <div class="ml-auto">
         <span>Powered by</span>
         <a href="https://coreui.io">CoreUI</a>
       </div>
     </footer>
-</body>
+    <!-- CoreUI and necessary plugins-->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/pace-progress/pace.min.js"></script>
+    <script src="node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+    <script src="node_modules/@coreui/coreui/dist/js/coreui.min.js"></script>
+  </body>
 </html>
