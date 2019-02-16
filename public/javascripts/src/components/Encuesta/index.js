@@ -331,7 +331,7 @@ class EncuestasPage extends React.Component {
           )
           : null
         }
-        
+        <GridGraphs></GridGraphs>
       </div>
     );
     
@@ -360,7 +360,7 @@ class EncuestasPage extends React.Component {
     const { pregunta, headers} = this.state;
     
    
-    return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <HistogramaGraph cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
   }
 
 

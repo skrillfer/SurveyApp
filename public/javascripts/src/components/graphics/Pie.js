@@ -1,4 +1,4 @@
-var Grafica = React.createClass({
+var PieGraph = React.createClass({
 
     getInitialState: function() {
         return {    
@@ -41,16 +41,8 @@ var Grafica = React.createClass({
             }
         );
         
-
-        if(tipo=='pie')
-        {
-            try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex){}
-            
-        }else
-        {   
-            try{this.generarHistograma(ejeX,ejeY,this.state.pregunta);}catch(ex){}
-            
-        }
+        try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex){}
+          
         
     },
     generarGraficaPie(ejeX,ejeY,pregunta)
@@ -75,64 +67,22 @@ var Grafica = React.createClass({
         width: 500
         };
         
-        Plotly.newPlot('histograma', data, layout);
+        Plotly.newPlot('graphContainer', data, layout);
     },
     getSum(total, num) 
     {
         return total + num;
-    }      
-    ,
-    generarHistograma(ejeX,ejeY,pregunta)
-    {
-        var trace1 = {
-            type: 'bar',
-            x: ejeX,
-            y: ejeY,
-            name: 'Cantidad',
-            marker: {
-                color: '#C8A2C8',
-                line: {
-                    width: 2.5
-                }
-            }
-        };
-        
-        var data = [ trace1 ];
-        
-       
-        var layout = {
-          title: 'Histograma de '+pregunta,
-          font: {size: 18},
-          yaxis: {
-            title: {
-              text: 'Cantidad',
-              font: {
-                family: 'Courier New, monospace',
-                size: 18,
-                color: '#7f7f7f'
-              }
-            }
-          },
-          
-        };
-        Plotly.newPlot('histograma', data, layout, {responsive: true});    
     },
     render() {
         return (
             <div id ="contenedorHistograma" className = "center-block">
             <div className="btn-group btn-group-justified" role="group" aria-label="...">
                 <div className="btn-group" role="group">
-                    <button type="button" onClick = {() =>this.mostrarGraficaDeColumna("histograma")} className="btn btn-link">Histograma</button>
-                </div>
-                <div className="btn-group" role="group">
-                    <button type="button"  onClick = {() =>this.mostrarGraficaDeColumna("pie")} className="btn btn-link">Pie</button>
-                </div>
-                <div className="btn-group" role="group">
                     <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
                 
-            <div  id="histograma" >
+            <div  id="graphContainer" >
 
             </div>
             <hr />
@@ -140,5 +90,3 @@ var Grafica = React.createClass({
         )
     }
 });
-
-
