@@ -53,6 +53,7 @@ class EncuestasPage extends React.Component {
   
 
   componentDidMount() {
+    
     this._isMounted = true;
 
     var control = false;
@@ -291,6 +292,7 @@ class EncuestasPage extends React.Component {
  
   render() {
     const { nombre,listafiltrada,loading } = this.state;
+
     return (
 
       <div>
@@ -302,6 +304,7 @@ class EncuestasPage extends React.Component {
               </fieldset>
             </form>
         </div>
+        
         <div id="contenedorFunciones">
             <h2> {nombre} </h2>
             <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
@@ -311,10 +314,6 @@ class EncuestasPage extends React.Component {
             </div>
         </div>
         <div id="graphic" className="graphicss"></div>
-        <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
-        </div>
-
         {this.state.showPopup ? 
           (
             this.cerrarGrafica,
@@ -329,6 +328,11 @@ class EncuestasPage extends React.Component {
           )
           : null
         }
+        <div id="TablaRespuestas">
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
+        </div>
+
+        
       </div>
     );
     
@@ -414,7 +418,7 @@ class EncuestasPage extends React.Component {
 
 const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
   
-  <table id="customers" className="table table-responsive-sm table-bordered table-striped table-sm">
+  <table id="example" className="table table-striped table-bordered">
     <thead>
         <tr>
           {headers.map( item =>(
@@ -447,6 +451,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     </tbody>
 
   </table>
+  
 );
 
 

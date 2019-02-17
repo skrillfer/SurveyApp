@@ -45,6 +45,7 @@ var HistogramaGraph = React.createClass({
     },
     generarHistograma(ejeX,ejeY,pregunta)
     {
+        /*
         var trace1 = {
             type: 'bar',
             x: ejeX,
@@ -76,20 +77,84 @@ var HistogramaGraph = React.createClass({
           },
           
         };
-        Plotly.newPlot('graphContainerH', data, layout, {responsive: true});    
+        Plotly.newPlot('graphContainerH', data, layout, {responsive: true});*/    
+        var ctx = document.getElementById("graphContainerH").getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ejeX,
+              datasets: [{
+                data: ejeY,
+                label:"",
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    maxRotation: 90,
+                    minRotation: 80
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              title: {
+                display: true,
+                text: 'Histograma de '+pregunta
+              }
+            }
+          });
     },
     render() {
         return (
             <div id ="contenedorHistograma" className = "center-block">
-            <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                <div className="btn-group" role="group">
-                    <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="text-left">
+                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+                    </div>
                 </div>
             </div>
                 
-            <div  id="graphContainerH" >
+            <canvas  id="graphContainerH" >
 
-            </div>
+            </canvas>
             <hr />
             </div>
         )

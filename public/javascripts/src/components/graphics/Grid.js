@@ -33,7 +33,7 @@ var GridGraphs = React.createClass({
                                 </div>
                                 <div className = "card">
                                     <div className ="card-header">
-                                        Line Chart 2
+                                        Histogram Chart
                                     </div>
                                     <div className ="card-body">
                                     <HistogramaGraph cerrarGrafica = {this.state.cerrarGrafica} tipo= {this.state.tipo} pregunta = {this.state.pregunta} 

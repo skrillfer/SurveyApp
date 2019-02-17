@@ -15,6 +15,14 @@ var PieGraph = React.createClass({
             this.mostrarGraficaDeColumna("histograma");   
         }catch(ex){}
         
+    },
+    getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
     ,
     uniq(a) {
@@ -47,12 +55,15 @@ var PieGraph = React.createClass({
     },
     generarGraficaPie(ejeX,ejeY,pregunta)
     {
+        var colors =[] ;
+
         var total=ejeY.reduce(this.getSum);
         var porcentajes = [];
         ejeY.map(
             item =>
             {
                 porcentajes.push((item/total)*100);
+                colors.push(this.getRandomColor());
             }
         );
         
@@ -61,7 +72,8 @@ var PieGraph = React.createClass({
             type: 'pie',
             data : {
                 datasets: [{
-                    data: porcentajes
+                    data: porcentajes,
+                    backgroundColor : colors 
                 }],
             
                 // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -98,9 +110,11 @@ var PieGraph = React.createClass({
     render() {
         return (
             <div id ="contenedorPie" className = "center-block">
-            <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                <div className="btn-group" role="group">
-                    <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="text-left">
+                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+                    </div>
                 </div>
             </div>
                 
