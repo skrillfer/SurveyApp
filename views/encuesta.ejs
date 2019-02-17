@@ -72,12 +72,30 @@
       <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
   
       <main class="main">
-
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item">
+          <a href="#">Admin</a>
+          </li>
+          <li class="breadcrumb-item active">Dashboard</li>
+          
+          <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+          <a class="btn" href="#">
+          <i class="icon-speech"></i>
+          </a>
+          <a class="btn" href="./">
+          <i class="icon-graph"></i> &nbsp;Agregar Grafica</a>
+          <a class="btn" href="#">
+          <i class="icon-settings"></i> &nbsp;Editar</a>
+          </div>
+          </li>
+        </ol>
 
       </br></br>
    
 
-      <div id="container">
+      <div id="container" class="container-fluid">
       </div>  
       <script>
          var id       = "<%= id %>";
