@@ -7,12 +7,21 @@ var GridGraphs = React.createClass({
                     respuestas : this.props.respuestas,
                     tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    gridList      : this.props.gridList,
+                    
                 };
     },
     componentDidMount: function()
     {
        
         
+    }
+    ,
+    agregarGraph(item)
+    {
+
+        console.log(item.histogram);
+        console.log(item.pie);
     }
     ,
     render() {
@@ -22,6 +31,17 @@ var GridGraphs = React.createClass({
                     <div>
                         <div className = "animated fadeIn">
                             <div className = "card-columns cols-2">
+                                {
+                                    this.state.gridList.map(
+                                        (item,key_pregunta)=> (
+                                            console.log(key_pregunta),
+                                            this.state.gridList[key_pregunta].map
+                                            (
+                                                item_graph => agregarGraph(item_graph)
+                                            )
+                                        )
+                                    )
+                                }
                                 <div className = "card">
                                     <div className ="card-header">
                                         Pie Chart
