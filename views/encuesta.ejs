@@ -12,23 +12,27 @@
     integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
     crossorigin="anonymous"></script>
     
+    
+    
     <!--
+      CORE UI CSS
+    -->
+    <link href="/coreui/css/style.css" rel="stylesheet">
+
+    <!--
+       BOOSTRAP
+    -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     rel="stylesheet"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
     crossorigin="anonymous">
-    
-    -->
-    
-    <link href="/coreui/css/style.css" rel="stylesheet">
-    <!--
-      CORE UI CSS
+  
     
     
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
-    -->
 
     <!--
       Libreria Chart.js
@@ -56,7 +60,6 @@
         <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.5/react-bootstrap.js"></script>
         <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" type='text/css'/>
 
       <!-- Firebase -->
@@ -68,17 +71,7 @@
       <!-- Initialize the Firebase SDK -->
       <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
   
-      <!--
-        DATA TABLES
-      -->
-
-      
-
-      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"/>
-      <script  src="https://code.jquery.com/jquery-3.3.1.js"></script>
-      <script  src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-      <script  src="https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js"></script>
+      <main class="main">
 
 
       </br></br>
@@ -97,5 +90,18 @@
       <script  type="text/babel" src="/javascripts/src/components/graphics/Pie.js" crossorigin></script>
       <script  type="text/babel" src="/javascripts/src/components/graphics/Grid.js" crossorigin></script>
       
+      
 
-  <%- include common/footer.ejs %>
+    </div>
+    <footer class="app-footer">
+      <div>
+        <a href="https://coreui.io">CoreUI</a>
+        <span>&copy; 2018 creativeLabs.</span>
+      </div>
+      <div class="ml-auto"> 
+        <span>Powered by</span>
+        <a href="https://coreui.io">CoreUI</a>
+      </div>
+    </footer>
+</body>
+</html>

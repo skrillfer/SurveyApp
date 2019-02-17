@@ -330,11 +330,13 @@ class EncuestasPage extends React.Component {
         }
         <div id="TablaRespuestas">
           <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
+          
         </div>
 
         
       </div>
     );
+      
     
   }
 
@@ -418,7 +420,7 @@ class EncuestasPage extends React.Component {
 
 const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
   
-  <table id="example" className="table table-striped table-bordered">
+  <table id="example11" className="table table-striped table-bordered">
     <thead>
         <tr>
           {headers.map( item =>(
