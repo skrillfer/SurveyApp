@@ -76,7 +76,7 @@ var HistogramaGraph = React.createClass({
           },
           
         };
-        Plotly.newPlot('graphContainer', data, layout, {responsive: true});    
+        Plotly.newPlot('graphContainerH', data, layout, {responsive: true});    
     },
     render() {
         return (
@@ -87,7 +87,7 @@ var HistogramaGraph = React.createClass({
                 </div>
             </div>
                 
-            <div  id="graphContainer" >
+            <div  id="graphContainerH" >
 
             </div>
             <hr />

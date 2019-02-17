@@ -55,7 +55,29 @@ var PieGraph = React.createClass({
                 porcentajes.push((item/total)*100);
             }
         );
-
+        
+        var ctx = document.getElementById("graphContainerP").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data : {
+                datasets: [{
+                    data: porcentajes
+                }],
+            
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: ejeX
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        /*
         var data = [{
             values: porcentajes,
             labels: ejeX,
@@ -67,7 +89,7 @@ var PieGraph = React.createClass({
         width: 500
         };
         
-        Plotly.newPlot('graphContainer', data, layout);
+        Plotly.newPlot('graphContainerP', data, layout);*/
     },
     getSum(total, num) 
     {
@@ -75,16 +97,16 @@ var PieGraph = React.createClass({
     },
     render() {
         return (
-            <div id ="contenedorHistograma" className = "center-block">
+            <div id ="contenedorPie" className = "center-block">
             <div className="btn-group btn-group-justified" role="group" aria-label="...">
                 <div className="btn-group" role="group">
                     <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
                 
-            <div  id="graphContainer" >
+            <canvas  id="graphContainerP" >
 
-            </div>
+            </canvas>
             <hr />
             </div>
         )

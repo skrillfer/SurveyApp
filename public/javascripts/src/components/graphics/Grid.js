@@ -2,7 +2,11 @@ var GridGraphs = React.createClass({
 
     getInitialState: function() {
         return {    
-                    
+                    pregunta: this.props.pregunta, 
+                    encabezados: this.props.encabezados,
+                    respuestas : this.props.respuestas,
+                    tipo: this.props.tipo,
+                    cerrarGrafica : this.props.cerrarGrafica,
                 };
     },
     componentDidMount: function()
@@ -20,10 +24,11 @@ var GridGraphs = React.createClass({
                             <div className = "card-columns cols-2">
                                 <div className = "card">
                                     <div className ="card-header">
-                                        Line Chart
+                                        Pie Chart
                                     </div>
                                     <div className ="card-body">
-                                        Hola Mundo
+                                       <PieGraph cerrarGrafica = {this.state.cerrarGrafica} tipo= {this.state.tipo} pregunta = {this.state.pregunta} 
+                                                 encabezados = {this.state.encabezados} respuestas = {this.state.respuestas}/>
                                     </div>
                                 </div>
                                 <div className = "card">
@@ -31,7 +36,8 @@ var GridGraphs = React.createClass({
                                         Line Chart 2
                                     </div>
                                     <div className ="card-body">
-                                        Hola Mundo Cruel
+                                    <HistogramaGraph cerrarGrafica = {this.state.cerrarGrafica} tipo= {this.state.tipo} pregunta = {this.state.pregunta} 
+                                                 encabezados = {this.state.encabezados} respuestas = {this.state.respuestas}/>
                                     </div>
                                 </div>
                             </div>

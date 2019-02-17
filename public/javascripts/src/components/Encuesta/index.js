@@ -219,7 +219,7 @@ class EncuestasPage extends React.Component {
           list.removeChild(list.childNodes[0]);
         }    
         const { pregunta, headers} = this.state;
-        return (ReactDOM.render( <Grafica cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
+        return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
       }
   }
 
@@ -303,10 +303,8 @@ class EncuestasPage extends React.Component {
             </form>
         </div>
         <div id="contenedorFunciones">
-            <h2> {nombre} <button onClick={this.downloadCSV} className="btn btn-link">
-            <span className="glyphicon glyphicon-save"></span> Descargar csv
-            </button>
-            </h2>
+            <h2> {nombre} </h2>
+            <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
             {loading && <div>Loading ...</div>}
             
             <div>
@@ -331,7 +329,6 @@ class EncuestasPage extends React.Component {
           )
           : null
         }
-        <GridGraphs></GridGraphs>
       </div>
     );
     
@@ -360,7 +357,7 @@ class EncuestasPage extends React.Component {
     const { pregunta, headers} = this.state;
     
    
-    return (ReactDOM.render( <HistogramaGraph cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
   }
 
 
@@ -417,7 +414,7 @@ class EncuestasPage extends React.Component {
 
 const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
   
-  <table id="customers">
+  <table id="customers" className="table table-responsive-sm table-bordered table-striped table-sm">
     <thead>
         <tr>
           {headers.map( item =>(
