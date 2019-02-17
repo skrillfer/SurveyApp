@@ -127,6 +127,13 @@ class EncuestasPage extends React.Component {
                     this.actualizarGrafico(current.state.HashFilter);
                   }
                   
+                  try{
+                    $(document).ready( function () {
+                      $('#example11').DataTable();
+                  } );
+                  }catch(exx){}
+
+                  
 
                }
           );
@@ -136,7 +143,6 @@ class EncuestasPage extends React.Component {
     });
      
    
-
     
     
   }
@@ -424,7 +430,7 @@ const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
     <thead>
         <tr>
           {headers.map( item =>(
-            <th name = {item} id = {item} onClick = {handle} key = {item}>
+            <th name = {item} id = {item}  key = {item}>
                 {item}
             </th>
           ))}
