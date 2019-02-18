@@ -3,17 +3,65 @@ var GridGraphs = React.createClass({
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
-                    encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
-                    tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
-                    gridList      : this.props.gridList,
-                    
+                    children      : this.props.children, 
+                    childrenComponents : [],     
+                    gridListHead : this.props.gridListHead,              
                 };
     },
-    componentDidMount: function()
+    componentWillMount: function()
     {
-       
+        this.crearGraphEnum();
+        
+    },
+    crearGraphEnum()
+    {
+        console.log('RESPUESTASAAAA');
+        console.log(this.state.respuestas);
+        console.log(this.state.pregunta);
+
+        this.state.children.map(
+            (item,index) =>
+            {
+                switch(item)
+                {
+                    case 0:
+                    this.state.childrenComponents.push(
+                            <div id={"card_"+index} className = "card">
+                                <div className ="card-header">
+                                    Histogram Chart
+                                </div>
+                                <div className ="card-body">
+                                    <HistogramaGraph 
+                                        cerrarGrafica = {this.state.cerrarGrafica} 
+                                        pregunta = {this.state.gridListHead[index]} 
+                                        respuestas = {this.state.respuestas}
+                                        index = {index}
+                                    ></HistogramaGraph>
+                                </div>
+                            </div>);
+                    break;        
+                    case 1:
+                    
+                    this.state.childrenComponents.push(
+                            <div id={"card_"+index} className = "card">
+                                <div className ="card-header">
+                                    Pie Chart
+                                </div>
+                                <div className ="card-body">
+                                    <PieGraph 
+                                        cerrarGrafica = {this.state.cerrarGrafica} 
+                                        pregunta = {this.state.gridListHead[index]} 
+                                        respuestas = {this.state.respuestas}
+                                        index = {index}
+                                ></PieGraph>
+                                </div>
+                            </div>);
+                    break;        
+                }
+            }    
+        )
         
     }
     ,
@@ -30,36 +78,8 @@ var GridGraphs = React.createClass({
                 <div id="ui-view">
                     <div>
                         <div className = "animated fadeIn">
-                            <div className = "card-columns cols-2">
-                                {
-                                    this.state.gridList.map(
-                                        (item,key_pregunta)=> (
-                                            console.log(key_pregunta),
-                                            this.state.gridList[key_pregunta].map
-                                            (
-                                                item_graph => agregarGraph(item_graph)
-                                            )
-                                        )
-                                    )
-                                }
-                                <div className = "card">
-                                    <div className ="card-header">
-                                        Pie Chart
-                                    </div>
-                                    <div className ="card-body">
-                                       <PieGraph cerrarGrafica = {this.state.cerrarGrafica} tipo= {this.state.tipo} pregunta = {this.state.pregunta} 
-                                                 encabezados = {this.state.encabezados} respuestas = {this.state.respuestas}/>
-                                    </div>
-                                </div>
-                                <div className = "card">
-                                    <div className ="card-header">
-                                        Histogram Chart
-                                    </div>
-                                    <div className ="card-body">
-                                    <HistogramaGraph cerrarGrafica = {this.state.cerrarGrafica} tipo= {this.state.tipo} pregunta = {this.state.pregunta} 
-                                                 encabezados = {this.state.encabezados} respuestas = {this.state.respuestas}/>
-                                    </div>
-                                </div>
+                            <div id="myform_cards" className = "card-columns cols-2">
+                                {this.state.childrenComponents}
                             </div>
                         </div>
                     </div>

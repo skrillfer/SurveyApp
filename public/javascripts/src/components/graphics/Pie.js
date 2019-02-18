@@ -3,10 +3,9 @@ var PieGraph = React.createClass({
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
-                    encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
-                    tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    index : this.props.index,
                 };
     },
     componentDidMount: function()
@@ -32,7 +31,7 @@ var PieGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function(tipo)
+    mostrarGraficaDeColumna: function()
     {
         var x = [];
     
@@ -55,6 +54,8 @@ var PieGraph = React.createClass({
     },
     generarGraficaPie(ejeX,ejeY,pregunta)
     {
+        console.log("index");
+        console.log(this.state.index);
         var colors =[] ;
 
         var total=ejeY.reduce(this.getSum);
@@ -67,7 +68,7 @@ var PieGraph = React.createClass({
             }
         );
         
-        var ctx = document.getElementById("graphContainerP").getContext('2d');
+        var ctx = document.getElementById("graphContainerP"+this.state.index).getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'pie',
             data : {
@@ -89,19 +90,7 @@ var PieGraph = React.createClass({
                 }
             }
         });
-        /*
-        var data = [{
-            values: porcentajes,
-            labels: ejeX,
-            type: "pie"
-          }];
-          
-        var layout = {
-        height: 400,
-        width: 500
-        };
         
-        Plotly.newPlot('graphContainerP', data, layout);*/
     },
     getSum(total, num) 
     {
@@ -109,19 +98,19 @@ var PieGraph = React.createClass({
     },
     render() {
         return (
-            <div id ="contenedorPie" className = "center-block">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="text-left">
-                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+            <div id ={"contenedorPie"+this.state.index} className = "center-block">
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="text-left">
+                            <button  type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span id={this.state.index} className="glyphicon glyphicon-remove"></span></button>
+                        </div>
                     </div>
                 </div>
-            </div>
-                
-            <canvas  id="graphContainerP" >
+                    
+                <canvas  id={"graphContainerP"+this.state.index} >
 
-            </canvas>
-            <hr />
+                </canvas>
+                <hr />
             </div>
         )
     }

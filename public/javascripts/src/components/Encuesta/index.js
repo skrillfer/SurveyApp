@@ -17,7 +17,7 @@ class EncuestasPage extends React.Component {
     this.generateHead = this.generateHead.bind(this);
     this.renderizarColumna = this.renderizarColumna.bind(this);
     this.obtenerEncabezado = this.obtenerEncabezado.bind(this);
-    this.actualizarGrafico = this.actualizarGrafico.bind(this);
+
     this.accionDropDown = this.accionDropDown.bind(this);
     this.agregarDropDown = this.agregarDropDown.bind(this);
 
@@ -41,6 +41,7 @@ class EncuestasPage extends React.Component {
       showGraphic :false,
       textSearch : '',
       gridList : [],
+      gridListHead : [],
     };
   }
 
@@ -120,16 +121,8 @@ class EncuestasPage extends React.Component {
           },s=>{
                    
                   control=true;
-                  //idSearch
-                  if(current.state.textSearch!='')
-                  {
-                    var element = document.getElementById('idSearch');
-                    element.value = '';
-                    this.cerrarGrafica();
-                  }else
-                  {
-                    this.actualizarGrafico(current.state.HashFilter);
-                  }
+                  
+
                   /*Agregando los tipos de columnas para seleccionar del dropdown */
                   var mydiv = document.getElementById("menuDropEncuesta");
                   mydiv.innerHTML ="";
@@ -229,14 +222,10 @@ class EncuestasPage extends React.Component {
     {
       
       this.setState({listafiltrada: filtrada,HashFilter:QueryHASH});
-      this.actualizarGrafico(QueryHASH);
     }
   }
 
-  actualizarGrafico(QueryHASH)
-  {
-      /*if(this.state.showGraphic)
-      {
+      /*
         var HashFilter = QueryHASH;
         if(Object.keys(this.state.HashFilter).length==0)
         {
@@ -251,7 +240,8 @@ class EncuestasPage extends React.Component {
         const { pregunta, headers} = this.state;
         return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}  />, document.getElementById('graphic')));
       }*/
-  }
+  
+
 
   convertArrayOfObjectsToCSV(args) {
     var result, headers, lineDelimiter,columnDelimiter, data;
@@ -318,17 +308,32 @@ class EncuestasPage extends React.Component {
   }
 
   
- 
+  
   render() {
-    const { nombre,listafiltrada,loading } = this.state;
+    const { nombre,showGraphic,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    console.log("RENDERIZADO");
 
+    let button = null;
+    
     return (
 
       <div>
-        { 
-          this.clickGenerarGrafico()
-        }
-        <div id="graphic" className="graphicss"></div>
+        
+        <div id="graphic" className="graphicss">
+            
+            {showGraphic ? 
+               
+               <GridGraphs 
+                   cerrarGrafica = {this.cerrarGrafica} 
+                   gridList = {gridList} 
+                   pregunta = {pregunta} 
+                   respuestas = {queryHash}  
+                   children   = {gridList}
+                   gridListHead = {gridListHead}
+               />
+               : null
+             } 
+        </div>
        
         <div id="Search">
             <form>
@@ -355,7 +360,7 @@ class EncuestasPage extends React.Component {
             clickGenerarGrafico = {this.clickGenerarGrafico}
             clickGraficaPie = {this.clickGraficaPie}
             posicion = {this.state.posicion}
-          />
+          ></ListBox>
            
           )
           : null
@@ -378,6 +383,7 @@ class EncuestasPage extends React.Component {
   /*Funciones de PopUp Menu */
   clickGenerarGrafico(event)
   {
+    /*
     if (this.state.gridList.length==0) return "";
 
     this.setState({showGraphic:true});
@@ -397,7 +403,8 @@ class EncuestasPage extends React.Component {
     const { pregunta, headers} = this.state;
     
    
-    return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
+    return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));*/
+
   }
 
 
@@ -425,72 +432,77 @@ class EncuestasPage extends React.Component {
 
 
 
-  cerrarGrafica()
+  cerrarGrafica(event)
   {
+    console.log(event.target.id);
+    
+    
+    try{
+      this.setState({showGraphic:false});
+      var list = document.getElementById("myform_cards");
+      if(list.childNodes.length>0)
+      {
+        list.removeChild(document.getElementById("card_"+event.target.id));
+      }
+      
 
-    this.setState({showGraphic:false});
-    var list = document.getElementById("graphic");
-    if(list.childNodes.length>0)
-    {
-      list.removeChild(list.childNodes[0]);
-    }    
+      let arrayGrid = this.state.gridList.filter(item => item !== parseInt(event.target.id));
+
+      //var arrayGrid=this.state.gridList;
+      //arrayGrid.splice(parseInt(event.target.id), 1);
+      let arrayGridHead = this.state.gridListHead.filter(item => item !== parseInt(event.target.id));
+
+      //var arrayGridHead=this.state.gridListHead;
+      //arrayGridHead.splice(parseInt(event.target.id), 1);
+       
+      //console.log("$$$$$$$$$$$$$$$$$$$$$$444");
+      //console.log(arrayGrid);
+      //console.log(arrayGridHead);
+      this.setState({gridList:arrayGrid});
+      this.setState({gridListHead:arrayGridHead});
+      //
+    }catch(exx){
+      console.log(exx);
+    }
+    this.setState({showGraphic:true});
+
   }
 
 
   /*------- Opciones de agregar grafica   */
   accionDropDown(event){
-    if (this._isMounted) {
-      
+    if (this._isMounted){
       document.getElementById("validationSelectedColum").value =event.target.title;
     }
-    
   }
  
+  
 
   agregarDropDown()
   {
-    
     if (this._isMounted) {
-      var mypregunta = document.getElementById("validationSelectedColum").value;
-  
-      
-      var seleccionados = [];
-      seleccionados.push(document.getElementById("checkHistogram").checked);
-      seleccionados.push(document.getElementById("checkPie").checked);
-      
-      //LISTA = this.state.gridList;
-      LISTA.push({[mypregunta]:seleccionados});
-      $('#exampleModal').modal('hide');
-      
-      
-      
-      //myGrid.push({[this.state.pregunta]:seleccionados});
-      //console.log(this.state.gridList);
 
-      /*
-      myGrid.map(
-        (item,key)=> {
-          console.log('-----');
-          var GRID2=myGrid[key];
-          var arrayVals=Object.values(GRID2);
-          arrayVals.map
-          (
-                (item_value) => {
-                  item_value.map(
-                    (type,index) =>
-                    {
-                      console.log(index+':'+type);
-                    }
-                  )
-                  
-                }
-              
-          )
-        }
-      )
-   */   
+      var mypregunta = document.getElementById("validationSelectedColum").value;
+
+      if(document.getElementById("checkHistogram").checked)
+      {
+        this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+      }
+      if(document.getElementById("checkPie").checked)
+      {
+        this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+      }
       
-  }
+      
+      this.setState({showGraphic:false});
+       console.log(this.state.gridList);
+       console.log(this.state.gridListHead);
+      $('#exampleModal').modal('hide');
+      this.setState({showGraphic:true});
+
+    }
     
   }
 

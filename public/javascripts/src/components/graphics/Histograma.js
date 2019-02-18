@@ -3,10 +3,9 @@ var HistogramaGraph = React.createClass({
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
-                    encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
-                    tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    index : this.props.index,
                 };
     },
     componentDidMount: function()
@@ -24,7 +23,7 @@ var HistogramaGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function(tipo)
+    mostrarGraficaDeColumna: function()
     {
         var x = [];
     
@@ -45,40 +44,8 @@ var HistogramaGraph = React.createClass({
     },
     generarHistograma(ejeX,ejeY,pregunta)
     {
-        /*
-        var trace1 = {
-            type: 'bar',
-            x: ejeX,
-            y: ejeY,
-            name: 'Cantidad',
-            marker: {
-                color: '#C8A2C8',
-                line: {
-                    width: 2.5
-                }
-            }
-        };
         
-        var data = [ trace1 ];
-        
-       
-        var layout = {
-          title: 'Histograma de '+pregunta,
-          font: {size: 18},
-          yaxis: {
-            title: {
-              text: 'Cantidad',
-              font: {
-                family: 'Courier New, monospace',
-                size: 18,
-                color: '#7f7f7f'
-              }
-            }
-          },
-          
-        };
-        Plotly.newPlot('graphContainerH', data, layout, {responsive: true});*/    
-        var ctx = document.getElementById("graphContainerH").getContext('2d');
+        var ctx = document.getElementById("graphContainerH"+this.state.index).getContext('2d');
 
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -142,17 +109,17 @@ var HistogramaGraph = React.createClass({
     },
     render() {
         return (
-            <div id ="contenedorHistograma" className = "center-block">
+            <div id ={"contenedorHistograma"+this.state.index} className = "center-block">
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="text-left">
-                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+            <div className="row">
+                <div className="col-xs-12">
+                    <div className="text-left">
+                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span id={this.state.index} className="glyphicon glyphicon-remove"></span></button>
                     </div>
                 </div>
             </div>
                 
-            <canvas  id="graphContainerH" >
+            <canvas  id={"graphContainerH"+this.state.index} >
 
             </canvas>
             <hr />
