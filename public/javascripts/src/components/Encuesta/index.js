@@ -419,25 +419,23 @@ class EncuestasPage extends React.Component {
     
     if(this._isMounted)
     {
-      //var index = event.target.id;
+
       try{
 
+        let gridList1 = this.state.gridList.filter((_,item) => item !== parseInt(index));
+        let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
+        if(gridList1.length==0)
+        {
+          gridList1 = [];gridListHead1 = [];
+        }
         
-        let gridList1 = this.state.gridList.filter(item => item !== parseInt(index));
-  
-        let gridListHead1 = this.state.gridListHead.filter(item => item !== parseInt(index));
-        var doc=document;
-        //var micarta = doc.getElementById("card_"+index);
         this.setState({gridList:gridList1,gridListHead:gridListHead1},()=>{
-          
-          //micarta.parentNode.removeChild(micarta);
+          alert('eliminado!!');
         });
-      
         
       }catch(exx){
         console.log(exx);
-      }
-  
+      }  
     }
     
   }

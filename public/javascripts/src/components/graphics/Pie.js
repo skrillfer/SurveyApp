@@ -87,7 +87,10 @@ var PieGraph = React.createClass({
                             beginAtZero:true
                         }
                     }]
-                }
+                },title: {
+                    display: true,
+                    text: 'Pie de '+pregunta
+                  }
             }
         });
         

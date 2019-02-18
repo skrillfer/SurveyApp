@@ -33,19 +33,20 @@ var GridGraphs = React.createClass({
 
         var index = event.target.id;
         var hijos=this.state.childrenComponents;
+    
+        let gridListHead1 = [];
         if(hijos.length==1)
         {
-            hijos=[];
+            hijos=[]; 
+
         }else
         {
             hijos = hijos.filter((_, i) => i !== parseInt(index));
+            gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         }
-        
-        console.log("$##$#$#$#$#$#$#$#$#$#$#$");
-        console.log('index:'+index);
-        console.log(hijos);
-
-        this.setState({childrenComponents:hijos},()=>{this.state.cerrarGrafica(index);});
+        this.setState({childrenComponents:hijos,gridListHead:gridListHead1},
+            ()=>{this.state.cerrarGrafica(index);}
+        );
         
     },
     crearGraphEnum()
