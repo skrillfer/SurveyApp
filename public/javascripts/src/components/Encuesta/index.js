@@ -20,6 +20,7 @@ class EncuestasPage extends React.Component {
 
     this.accionDropDown = this.accionDropDown.bind(this);
     this.agregarDropDown = this.agregarDropDown.bind(this);
+    this.prueba = this.prueba.bind(this);
 
 
     this.state = {
@@ -42,6 +43,7 @@ class EncuestasPage extends React.Component {
       textSearch : '',
       gridList : [],
       gridListHead : [],
+      
     };
   }
 
@@ -225,23 +227,7 @@ class EncuestasPage extends React.Component {
     }
   }
 
-      /*
-        var HashFilter = QueryHASH;
-        if(Object.keys(this.state.HashFilter).length==0)
-        {
-          HashFilter = this.state.queryHash;
-        }
-    
-        var list = document.getElementById("graphic");
-        if(list.childNodes.length>0)
-        {
-          list.removeChild(list.childNodes[0]);
-        }    
-        const { pregunta, headers} = this.state;
-        return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}  />, document.getElementById('graphic')));
-      }*/
-  
-
+      
 
   convertArrayOfObjectsToCSV(args) {
     var result, headers, lineDelimiter,columnDelimiter, data;
@@ -430,42 +416,37 @@ class EncuestasPage extends React.Component {
     
   }
 
-
-
-  cerrarGrafica(event)
+  prueba()
   {
-    console.log(event.target.id);
+    console.log("TERMINE");
+  }
+
+  cerrarGrafica(index)
+  {
     
-    
-    try{
-      this.setState({showGraphic:false});
-      var list = document.getElementById("myform_cards");
-      if(list.childNodes.length>0)
-      {
-        list.removeChild(document.getElementById("card_"+event.target.id));
-      }
+    if(this._isMounted)
+    {
+      //var index = event.target.id;
+      try{
+
+        
+        let gridList1 = this.state.gridList.filter(item => item !== parseInt(index));
+  
+        let gridListHead1 = this.state.gridListHead.filter(item => item !== parseInt(index));
+        var doc=document;
+        //var micarta = doc.getElementById("card_"+index);
+        this.setState({gridList:gridList1,gridListHead:gridListHead1},()=>{
+          
+          //micarta.parentNode.removeChild(micarta);
+        });
       
-
-      let arrayGrid = this.state.gridList.filter(item => item !== parseInt(event.target.id));
-
-      //var arrayGrid=this.state.gridList;
-      //arrayGrid.splice(parseInt(event.target.id), 1);
-      let arrayGridHead = this.state.gridListHead.filter(item => item !== parseInt(event.target.id));
-
-      //var arrayGridHead=this.state.gridListHead;
-      //arrayGridHead.splice(parseInt(event.target.id), 1);
-       
-      //console.log("$$$$$$$$$$$$$$$$$$$$$$444");
-      //console.log(arrayGrid);
-      //console.log(arrayGridHead);
-      this.setState({gridList:arrayGrid});
-      this.setState({gridListHead:arrayGridHead});
-      //
-    }catch(exx){
-      console.log(exx);
+        
+      }catch(exx){
+        console.log(exx);
+      }
+  
     }
-    this.setState({showGraphic:true});
-
+    
   }
 
 
@@ -480,27 +461,38 @@ class EncuestasPage extends React.Component {
 
   agregarDropDown()
   {
-    if (this._isMounted) {
+    if (this._isMounted && document.getElementById("validationSelectedColum").value!='') {
 
       var mypregunta = document.getElementById("validationSelectedColum").value;
-
+      var siCheck =false;
       if(document.getElementById("checkHistogram").checked)
       {
+        siCheck =true;
         this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
                       ,gridListHead:this.state.gridListHead.concat(mypregunta)});
       }
       if(document.getElementById("checkPie").checked)
       {
+        siCheck =true;
         this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
                       ,gridListHead:this.state.gridListHead.concat(mypregunta)});
       }
       
-      
-      this.setState({showGraphic:false});
-       console.log(this.state.gridList);
-       console.log(this.state.gridListHead);
-      $('#exampleModal').modal('hide');
-      this.setState({showGraphic:true});
+      if(siCheck)
+      {        
+        this.setState({showGraphic:false});
+        console.log(this.state.gridList);
+        console.log(this.state.gridListHead);
+        $('#exampleModal').modal('hide');
+        this.setState({showGraphic:true});
+      }else
+      {
+        alert('Tienes que elegir al menos un tipo de grafica');
+
+      } 
+    }else
+    {
+      alert('Debes seleccionar al menos una Columna');
 
     }
     

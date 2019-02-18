@@ -7,12 +7,45 @@ var GridGraphs = React.createClass({
                     cerrarGrafica : this.props.cerrarGrafica,
                     children      : this.props.children, 
                     childrenComponents : [],     
-                    gridListHead : this.props.gridListHead,              
+                    gridListHead : this.props.gridListHead,   
+                    isTrue:false,          
                 };
     },
     componentWillMount: function()
     {
-        this.crearGraphEnum();
+        //$('#modalWait').modal('show');
+        //this.crearGraphEnum();
+        
+    },
+    componentDidUpdate: function()
+    {
+
+        //console.log("he sido actualizado");
+        //$(".alert").alert('close');
+        
+    },
+    componentDidMount: function()
+    {
+        this.crearGraphEnum();        
+    },
+    cerrarGraph(event)
+    {
+
+        var index = event.target.id;
+        var hijos=this.state.childrenComponents;
+        if(hijos.length==1)
+        {
+            hijos=[];
+        }else
+        {
+            hijos = hijos.filter((_, i) => i !== parseInt(index));
+        }
+        
+        console.log("$##$#$#$#$#$#$#$#$#$#$#$");
+        console.log('index:'+index);
+        console.log(hijos);
+
+        this.setState({childrenComponents:hijos},()=>{this.state.cerrarGrafica(index);});
         
     },
     crearGraphEnum()
@@ -21,20 +54,22 @@ var GridGraphs = React.createClass({
         console.log(this.state.respuestas);
         console.log(this.state.pregunta);
 
+        var ARRAY = [];
         this.state.children.map(
             (item,index) =>
             {
                 switch(item)
                 {
                     case 0:
-                    this.state.childrenComponents.push(
+
+                    ARRAY.push(
                             <div id={"card_"+index} className = "card">
                                 <div className ="card-header">
                                     Histogram Chart
                                 </div>
                                 <div className ="card-body">
                                     <HistogramaGraph 
-                                        cerrarGrafica = {this.state.cerrarGrafica} 
+                                        cerrarGrafica = {this.cerrarGraph} 
                                         pregunta = {this.state.gridListHead[index]} 
                                         respuestas = {this.state.respuestas}
                                         index = {index}
@@ -44,14 +79,14 @@ var GridGraphs = React.createClass({
                     break;        
                     case 1:
                     
-                    this.state.childrenComponents.push(
+                    ARRAY.push(
                             <div id={"card_"+index} className = "card">
                                 <div className ="card-header">
                                     Pie Chart
                                 </div>
                                 <div className ="card-body">
                                     <PieGraph 
-                                        cerrarGrafica = {this.state.cerrarGrafica} 
+                                        cerrarGrafica = {this.cerrarGraph} 
                                         pregunta = {this.state.gridListHead[index]} 
                                         respuestas = {this.state.respuestas}
                                         index = {index}
@@ -61,7 +96,8 @@ var GridGraphs = React.createClass({
                     break;        
                 }
             }    
-        )
+        );
+        this.setState({childrenComponents:ARRAY});
         
     }
     ,
@@ -73,8 +109,9 @@ var GridGraphs = React.createClass({
     }
     ,
     render() {
+        console.log("GRID RENDERIZADO");
         return (
-            <div className="container-fluid">
+            <div id="GridManager" className="container-fluid">
                 <div id="ui-view">
                     <div>
                         <div className = "animated fadeIn">

@@ -114,7 +114,7 @@ var HistogramaGraph = React.createClass({
             <div className="row">
                 <div className="col-xs-12">
                     <div className="text-left">
-                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span id={this.state.index} className="glyphicon glyphicon-remove"></span></button>
+                        <button id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">X</button>
                     </div>
                 </div>
             </div>
