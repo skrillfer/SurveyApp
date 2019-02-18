@@ -321,16 +321,9 @@ class EncuestasPage extends React.Component {
              } 
         </div>
        
-        <div id="Search">
-            <form>
-              <fieldset className="form-group">
-              <input type="text" className="form-control form-control-lg" id="idSearch" placeholder="Search" onChange={this.filtrar_respuestas}/>
-              </fieldset>
-            </form>
-        </div>
         
         <div id="contenedorFunciones">
-            <h2> {nombre} </h2>
+            <center><h1> {nombre} </h1></center>
             <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
             {loading && <div>Loading ...</div>}
             
