@@ -9,7 +9,8 @@ class EncuestasPage extends React.Component {
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
 
-    this.cerrarGrafica = this.cerrarGrafica.bind(this);
+    this.cerrarGrafica =  this.cerrarGrafica.bind(this);
+    this.cerrarTodo    =  this.cerrarTodo.bind(this);
 
           /*        Funciones de PopUp Menu       */
     this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
@@ -311,6 +312,7 @@ class EncuestasPage extends React.Component {
                
                <GridGraphs 
                    cerrarGrafica = {this.cerrarGrafica} 
+                   cerrarTodo = {this.cerrarTodo} 
                    gridList = {gridList} 
                    pregunta = {pregunta} 
                    respuestas = {queryHash}  
@@ -414,6 +416,12 @@ class EncuestasPage extends React.Component {
     console.log("TERMINE");
   }
 
+  cerrarTodo()
+  {
+    this.setState({gridList:[],gridListHead:[],showGraphic:false},()=>{
+      
+    });
+  }
   cerrarGrafica(index)
   {
     
@@ -430,7 +438,11 @@ class EncuestasPage extends React.Component {
         }
         
         this.setState({gridList:gridList1,gridListHead:gridListHead1},()=>{
-          alert('eliminado!!');
+          //alert('eliminado!!');
+          document.getElementById("Gridloader").style.display = "none";
+          document.getElementById("ui-view").style.display = "block";
+          document.getElementById("GridCerrarTodo").style.display = "block";
+
         });
         
       }catch(exx){

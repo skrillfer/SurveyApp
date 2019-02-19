@@ -5,10 +5,10 @@ var GridGraphs = React.createClass({
                     pregunta: this.props.pregunta, 
                     respuestas : this.props.respuestas,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    cerrarTodo : this.props.cerrarTodo,
                     children      : this.props.children, 
                     childrenComponents : [],     
                     gridListHead : this.props.gridListHead,   
-                    isTrue:false,          
                 };
     },
     componentWillMount: function()
@@ -20,6 +20,7 @@ var GridGraphs = React.createClass({
     componentDidUpdate: function()
     {
 
+        
         //console.log("he sido actualizado");
         //$(".alert").alert('close');
         
@@ -27,11 +28,37 @@ var GridGraphs = React.createClass({
     componentDidMount: function()
     {
         this.crearGraphEnum();        
-    },
+        
+    }
+    ,
+    cerrar_Todo()
+    {
+        document.getElementById("Gridloader").style.display = "block";
+        document.getElementById("ui-view").style.display = "none";
+        document.getElementById("GridCerrarTodo").style.display = "none";
+
+        var current = this;
+        setTimeout(function(){ 
+            
+            current.setState({childrenComponents:[],gridListHead:[]},
+                ()=>{current.state.cerrarTodo();}
+            );
+        }, 3000);
+
+    }
+    ,
     cerrarGraph(event)
     {
 
+        document.getElementById("Gridloader").style.display = "block";
+        document.getElementById("ui-view").style.display = "none";
+        document.getElementById("GridCerrarTodo").style.display = "none";
+
         var index = event.target.id;
+
+        //var CARD=document.getElementById("card_"+index);
+        //CARD.outerHTML = "";
+
         var hijos=this.state.childrenComponents;
     
         let gridListHead1 = [];
@@ -44,9 +71,14 @@ var GridGraphs = React.createClass({
             hijos = hijos.filter((_, i) => i !== parseInt(index));
             gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         }
-        this.setState({childrenComponents:hijos,gridListHead:gridListHead1},
-            ()=>{this.state.cerrarGrafica(index);}
-        );
+        var current = this;
+        setTimeout(function(){ 
+            
+            current.setState({childrenComponents:hijos,gridListHead:gridListHead1},
+                ()=>{current.state.cerrarGrafica(index);}
+            );
+        }, 3000);
+
         
     },
     crearGraphEnum()
@@ -56,6 +88,7 @@ var GridGraphs = React.createClass({
         console.log(this.state.pregunta);
 
         var ARRAY = [];
+       
         this.state.children.map(
             (item,index) =>
             {
@@ -111,13 +144,29 @@ var GridGraphs = React.createClass({
     ,
     render() {
         console.log("GRID RENDERIZADO");
+        
         return (
             <div id="GridManager" className="container-fluid">
-                <div id="ui-view">
-                    <div>
-                        <div className = "animated fadeIn">
-                            <div id="myform_cards" className = "card-columns cols-2">
-                                {this.state.childrenComponents}
+                <div className="row">
+                    <div className="col-md-4">
+                        <div id="Gridloader" style ={{display: 'none'}}  className="text-center">
+                            <div className="spinner-border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="GridCerrarTodo"  className="col-md-4 text-center">
+                        <button  type="button" className="btn btn-secondary" onClick = {this.cerrar_Todo}>Cerrar Todo</button>
+                    </div>
+                    <hr/>
+                </div>
+                <div className="row">
+                    <div id="ui-view">    
+                        <div>
+                            <div className = "animated fadeIn">
+                                <div id="myform_cards" className = "card-columns cols-2">
+                                    {this.state.childrenComponents}
+                                </div>
                             </div>
                         </div>
                     </div>
