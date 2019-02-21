@@ -56,16 +56,13 @@ var GridGraphs = React.createClass({
 
         var index = event.target.id;
 
-        //var CARD=document.getElementById("card_"+index);
-        //CARD.outerHTML = "";
-
         var hijos=this.state.childrenComponents;
     
         let gridListHead1 = [];
         if(hijos.length==1)
         {
             hijos=[]; 
-
+            
         }else
         {
             hijos = hijos.filter((_, i) => i !== parseInt(index));
@@ -147,15 +144,15 @@ var GridGraphs = React.createClass({
         
         return (
             <div id="GridManager" className="container-fluid">
-                <div className="row">
-                    <div className="col-md-4">
-                        <div id="Gridloader" style ={{display: 'none'}}  className="text-center">
-                            <div className="spinner-border" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
+                <div className="row justify-content-md-center">
+                    <div id="Gridloader" style ={{display: 'none'}}  className="col text-center">
+                        <div className="spinner-border text-warning" role="status">
+                            <span className="sr-only">Loading...</span>
                         </div>
                     </div>
-                    <div id="GridCerrarTodo"  className="col-md-4 text-center">
+                </div>
+                <div className="row row justify-content-md-center">
+                    <div id="GridCerrarTodo"  className="col text-center">
                         <button  type="button" className="btn btn-secondary" onClick = {this.cerrar_Todo}>Cerrar Todo</button>
                     </div>
                     <hr/>

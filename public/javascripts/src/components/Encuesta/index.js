@@ -325,12 +325,24 @@ class EncuestasPage extends React.Component {
        
         
         <div id="contenedorFunciones">
-            <center><h1> {nombre} </h1></center>
-            <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
-            {loading && <div>Loading ...</div>}
+            {loading && <div style ={{display: 'block'}}  className="text-center">
+                            <div className="spinner-border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                        
+            <center>
+              {!loading ?
+                <div>
+                  <h1> {nombre} </h1>
+                  <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
+                </div> : null
+              }    
+            </center>
             
-            <div>
-            </div>
+
+            
+            
         </div>
         {this.state.showPopup ? 
           (
@@ -434,15 +446,22 @@ class EncuestasPage extends React.Component {
         let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         if(gridList1.length==0)
         {
+          
           gridList1 = [];gridListHead1 = [];
         }
         
+        var current = this;
         this.setState({gridList:gridList1,gridListHead:gridListHead1},()=>{
-          //alert('eliminado!!');
-          document.getElementById("Gridloader").style.display = "none";
-          document.getElementById("ui-view").style.display = "block";
-          document.getElementById("GridCerrarTodo").style.display = "block";
-
+          
+          if(!gridList1.length>0){
+            current.setState({showGraphic:false});
+          }else
+          {
+            document.getElementById("Gridloader").style.display = "none";
+            document.getElementById("ui-view").style.display = "block";
+            document.getElementById("GridCerrarTodo").style.display = "block";
+          }
+          
         });
         
       }catch(exx){
