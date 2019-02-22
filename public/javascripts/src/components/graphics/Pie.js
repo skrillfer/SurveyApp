@@ -1,11 +1,13 @@
-var PieGraph = React.createClass({
 
+var PieGraph = React.createClass({
+    
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
                     respuestas : this.props.respuestas,
                     cerrarGrafica : this.props.cerrarGrafica,
                     index : this.props.index,
+                    _Chart : null,
                 };
     },
     componentDidMount: function()
@@ -69,7 +71,7 @@ var PieGraph = React.createClass({
         );
         
         var ctx = document.getElementById("graphContainerP"+this.state.index).getContext('2d');
-        var myChart = new Chart(ctx, {
+        var template = {
             type: 'pie',
             data : {
                 datasets: [{
@@ -92,9 +94,32 @@ var PieGraph = React.createClass({
                     text: 'Pie de '+pregunta
                   }
             }
-        });
-        
+        };
+
+        var myChart = new Chart(ctx, template);
+        this.state._Chart = template;
     },
+    zoomGrafica()
+    {
+        
+        var zoomBody = document.getElementById("zoomBody");
+
+        while (zoomBody.firstChild) {
+            zoomBody.removeChild(zoomBody.firstChild);
+        }
+
+        document.getElementById("exampleModalLabel").innerText="Pie Chart";;
+
+        var mycanvas = document.createElement("canvas");
+        zoomBody.appendChild(mycanvas);
+
+
+        var ctx = mycanvas.getContext('2d');
+        new Chart(ctx, this.state._Chart);
+
+        $('#zoomModal').modal('show');        
+    }
+    ,
     getSum(total, num) 
     {
         return total + num;
@@ -105,7 +130,9 @@ var PieGraph = React.createClass({
                 <div className="row">
                     <div className="col-xs-12">
                         <div className="text-left">
-                            <button  id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">X</button>
+                            <button  id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">x</button>
+                            <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-secondary">|<span className="glyphicon glyphicon-zoom-in"></span>|</button>
+
                         </div>
                     </div>
                 </div>

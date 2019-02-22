@@ -2,7 +2,6 @@
 
 class EncuestasPage extends React.Component {
   _isMounted = false;
-  LISTA    = [];
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
@@ -13,8 +12,6 @@ class EncuestasPage extends React.Component {
     this.cerrarTodo    =  this.cerrarTodo.bind(this);
 
           /*        Funciones de PopUp Menu       */
-    this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
-    this.togglePopup = this.togglePopup.bind(this);
     this.generateHead = this.generateHead.bind(this);
     this.renderizarColumna = this.renderizarColumna.bind(this);
     this.obtenerEncabezado = this.obtenerEncabezado.bind(this);
@@ -33,6 +30,7 @@ class EncuestasPage extends React.Component {
       showPopup: false,
       pregunta: '',
       respuesta: '',
+
 
       //refactor
       headers : [],
@@ -146,10 +144,12 @@ class EncuestasPage extends React.Component {
                   mybtnSave.onclick = this.agregarDropDown;
 
                   /*-------------------------------------------------------------- */
+
                   try{
                     $(document).ready( function () {
-                      $('#example11').DataTable();
-                  } );
+                        $('#example11').DataTable();
+                     
+                    });
                   }catch(exx){}
 
                   
@@ -188,9 +188,7 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
-    
-    this.setState({textSearch:event.target.value});
-
+    alert('buscando');
 
     var QueryHASH = {};
     this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
@@ -202,7 +200,7 @@ class EncuestasPage extends React.Component {
       {
         const v = item.filter(subitem => 
             subitem.respuesta.toString().toLowerCase().search(
-                event.target.value.toLowerCase()) !== -1
+                event.toLowerCase()) !== -1
         );
 
         if(v.length>0)
@@ -221,11 +219,11 @@ class EncuestasPage extends React.Component {
         
       }     
     );
-    if(this._isMounted)
-    {
-      
-      this.setState({listafiltrada: filtrada,HashFilter:QueryHASH});
-    }
+    
+    var RETORNO = [];
+    RETORNO.push({listafiltrada: filtrada,HashFilter:QueryHASH});
+    return RETORNO;
+
   }
 
       
@@ -344,22 +342,9 @@ class EncuestasPage extends React.Component {
             
             
         </div>
-        {this.state.showPopup ? 
-          (
-            this.cerrarGrafica,
-          <ListBox
-            text={'Estadisticas Graficas de '+this.state.pregunta+'?'}
-            closePopup={this.togglePopup.bind(this)}
-            clickGenerarGrafico = {this.clickGenerarGrafico}
-            clickGraficaPie = {this.clickGraficaPie}
-            posicion = {this.state.posicion}
-          ></ListBox>
-           
-          )
-          : null
-        }
+       
         <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
           
         </div>
 
@@ -369,38 +354,6 @@ class EncuestasPage extends React.Component {
       
     
   }
-
-
- 
-
-  /*Funciones de PopUp Menu */
-  clickGenerarGrafico(event)
-  {
-    /*
-    if (this.state.gridList.length==0) return "";
-
-    this.setState({showGraphic:true});
-
-    var HashFilter = this.state.HashFilter;
-    if(Object.keys(this.state.HashFilter).length==0)
-    {
-      HashFilter = this.state.queryHash;
-    }
-
-    var list = document.getElementById("graphic");
-    if(list.childNodes.length>0)
-    {
-      list.removeChild(list.childNodes[0]);
-    }    
-    this.setState({showPopup: !this.state.showPopup,});
-    const { pregunta, headers} = this.state;
-    
-   
-    return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));*/
-
-  }
-
-
 
   renderizarColumna(row,i)
   {
@@ -485,6 +438,19 @@ class EncuestasPage extends React.Component {
   {
     if (this._isMounted && document.getElementById("validationSelectedColum").value!='') {
 
+      try{
+        var FILTER = document.getElementById("example11_filter");
+        var inputNodes = FILTER.getElementsByTagName('INPUT');
+        this.setState({textSearch:inputNodes[0].value});
+        /* 
+        OPCIONES:
+        1. Enviar el textSearch y enviar la funcion filtrar para obtener una data filtrada
+        2. refactorizar codigo y entonces tendria que tener una palabra search para que cada
+        grafica sea generada de acuerdo a su search
+        */
+
+      }catch(exx){}
+      
       var mypregunta = document.getElementById("validationSelectedColum").value;
       var siCheck =false;
       if(document.getElementById("checkHistogram").checked)
@@ -521,25 +487,10 @@ class EncuestasPage extends React.Component {
   }
 
 
-  togglePopup(event) {
-    var posicionM = '';
-    try{
-      var elemento = document.getElementById(event.target.id);
-      posicionM = elemento.getBoundingClientRect();
-    }catch(ex){}
-    
-
-    this.setState({
-      showPopup: !this.state.showPopup,
-      pregunta:   event.target.getAttribute('name'),
-      respuesta : event.target.id,
-      posicion :  posicionM,
-    });
-  }
 
 }
 
-const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
+const ListaRespuestas = ({ headers,matrix ,renderizarColumna }) => (
   
   <table id="example11" className="table table-striped table-bordered">
     <thead>
