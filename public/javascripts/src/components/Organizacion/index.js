@@ -5,6 +5,7 @@ const e = React.createElement;
 class OrgsPage extends React.Component {
   constructor(props) {
     super(props);
+    this.NumRespuestas = this.NumRespuestas.bind(this);
     this.state = {
       loading: false,
       orgs: [],
@@ -44,6 +45,7 @@ class OrgsPage extends React.Component {
                 db.ref('proyectos/'+childKey+'/encuestas').on('value', xsnapshot => {
                   if(xsnapshot.exists())
                   {
+                    
                     const usersObject = xsnapshot.val();
 
                     const ARRAY2=Object.keys(usersObject).map(key => ({
@@ -52,12 +54,14 @@ class OrgsPage extends React.Component {
                       organizacion: childData.nombre,
                       idorg: childKey,
                     }));
+                    
+                    
                     var HashTmp = current.state.orgs;
                     HashTmp[childKey] = ARRAY2;
                     current.setState({ 
                       orgs: HashTmp,
                       loading:false
-                    })
+                    });
                   }
                     
                 });
@@ -74,6 +78,14 @@ class OrgsPage extends React.Component {
   }
 
 
+  NumRespuestas(keyorg,keyencu)
+  {
+    var tam = "";
+    db.ref('proyectos/'+keyorg+'/respuestas/'+keyencu).on('value', xsnapshot =>{
+        tam = xsnapshot.numChildren();
+    });
+    return tam;
+  }
 
   componentWillUnmount() {
     this.firebaseRef.off();
@@ -98,7 +110,7 @@ class OrgsPage extends React.Component {
         {!loading ?
           <div>
           <h1>Informacion</h1>
-          <OrgSList orgs={orgs} />  
+          <OrgSList orgs={orgs} NumRespuestas = {this.NumRespuestas}/>  
           </div>: null
         }
         
@@ -113,7 +125,9 @@ class OrgsPage extends React.Component {
 
 
 
-const OrgSList = ({ orgs }) => (
+
+
+const OrgSList = ({ orgs,NumRespuestas }) => (
 
   <div className="animated fadeIn">
       <div className ="row">
@@ -124,14 +138,29 @@ const OrgSList = ({ orgs }) => (
               orgs[key].map(
                 item =>
                 
-                <div className ="col-sm-3 col-md-3">
+                <div key={key+"-"+item.uid} className ="col-sm-3 col-md-3">
 
                     <div className ="card">
                       <div className ="card-header">
                           {item.organizacion}
                       </div>
+
                       <div className ="card-body">
-                           <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
+                        <div className="row">
+                            
+                            <div className = "col-sm-8">
+                              <div className="centerBlock">
+                              <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
+                              </div>
+                            </div>
+                            <div className = "col-sm-8">
+                              <div className = "callout callout-info">
+                                  <small className = "text-muted">Respuestas</small>
+                                  <br/>
+                                  <strong className = "h4">{NumRespuestas(key,item.uid)}</strong>
+                              </div>
+                            </div>
+                        </div>   
                       </div>
                     </div>
                 </div>
