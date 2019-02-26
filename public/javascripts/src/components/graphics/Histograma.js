@@ -120,7 +120,7 @@ var HistogramaGraph = React.createClass({
             zoomBody.removeChild(zoomBody.firstChild);
         }
 
-        document.getElementById("exampleModalLabel").innerText="Pie Chart";;
+        document.getElementById("exampleModalLabel").innerText="Histogram Chart";;
 
         var mycanvas = document.createElement("canvas");
         zoomBody.appendChild(mycanvas);
