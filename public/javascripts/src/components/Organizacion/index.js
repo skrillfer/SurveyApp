@@ -129,6 +129,14 @@ const OrgSList = ({ orgs }) => (
                     <div className ="card">
                       <div className ="card-header">
                           {item.organizacion}
+                          <div class="card-header-actions">
+                            <a href="#" id={'dropdownMenuButton'+item.uid} class="card-header-action btn-setting dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="icon-settings"></i>
+                            </a>
+                            <div class="dropdown-menu popup1" aria-labelledby={'dropdownMenuButton'+item.uid} x-placement="bottom-start">
+                              <a class="dropdown-item" href="#">Compartir</a>
+                            </div>
+                          </div>
                       </div>
                       <div className ="card-body">
                            <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
