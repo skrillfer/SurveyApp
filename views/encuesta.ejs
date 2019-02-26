@@ -1,24 +1,46 @@
 <% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
-  <%- include common/headerUsuario.ejs %>
+  <%- include common/headerDashboard.ejs %>
   <% }else{%>
   <%- include common/header.ejs %>
   <% } %>   
   
 
     <!--
-      BOOSTRAP
+      JQUERY
     -->
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"
     integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
     crossorigin="anonymous"></script>
     
+    
+    
+    <!--
+      CORE UI CSS
+    -->
+    <link href="/coreui/css/style.css" rel="stylesheet">
+
+    <!--
+       BOOSTRAP
+    -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     rel="stylesheet"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
     crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  
+    
+    
+
+    <!--
+      Libreria Chart.js
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
     
 
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
@@ -28,7 +50,13 @@
     <script src="https://unpkg.com/react-addons-update/react-addons-update.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 
-     
+     <!--
+       Libreria de DataTables
+     -->
+     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+ 
+     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+
      <!-- Stylesheets for React Components 
       ============================================= -->
       <meta charset="utf-8">
@@ -38,7 +66,6 @@
         <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.5/react-bootstrap.js"></script>
         <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" type='text/css'/>
 
       <!-- Firebase -->
@@ -50,10 +77,123 @@
       <!-- Initialize the Firebase SDK -->
       <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
   
+      <main class="main">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <li class="breadcrumb-item">
+          <a href="#">Admin</a>
+          </li>
+          <li class="breadcrumb-item active">Dashboard</li>
+          
+          <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+          <a class="btn" href="#">
+          <i class="icon-speech"></i>
+          </a>
+          <a class="btn" >
+            <!-- Button Agregar Grafica -->
+            <button type="button" class="breadcrumb-item btn-success" data-toggle="modal" data-target="#exampleModal">
+                Agregar Grafica
+            </button>
+            
+          </a>
+          <a class="btn" href="#">
+            <button type="button" class="breadcrumb-item btn-secondary" data-toggle="modal" data-target="#exampleModal">
+              Editar
+            </button>
+          </a>
+          </div>
+          </li>
+        </ol>
+
+        
+      <!-- Modal ZOOM -->
+      <div class="modal fade bd-example-modal-lg" id="zoomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div id ="zoomBody" class="modal-body">
+              <canvas id="zoomCanvas" >
+
+              </canvas>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selecciona la Columna</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-sm-8">
+                            <!-- Example single danger button -->
+                          <div id = "modal_Encuesta" class="btn-group">
+                              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Selecciona
+                              </button>
+                              <div id ="menuDropEncuesta" class="dropdown-menu">
+                              </div>
+                          </div>      
+                      </div>
+                      <div class="col-sm-8">
+
+                          <input type="text" enable ="false" class="form-control" id="validationSelectedColum" placeholder="Selected Column"  disabled>
+                      </div>
+                      
+                    
+                  </div>
+
+                  <div class="dropdown-divider"></div>
+
+                  <!-- Example single danger button -->
+                  <div class="row justify-content-center">
+                    
+                      <div class="class="px-4 py-3>
+                          <div class="col-sm-14" style="background-color:yellow;">
+                              <div  class="checkbox">
+                                  <label><input id ="checkPie" type="checkbox"  checked>Pie</label>
+                              </div>
+                          </div>
+
+                          <div class="dropdown-divider"></div>
+                          
+                          <div class="col-sm-14" style="background-color:green;">
+                              <div  class="checkbox">
+                                  <label><input id="checkHistogram" type="checkbox">Histogram</label>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                    
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btn_DropdownSave" type="button" class="btn btn-primary">Agregar</button>
+              </div>
+            </div>
+          </div>
+      </div>
+
       </br></br>
    
 
-      <div id="container">
+      <div id="container" class="container-fluid">
       </div>  
       <script>
          var id       = "<%= id %>";
@@ -62,7 +202,22 @@
 
       <script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>  
       <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
-      <script  type="text/babel" src="/javascripts/src/components/Encuesta/Histograma.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/graphics/Histograma.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/graphics/Pie.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/graphics/Grid.js" crossorigin></script>
+      
       
 
-  <%- include common/footer.ejs %>
+    </div>
+    <footer class="app-footer">
+      <div>
+        <a href="https://coreui.io">CoreUI</a>
+        <span>&copy; 2018 creativeLabs.</span>
+      </div>
+      <div class="ml-auto"> 
+        <span>Powered by</span>
+        <a href="https://coreui.io">CoreUI</a>
+      </div>
+    </footer>
+</body>
+</html>

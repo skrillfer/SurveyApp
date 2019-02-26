@@ -13,6 +13,7 @@ var generalRouter = require('./routes/general');
 var loginRouter = require('./routes/login');
 var dashboardRouter = require('./routes/dashboard');
 var builderRouter = require('./routes/builder');
+var encuestaRouter = require('./routes/encuesta');
 
 var app = express();
 
@@ -37,10 +38,12 @@ app.use("/",generalRouter);
 app.use("/users",loginRouter);
 app.use("/dashboard",dashboardRouter);
 app.use("/builder",builderRouter);
+app.use("/encuesta",encuestaRouter);
 
 // Initialize Admin SDK.
 admin.initializeApp({
-  credential: admin.credential.cert('bdsurvey-4d97c-firebase-adminsdk-upi86-f83f38b991.json')
+  credential: admin.credential.cert('bdsurvey-4d97c-firebase-adminsdk-upi86-f83f38b991.json'),
+  databaseURL:'https://bdsurvey-4d97c.firebaseio.com/'
 });
 // Support JSON-encoded bodies.
 app.use(bodyParser.json());

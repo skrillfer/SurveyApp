@@ -55,7 +55,8 @@ class OrgsPage extends React.Component {
                     var HashTmp = current.state.orgs;
                     HashTmp[childKey] = ARRAY2;
                     current.setState({ 
-                      orgs: HashTmp
+                      orgs: HashTmp,
+                      loading:false
                     })
                   }
                     
@@ -87,9 +88,20 @@ class OrgsPage extends React.Component {
 
 
     return (
+      
       <div>
-        <h1>Informacion</h1>
-        <OrgSList orgs={orgs} />  
+        {loading && <div style ={{display: 'block'}}  className="d-flex justify-content-center">
+                            <div className="spinner-border text-primary" style={{width: "5rem", height: "5rem"}} role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+        {!loading ?
+          <div>
+          <h1>Informacion</h1>
+          <OrgSList orgs={orgs} />  
+          </div>: null
+        }
+        
       </div>
      );
     
@@ -98,11 +110,39 @@ class OrgsPage extends React.Component {
 }
 
 
-//        <OrgSList orgs={orgs} />        
 
 
 
 const OrgSList = ({ orgs }) => (
+
+  <div className="animated fadeIn">
+      <div className ="row">
+      {
+        Object.keys(orgs).map( key => 
+
+          (
+              orgs[key].map(
+                item =>
+                
+                <div className ="col-sm-3 col-md-3">
+
+                    <div className ="card">
+                      <div className ="card-header">
+                          {item.organizacion}
+                      </div>
+                      <div className ="card-body">
+                           <a href={'/dashboard/encuesta/'+key+'/'+item.uid} >{item.nombre}</a>
+                      </div>
+                    </div>
+                </div>
+
+              )
+          )
+        )
+      }
+      </div>
+  </div>
+  /*
   <table id="customers">
     <thead>
         <tr>
@@ -128,7 +168,7 @@ const OrgSList = ({ orgs }) => (
       ))}
     </tbody>
 
-  </table>
+  </table>*/
 );
 
 

@@ -1,0 +1,53 @@
+<html>
+    <head>
+            <script src="/javascripts/jquery-2.2.4.min.js"></script>
+            <script src="https://surveyjs.azureedge.net/1.0.69/survey.jquery.min.js"></script>
+            <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">	
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><%= titulo %></h3>
+                </div>
+                <div class="panel-body" style="min-height: 100%">
+                    <div id="surveyContainer"></div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            Survey.Survey.cssType = "bootstrap";
+
+            var surveyJSON = <%- encuesta %>;
+
+            function sendDataToServer(surveyModel,options) {
+                options.showDataSaving('Guardando ...');
+                $.post('/encuesta/<%= idencuesta %>',{strrespuesta:JSON.stringify(surveyModel.data)}).done(function(data){
+                    var jData = JSON.parse(data);
+                    if(jData.status=="ok"){
+                        $('#error').css('display','none');
+                        $('#exito').css('display','block');
+                        options.showDataSavingSuccess('Respuesta enviada exitósamente!');
+                    }else{
+                        $('#error').css('display','block');
+                        $('#exito').css('display','none');
+                        options.showDataSavingError('Ocurrió un error al enviar la respuesta, intent de nuevo');
+                    }
+
+                }).error(function(data){
+                    options.showDataSavingError('Ocurrió un error al enviar la respuesta, intent de nuevo');
+                });
+            }
+
+            var survey = new Survey.Model(surveyJSON);
+            survey.locale='es';
+            $("#surveyContainer").Survey(
+                {
+                    model: survey,
+                    onComplete: sendDataToServer
+                }
+            );
+        </script>
+    </body>
+</html>
