@@ -97,7 +97,7 @@ class OrgsPage extends React.Component {
                         </div>}
         {!loading ?
           <div>
-          <h1>Informacion</h1>
+          <h1>Tus Encuestas</h1>
           <OrgSList orgs={orgs} />  
           </div>: null
         }
