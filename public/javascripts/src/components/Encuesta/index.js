@@ -2,22 +2,23 @@
 
 class EncuestasPage extends React.Component {
   _isMounted = false;
-
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
     this.convertArrayOfObjectsToCSV = this.convertArrayOfObjectsToCSV.bind(this);
     this.downloadCSV = this.downloadCSV.bind(this);
 
-    this.cerrarGrafica = this.cerrarGrafica.bind(this);
+    this.cerrarGrafica =  this.cerrarGrafica.bind(this);
+    this.cerrarTodo    =  this.cerrarTodo.bind(this);
 
           /*        Funciones de PopUp Menu       */
-    this.clickGenerarGrafico =  this.clickGenerarGrafico.bind(this);
-    this.togglePopup = this.togglePopup.bind(this);
     this.generateHead = this.generateHead.bind(this);
     this.renderizarColumna = this.renderizarColumna.bind(this);
     this.obtenerEncabezado = this.obtenerEncabezado.bind(this);
-    this.actualizarGrafico = this.actualizarGrafico.bind(this);
+
+    this.accionDropDown = this.accionDropDown.bind(this);
+    this.agregarDropDown = this.agregarDropDown.bind(this);
+    this.prueba = this.prueba.bind(this);
 
 
     this.state = {
@@ -30,6 +31,7 @@ class EncuestasPage extends React.Component {
       pregunta: '',
       respuesta: '',
 
+
       //refactor
       headers : [],
       data : [],
@@ -38,6 +40,9 @@ class EncuestasPage extends React.Component {
       HashFilter: {},
       showGraphic :false,
       textSearch : '',
+      gridList : [],
+      gridListHead : [],
+      
     };
   }
 
@@ -115,17 +120,38 @@ class EncuestasPage extends React.Component {
             data : ARRAY,
             listafiltrada: ARRAY,
           },s=>{
+                   
                   control=true;
-                  //idSearch
-                  if(current.state.textSearch!='')
-                  {
-                    var element = document.getElementById('idSearch');
-                    element.value = '';
-                    this.cerrarGrafica();
-                  }else
-                  {
-                    this.actualizarGrafico(current.state.HashFilter);
-                  }
+                  
+
+                  /*Agregando los tipos de columnas para seleccionar del dropdown */
+                  var mydiv = document.getElementById("menuDropEncuesta");
+                  mydiv.innerHTML ="";
+                  this.state.headers.map(item =>
+                    {
+                      var a_element = document.createElement('a');
+                      a_element.title = item;
+                      var linkText = document.createTextNode(item);
+                      a_element.appendChild(linkText);
+                      a_element.className = "dropdown-item";
+                      a_element.onclick = this.accionDropDown;
+                      mydiv.appendChild(a_element);
+                      
+                    }
+                  );
+
+                  var mybtnSave = document.getElementById("btn_DropdownSave");
+                  mybtnSave.onclick = this.agregarDropDown;
+
+                  /*-------------------------------------------------------------- */
+
+                  try{
+                    $(document).ready( function () {
+                        $('#example11').DataTable();
+                     
+                    });
+                  }catch(exx){}
+
                   
 
                }
@@ -136,7 +162,6 @@ class EncuestasPage extends React.Component {
     });
      
    
-
     
     
   }
@@ -163,9 +188,7 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
-    
-    this.setState({textSearch:event.target.value});
-
+    alert('buscando');
 
     var QueryHASH = {};
     this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
@@ -177,7 +200,7 @@ class EncuestasPage extends React.Component {
       {
         const v = item.filter(subitem => 
             subitem.respuesta.toString().toLowerCase().search(
-                event.target.value.toLowerCase()) !== -1
+                event.toLowerCase()) !== -1
         );
 
         if(v.length>0)
@@ -196,33 +219,14 @@ class EncuestasPage extends React.Component {
         
       }     
     );
-    if(this._isMounted)
-    {
-      
-      this.setState({listafiltrada: filtrada,HashFilter:QueryHASH});
-      this.actualizarGrafico(QueryHASH);
-    }
+    
+    var RETORNO = [];
+    RETORNO.push({listafiltrada: filtrada,HashFilter:QueryHASH});
+    return RETORNO;
+
   }
 
-  actualizarGrafico(QueryHASH)
-  {
-      if(this.state.showGraphic)
-      {
-        var HashFilter = QueryHASH;
-        if(Object.keys(this.state.HashFilter).length==0)
-        {
-          HashFilter = this.state.queryHash;
-        }
-    
-        var list = document.getElementById("graphic");
-        if(list.childNodes.length>0)
-        {
-          list.removeChild(list.childNodes[0]);
-        }    
-        const { pregunta, headers} = this.state;
-        return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
-      }
-  }
+      
 
   convertArrayOfObjectsToCSV(args) {
     var result, headers, lineDelimiter,columnDelimiter, data;
@@ -289,47 +293,58 @@ class EncuestasPage extends React.Component {
   }
 
   
- 
+  
   render() {
-    const { nombre,listafiltrada,loading } = this.state;
+    const { nombre,showGraphic,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    console.log("RENDERIZADO");
 
+    let button = null;
+    
     return (
 
       <div>
         
-        <div id="Search">
-            <form>
-              <fieldset className="form-group">
-              <input type="text" className="form-control form-control-lg" id="idSearch" placeholder="Search" onChange={this.filtrar_respuestas}/>
-              </fieldset>
-            </form>
+        <div id="graphic" className="graphicss">
+            
+            {showGraphic ? 
+               
+               <GridGraphs 
+                   cerrarGrafica = {this.cerrarGrafica} 
+                   cerrarTodo = {this.cerrarTodo} 
+                   gridList = {gridList} 
+                   pregunta = {pregunta} 
+                   respuestas = {queryHash}  
+                   children   = {gridList}
+                   gridListHead = {gridListHead}
+               />
+               : null
+             } 
         </div>
+       
         
         <div id="contenedorFunciones">
-            <h2> {nombre} </h2>
-            <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
-            {loading && <div>Loading ...</div>}
+            {loading && <div style ={{display: 'block'}}  className="text-center">
+                            <div className="spinner-border" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                        
+            <center>
+              {!loading ?
+                <div>
+                  <h1> {nombre} </h1>
+                  <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
+                </div> : null
+              }    
+            </center>
             
-            <div>
-            </div>
+
+            
+            
         </div>
-        <div id="graphic" className="graphicss"></div>
-        {this.state.showPopup ? 
-          (
-            this.cerrarGrafica,
-          <ListBox
-            text={'Estadisticas Graficas de '+this.state.pregunta+'?'}
-            closePopup={this.togglePopup.bind(this)}
-            clickGenerarGrafico = {this.clickGenerarGrafico}
-            clickGraficaPie = {this.clickGraficaPie}
-            posicion = {this.state.posicion}
-          />
-           
-          )
-          : null
-        }
+       
         <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada} handle = {this.togglePopup} lt ={[]} renderizarColumna ={this.renderizarColumna}/>
+          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
           
         </div>
 
@@ -339,34 +354,6 @@ class EncuestasPage extends React.Component {
       
     
   }
-
-
- 
-
-  /*Funciones de PopUp Menu */
-  clickGenerarGrafico(event)
-  {
-    this.setState({showGraphic:true});
-
-    var HashFilter = this.state.HashFilter;
-    if(Object.keys(this.state.HashFilter).length==0)
-    {
-      HashFilter = this.state.queryHash;
-    }
-
-    var list = document.getElementById("graphic");
-    if(list.childNodes.length>0)
-    {
-      list.removeChild(list.childNodes[0]);
-    }    
-    this.setState({showPopup: !this.state.showPopup,});
-    const { pregunta, headers} = this.state;
-    
-   
-    return (ReactDOM.render( <GridGraphs cerrarGrafica = {this.cerrarGrafica} tipo= {event.target.id} pregunta = {pregunta} encabezados = {headers} respuestas = {HashFilter}/>, document.getElementById('graphic')));
-  }
-
-
 
   renderizarColumna(row,i)
   {
@@ -389,42 +376,127 @@ class EncuestasPage extends React.Component {
     
   }
 
-  cerrarGrafica()
+  prueba()
   {
-
-    this.setState({showGraphic:false});
-    var list = document.getElementById("graphic");
-    if(list.childNodes.length>0)
-    {
-      list.removeChild(list.childNodes[0]);
-    }    
+    console.log("TERMINE");
   }
 
-  togglePopup(event) {
-    var posicionM = '';
-    try{
-      var elemento = document.getElementById(event.target.id);
-      posicionM = elemento.getBoundingClientRect();
-    }catch(ex){}
-    
-
-    this.setState({
-      showPopup: !this.state.showPopup,
-      pregunta:   event.target.getAttribute('name'),
-      respuesta : event.target.id,
-      posicion :  posicionM,
+  cerrarTodo()
+  {
+    this.setState({gridList:[],gridListHead:[],showGraphic:false},()=>{
+      
     });
   }
+  cerrarGrafica(index)
+  {
+    
+    if(this._isMounted)
+    {
+
+      try{
+
+        let gridList1 = this.state.gridList.filter((_,item) => item !== parseInt(index));
+        let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
+        if(gridList1.length==0)
+        {
+          
+          gridList1 = [];gridListHead1 = [];
+        }
+        
+        var current = this;
+        this.setState({gridList:gridList1,gridListHead:gridListHead1},()=>{
+          
+          if(!gridList1.length>0){
+            current.setState({showGraphic:false});
+          }else
+          {
+            document.getElementById("Gridloader").style.display = "none";
+            document.getElementById("ui-view").style.display = "block";
+            document.getElementById("GridCerrarTodo").style.display = "block";
+          }
+          
+        });
+        
+      }catch(exx){
+        console.log(exx);
+      }  
+    }
+    
+  }
+
+
+  /*------- Opciones de agregar grafica   */
+  accionDropDown(event){
+    if (this._isMounted){
+      document.getElementById("validationSelectedColum").value =event.target.title;
+    }
+  }
+ 
+  
+
+  agregarDropDown()
+  {
+    if (this._isMounted && document.getElementById("validationSelectedColum").value!='') {
+
+      try{
+        var FILTER = document.getElementById("example11_filter");
+        var inputNodes = FILTER.getElementsByTagName('INPUT');
+        this.setState({textSearch:inputNodes[0].value});
+        /* 
+        OPCIONES:
+        1. Enviar el textSearch y enviar la funcion filtrar para obtener una data filtrada
+        2. refactorizar codigo y entonces tendria que tener una palabra search para que cada
+        grafica sea generada de acuerdo a su search
+        */
+
+      }catch(exx){}
+      
+      var mypregunta = document.getElementById("validationSelectedColum").value;
+      var siCheck =false;
+      if(document.getElementById("checkHistogram").checked)
+      {
+        siCheck =true;
+        this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+      }
+      if(document.getElementById("checkPie").checked)
+      {
+        siCheck =true;
+        this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+      }
+      
+      if(siCheck)
+      {        
+        this.setState({showGraphic:false});
+        console.log(this.state.gridList);
+        console.log(this.state.gridListHead);
+        $('#exampleModal').modal('hide');
+        this.setState({showGraphic:true});
+      }else
+      {
+        alert('Tienes que elegir al menos un tipo de grafica');
+
+      } 
+    }else
+    {
+      alert('Debes seleccionar al menos una Columna');
+
+    }
+    
+  }
+
+
 
 }
 
-const ListaRespuestas = ({ headers,matrix , handle,lt,renderizarColumna }) => (
+const ListaRespuestas = ({ headers,matrix ,renderizarColumna }) => (
   
   <table id="example11" className="table table-striped table-bordered">
     <thead>
         <tr>
           {headers.map( item =>(
-            <th name = {item} id = {item} onClick = {handle} key = {item}>
+            <th name = {item} id = {item}  key = {item}>
                 {item}
             </th>
           ))}

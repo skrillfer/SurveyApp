@@ -3,10 +3,10 @@ var HistogramaGraph = React.createClass({
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
-                    encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
-                    tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    index : this.props.index,
+                    _Chart : null,
                 };
     },
     componentDidMount: function()
@@ -24,7 +24,7 @@ var HistogramaGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function(tipo)
+    mostrarGraficaDeColumna: function()
     {
         var x = [];
     
@@ -45,42 +45,9 @@ var HistogramaGraph = React.createClass({
     },
     generarHistograma(ejeX,ejeY,pregunta)
     {
-        /*
-        var trace1 = {
-            type: 'bar',
-            x: ejeX,
-            y: ejeY,
-            name: 'Cantidad',
-            marker: {
-                color: '#C8A2C8',
-                line: {
-                    width: 2.5
-                }
-            }
-        };
         
-        var data = [ trace1 ];
-        
-       
-        var layout = {
-          title: 'Histograma de '+pregunta,
-          font: {size: 18},
-          yaxis: {
-            title: {
-              text: 'Cantidad',
-              font: {
-                family: 'Courier New, monospace',
-                size: 18,
-                color: '#7f7f7f'
-              }
-            }
-          },
-          
-        };
-        Plotly.newPlot('graphContainerH', data, layout, {responsive: true});*/    
-        var ctx = document.getElementById("graphContainerH").getContext('2d');
-
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById("graphContainerH"+this.state.index).getContext('2d');
+        var template = {
             type: 'bar',
             data: {
               labels: ejeX,
@@ -138,21 +105,46 @@ var HistogramaGraph = React.createClass({
                 text: 'Histograma de '+pregunta
               }
             }
-          });
+          };
+
+        var myChart = new Chart(ctx, template);
+        this.state._Chart = template;
+
+    },
+    zoomGrafica()
+    {
+        
+        var zoomBody = document.getElementById("zoomBody");
+
+        while (zoomBody.firstChild) {
+            zoomBody.removeChild(zoomBody.firstChild);
+        }
+
+        document.getElementById("exampleModalLabel").innerText="Pie Chart";;
+
+        var mycanvas = document.createElement("canvas");
+        zoomBody.appendChild(mycanvas);
+
+
+        var ctx = mycanvas.getContext('2d');
+        new Chart(ctx, this.state._Chart);
+
+        $('#zoomModal').modal('show');        
     },
     render() {
         return (
-            <div id ="contenedorHistograma" className = "center-block">
+            <div id ={"contenedorHistograma"+this.state.index} className = "center-block">
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="text-left">
-                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+            <div className="row">
+                <div className="col-xs-12">
+                    <div className="text-left">
+                        <button id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">X</button>
+                        <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-secondary">|<span className="glyphicon glyphicon-zoom-in"></span>|</button>
                     </div>
                 </div>
             </div>
                 
-            <canvas  id="graphContainerH" >
+            <canvas  id={"graphContainerH"+this.state.index} >
 
             </canvas>
             <hr />

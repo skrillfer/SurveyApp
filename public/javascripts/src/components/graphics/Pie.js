@@ -1,12 +1,13 @@
-var PieGraph = React.createClass({
 
+var PieGraph = React.createClass({
+    
     getInitialState: function() {
         return {    
                     pregunta: this.props.pregunta, 
-                    encabezados: this.props.encabezados,
                     respuestas : this.props.respuestas,
-                    tipo: this.props.tipo,
                     cerrarGrafica : this.props.cerrarGrafica,
+                    index : this.props.index,
+                    _Chart : null,
                 };
     },
     componentDidMount: function()
@@ -32,7 +33,7 @@ var PieGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function(tipo)
+    mostrarGraficaDeColumna: function()
     {
         var x = [];
     
@@ -55,6 +56,8 @@ var PieGraph = React.createClass({
     },
     generarGraficaPie(ejeX,ejeY,pregunta)
     {
+        console.log("index");
+        console.log(this.state.index);
         var colors =[] ;
 
         var total=ejeY.reduce(this.getSum);
@@ -67,8 +70,8 @@ var PieGraph = React.createClass({
             }
         );
         
-        var ctx = document.getElementById("graphContainerP").getContext('2d');
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById("graphContainerP"+this.state.index).getContext('2d');
+        var template = {
             type: 'pie',
             data : {
                 datasets: [{
@@ -86,42 +89,58 @@ var PieGraph = React.createClass({
                             beginAtZero:true
                         }
                     }]
-                }
+                },title: {
+                    display: true,
+                    text: 'Pie de '+pregunta
+                  }
             }
-        });
-        /*
-        var data = [{
-            values: porcentajes,
-            labels: ejeX,
-            type: "pie"
-          }];
-          
-        var layout = {
-        height: 400,
-        width: 500
         };
-        
-        Plotly.newPlot('graphContainerP', data, layout);*/
+
+        var myChart = new Chart(ctx, template);
+        this.state._Chart = template;
     },
+    zoomGrafica()
+    {
+        
+        var zoomBody = document.getElementById("zoomBody");
+
+        while (zoomBody.firstChild) {
+            zoomBody.removeChild(zoomBody.firstChild);
+        }
+
+        document.getElementById("exampleModalLabel").innerText="Pie Chart";;
+
+        var mycanvas = document.createElement("canvas");
+        zoomBody.appendChild(mycanvas);
+
+
+        var ctx = mycanvas.getContext('2d');
+        new Chart(ctx, this.state._Chart);
+
+        $('#zoomModal').modal('show');        
+    }
+    ,
     getSum(total, num) 
     {
         return total + num;
     },
     render() {
         return (
-            <div id ="contenedorPie" className = "center-block">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="text-left">
-                        <button type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger"><span className="glyphicon glyphicon-remove"></span></button>
+            <div id ={"contenedorPie"+this.state.index} className = "center-block">
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="text-left">
+                            <button  id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">x</button>
+                            <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-secondary">|<span className="glyphicon glyphicon-zoom-in"></span>|</button>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-                
-            <canvas  id="graphContainerP" >
+                    
+                <canvas  id={"graphContainerP"+this.state.index} >
 
-            </canvas>
-            <hr />
+                </canvas>
+                <hr />
             </div>
         )
     }
