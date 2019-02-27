@@ -320,34 +320,31 @@ class EncuestasPage extends React.Component {
                : null
              } 
         </div>
-       
+        <div className="card">
+             <div className="card-header">
+              {nombre}
+              <div className="card-header-actions">
+                {!loading ?
+                  <div>
+                    <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                  </div> : null
+                }
+              </div>
+             </div>
+             <div className="card-body" id="TablaRespuestas">
+            <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
+            
+             </div>
+            <div id="contenedorFunciones">
+              {loading && <div style ={{display: 'block'}}  className="text-center">
+                              <div className="spinner-border" role="status">
+                                  <span className="sr-only">Loading...</span>
+                              </div>
+                          </div>}
+          </div>
         
-        <div id="contenedorFunciones">
-            {loading && <div style ={{display: 'block'}}  className="text-center">
-                            <div className="spinner-border" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
-                        </div>}
-                        
-            <center>
-              {!loading ?
-                <div>
-                  <h1> {nombre} </h1>
-                  <button onClick={this.downloadCSV} className="btn btn-block btn-link"> Descargar CSV</button>
-                </div> : null
-              }    
-            </center>
-            
-
-            
-            
-        </div>
-       
-        <div id="TablaRespuestas">
-          <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
           
         </div>
-
         
       </div>
     );

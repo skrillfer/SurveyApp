@@ -15,33 +15,7 @@
     crossorigin="anonymous"></script>
     
     
-    
-    <!--
-      CORE UI CSS
-    -->
-    <link href="/coreui/css/style.css" rel="stylesheet">
-
-    <!--
-       BOOSTRAP
-    -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
-  
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-    crossorigin="anonymous">
-  
-  
-    <!-- Main styles for this application-->
-    <script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.3/firebaseui.css" />
-    
-    <main class="main">
-
-    <!-- Stylesheets for React Components 
+<!-- Stylesheets for React Components 
     ============================================= -->
     <script src="https://unpkg.com/react@16/umd/react.development.js" ></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" ></script>
@@ -54,31 +28,24 @@
     <script src="https://unpkg.com/throw-in-the-towel@2"></script>
     <!-- Initialize the Firebase SDK -->
     <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
+    
+    <main class="main">
+
+    
 
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Home</li>
-        <li class="breadcrumb-item">
-        <a href="#">Admin</a>
-        </li>
-        <li class="breadcrumb-item active">Dashboard</li>
-        
-        <li class="breadcrumb-menu d-md-down-none">
+      <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group" aria-label="Button group">
-        <a class="btn" href="#">
             <div align="right">
-                <a class="btn btn-pill  btn-default" href="/builder/">Crear Encuesta</a>
+                <a class="btn btn-block btn-success" href="/builder/"><i class="icon-plus icons" style="margin-right:5px"></i>Crear Encuesta</a>
             </div>
-        </a>
         </div>
-        </li>
-        
+      </li>
     </ol>
 
     <script>
         var UserID = "<%= UserID %>";
     </script>
-    </br></br>
-    
     
     <div id="container" class="container-fluid">
     </div>  
@@ -98,5 +65,6 @@
         <a href="https://coreui.io">CoreUI</a>
       </div>
     </footer>
+    <script src="/coreui/js/coreui.min.js"></script>
 </body>
 </html>
