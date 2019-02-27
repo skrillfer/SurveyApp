@@ -109,7 +109,7 @@ class OrgsPage extends React.Component {
                         </div>}
         {!loading ?
           <div>
-          <h1>Informacion</h1>
+          <h1>Encuestas</h1>
           <OrgSList orgs={orgs} NumRespuestas = {this.NumRespuestas}/>  
           </div>: null
         }
@@ -142,6 +142,7 @@ const OrgSList = ({ orgs,NumRespuestas }) => (
 
                     <div className ="card">
                       <div className ="card-header">
+                          <a href="#"><span className="glyphicon glyphicon-globe"></span></a>&nbsp;
                           {item.organizacion}
                       </div>
 

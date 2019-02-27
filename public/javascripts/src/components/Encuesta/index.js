@@ -152,8 +152,6 @@ class EncuestasPage extends React.Component {
                     });
                   }catch(exx){}
 
-                  
-
                }
           );
         }
@@ -303,6 +301,8 @@ class EncuestasPage extends React.Component {
     return (
 
       <div>
+
+        <Rsumen />
         
         <div id="graphic" className="graphicss">
             
