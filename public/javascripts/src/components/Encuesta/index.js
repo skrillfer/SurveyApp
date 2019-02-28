@@ -42,6 +42,9 @@ class EncuestasPage extends React.Component {
       textSearch : '',
       gridList : [],
       gridListHead : [],
+
+      //mapas
+      queryMap : {},
       
     };
   }
@@ -69,7 +72,7 @@ class EncuestasPage extends React.Component {
     console.log(this.state.uid_org);
 
     let ARRAY = [];
-
+    let LMap  = {};
     console.log('comenzamos');
     let current = this;
     this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
@@ -82,12 +85,41 @@ class EncuestasPage extends React.Component {
             ARRAY = [];
             current.state.queryHash = {};
             control=false;
+            /*- mapa -*/
+            LMap = {};
+            /*- mapa -*/
           }
           
 
           let lista = [];
           ARRAY.push(lista);
-          
+         
+          /*db.ref('proyectos/'+current.state.uid_org+'/respuestas/'+current.state.uid+'/'+childKey).on('value',
+          respxnapshot =>{
+            let latitude="";
+            let longitude="";
+            let date="";
+            
+            if(respxnapshot.exists)
+            {
+              if (respxnapshot.hasChild("latitude") && respxnapshot.hasChild("longitude") && respxnapshot.hasChild("date")) {
+                latitude = respxnapshot.child("latitude").val();
+                longitude =respxnapshot.child("longitude").val();
+                date =respxnapshot.child("date").val();
+                if(current.state.queryMap[childKey]){
+                  current.state.queryMap[childKey].push({'latitude':latitude,'longitude':longitude,'date':date});
+                }else{
+                  current.state.queryMap[childKey] = [];
+                  current.state.queryMap[childKey].push({'latitude':latitude,'longitude':longitude,'date':date});
+                  
+                }
+              }
+            }
+            
+          });  */
+
+          /*- mapa -*/
+
           db.ref('proyectos/'+current.state.uid_org+'/respuestas/'+current.state.uid+'/'+childKey+'/body').on('value', 
               bodyxnapshot=>{
                 bodyxnapshot.forEach(function(inSnapshot) {
@@ -107,6 +139,26 @@ class EncuestasPage extends React.Component {
                 });
               }
           );
+
+           /*- mapa -*/
+
+           let latitude="";
+           let longitude="";
+           let date="";
+           if (childSnapshot.hasChild("latitude") && childSnapshot.hasChild("longitude") && childSnapshot.hasChild("date"))
+           {
+             
+             latitude  = childSnapshot.child("latitude").val();
+             longitude = childSnapshot.child("longitude").val();
+             date      = childSnapshot.child("date").val();
+ 
+             if(!LMap[childKey]){
+               LMap[childKey] = [];
+               LMap[childKey].push({'latitude':latitude,'longitude':longitude,'date':date});
+             }
+           }
+           /*- mapa -*/
+
          
       });
 
@@ -119,6 +171,7 @@ class EncuestasPage extends React.Component {
             nombre: childData.nombre,
             data : ARRAY,
             listafiltrada: ARRAY,
+            queryMap : LMap,
           },s=>{
                    
                   control=true;
@@ -295,15 +348,19 @@ class EncuestasPage extends React.Component {
   render() {
     const { nombre,showGraphic,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
     console.log("RENDERIZADO");
-
+    
+    var keys = Object.keys(this.state.queryMap);
+    console.log(keys.length);
     let button = null;
     
     return (
 
       <div>
-
-        <Rsumen />
+        {/*!loading?
+        <Rsumen queryMap ={this.state.queryMap}/>:null*/
+        }
         
+        <Rsumen queryMap ={this.state.queryMap}/>
         <div id="graphic" className="graphicss">
             
             {showGraphic ? 

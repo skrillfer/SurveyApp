@@ -61,9 +61,11 @@
       -->
     
       
+      <link href="/coreui/css/style.css" rel="stylesheet">		
       
+      <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 
-    
       <main class="main">
 
         
@@ -73,7 +75,7 @@
           <div class="btn-group" role="group" aria-label="Button group">
           <a class="btn" >
             <!-- Button Agregar Grafica -->
-            <button type="button" class="breadcrumb-item btn-success" data-toggle="modal" data-target="#exampleModal">
+            <button id="uid" type="button" class="breadcrumb-item btn-success" data-toggle="modal" data-target="#exampleModal">
                 Agregar Gráfica
             </button>            
           </a>
@@ -109,7 +111,7 @@
         </div>
       </div>
       <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:35px 50px;">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -171,52 +173,7 @@
       </div>
    
 
-      <div id="map"  style="width: 500px; height: 400px;"></div>
-
-      <script>
-          var map;
-          function initMap() {
-                var center = {lat: 34.052235, lng: -118.243683};
-                var locations = [
-                  ['Philz Coffee<br>\
-                  801 S Hope St A, Los Angeles, CA 90017<br>\
-                <a href="https://goo.gl/maps/L8ETMBt7cRA2">Get Directions</a>',   34.046438, -118.259653],
-                  ['Philz Coffee<br>\
-                  525 Santa Monica Blvd, Santa Monica, CA 90401<br>\
-                <a href="https://goo.gl/maps/PY1abQhuW9C2">Get Directions</a>', 34.017951, -118.493567],
-                  ['Philz Coffee<br>\
-                  146 South Lake Avenue #106, At Shoppers Lane, Pasadena, CA 91101<br>\
-                  <a href="https://goo.gl/maps/eUmyNuMyYNN2">Get Directions</a>', 34.143073, -118.132040],
-                  ['Philz Coffee<br>\
-                  21016 Pacific Coast Hwy, Huntington Beach, CA 92648<br>\
-                  <a href="https://goo.gl/maps/Cp2TZoeGCXw">Get Directions</a>', 33.655199, -117.998640],
-                  ['Philz Coffee<br>\
-                  252 S Brand Blvd, Glendale, CA 91204<br>\
-                <a href="https://goo.gl/maps/WDr2ef3ccVz">Get Directions</a>', 34.142823, -118.254569]
-                ];
-              var map = new google.maps.Map(document.getElementById('map'), {
-                  zoom: 9,
-                  center: center
-                });
-              var infowindow =  new google.maps.InfoWindow({});
-              var marker, count;
-              for (count = 0; count < locations.length; count++) {
-                  marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[count][1], locations[count][2]),
-                    map: map,
-                    title: locations[count][0]
-                  });
-              google.maps.event.addListener(marker, 'click', (function (marker, count) {
-                    return function () {
-                      infowindow.setContent(locations[count][0]);
-                      infowindow.open(map, marker);
-                    }
-                  })(marker, count));
-                }
-          }
-        </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDW5i2uqApjwJcqLmkJvgO2VVVdeNGBtVo&callback=initMap"
-    async defer></script>
+      
 
       <div id="container" class="container-fluid">
 
@@ -227,6 +184,7 @@
        </script>
 
       <script  type="text/babel" src="/javascripts/src/components/Resumen/General.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/Resumen/Mapa.js" crossorigin></script>
 
       <script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>  
       <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
@@ -246,5 +204,6 @@
       </div>
     </footer>
     <script src="/coreui/js/coreui.min.js"></script>
+
 </body>
 </html>
