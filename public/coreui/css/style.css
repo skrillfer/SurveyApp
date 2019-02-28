@@ -3429,25 +3429,25 @@ input[type="button"].btn-block {
 }
 
 .input-group {
-  position: relative;
+  /*position: relative;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -ms-flex-align: stretch;
   align-items: stretch;
-  width: 100%;
+  width: 100%;*/
 }
 
 .input-group > .form-control,
 .input-group > .form-control-plaintext,
 .input-group > .custom-select,
 .input-group > .custom-file {
-  position: relative;
+/*  position: relative;
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   width: 1%;
-  margin-bottom: 0;
+  margin-bottom: 0;*/
 }
 
 .input-group > .form-control + .form-control,
