@@ -7,21 +7,6 @@ var Mapa = React.createClass({
                 };
     },
     componentWillReceiveProps:function(nextprops) {
-        var keys1 = Object.keys(this.state.queryMap);
-        var keys2 = Object.keys(nextprops.queryMap);
-        if (keys1 != keys2) {
-            console.log('es diferente');
-            if(this.map!=null)
-            {
-                
-                //this.markers.removeLayer(markers);            
-            }
-        }
-        /*try {
-            this.map.clearLayers();
-        } catch (error) {
-            
-        }*/
         this.setState({ queryMap: nextprops.queryMap });
     },
 
@@ -38,7 +23,6 @@ var Mapa = React.createClass({
         console.log('componentDidUpdate');    
         
         var keys = Object.keys(this.state.queryMap);
-        console.log(keys.length);
         console.log('*************************************');
         if(keys.length>0)
         {
@@ -47,14 +31,19 @@ var Mapa = React.createClass({
             
             if(this.map==null)
             {
-                this.map = L.map('map').setView([Xpoint.latitude, Xpoint.longitude], 10);
+                this.map = L.map('map', {
+                    maxZoom: 18
+                });
+
+                this.map.setView([Xpoint.latitude, Xpoint.longitude], 13);
                 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
                     maxZoom: 18
                 }).addTo(this.map);
 
-                L.control.scale().addTo(this.map);
-            
+                //L.control.scale().addTo(this.map);
+                //this.map.invalidateSize();
+
             }else
             {
                 this.map.removeLayer(this.markers);
@@ -91,13 +80,11 @@ var Mapa = React.createClass({
         console.log(keys.length);
 
         console.log('Mapa Renderizado');
-        return(
-            <div id="managerMap">
-                
-                {/* Mapa de calor */}
-                    <div id="map" style={{width: "960px", height:"500px"}}></div>
-            </div>
-        )
+        return(    
+            <div id="map" style={{width: "100%", height:"350px"}}>
+            </div>)
     }
-    
+
 });
+
+

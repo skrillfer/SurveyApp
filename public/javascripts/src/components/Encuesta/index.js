@@ -45,6 +45,7 @@ class EncuestasPage extends React.Component {
       
       //mapas
       queryMap : {},
+      count    : 0,
     };
   }
 
@@ -72,9 +73,11 @@ class EncuestasPage extends React.Component {
 
     let ARRAY = [];
     let LMap  = {};
+    let Tcount = 0;
     console.log('comenzamos');
     let current = this;
     this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
+      Tcount=xsnapshot.numChildren();
       xsnapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
@@ -145,6 +148,7 @@ class EncuestasPage extends React.Component {
             data : ARRAY,
             listafiltrada: ARRAY,
             queryMap : LMap,
+            count : Tcount,
           },s=>{
                    
                   control=true;
@@ -371,10 +375,7 @@ class EncuestasPage extends React.Component {
   
   render() {
     const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
-    console.log("RENDERIZADO");
-
-    let button = null;
-    
+    console.log("RENDERIZADO");    
     return (
 
       <div>
@@ -398,8 +399,9 @@ class EncuestasPage extends React.Component {
 
       {
       showComponent==1?
-        <Resumen queryMap ={this.state.queryMap}/>
+        <Resumen queryMap ={this.state.queryMap} count = {this.state.count}/>
       :showComponent==2?
+        
         <div className="card">
              <div className="card-header">
                 {nombre}
