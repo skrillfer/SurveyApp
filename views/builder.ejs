@@ -1,40 +1,55 @@
 <% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
-<%- include common/headerUsuario.ejs %>
+<%- include common/headerDashboard.ejs %>
 <% }else{%>
 <%- include common/header.ejs %>
 <% } %>
 <%- include header/survey.ejs %>
+    <main class="main">
+        <div class="container-fluid">
+        <div id="surveyEditorContainer"></div>
 
-<div id="surveyEditorContainer"></div>
-
-<div id="modalGuardar" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Guardar encuesta</h4>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label for="tituloEncuesta">Título de encuesta</label>
-                    <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)">
+        <div id="modalGuardar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Guardar encuesta</h4>
                 </div>
-                <div class="form-group">
-                    <label for="organizacionEncuesta" class="col-sm-2 control-label">Organización</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" id="selOrganizaciones" name="selOrganizaciones"></select>
-                    </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="tituloEncuesta">Título de encuesta</label>
+                            <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)">
+                        </div>
+                        <div class="form-group">
+                            <label for="organizacionEncuesta" class="col-sm-2 control-label">Organización</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="selOrganizaciones" name="selOrganizaciones"></select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarEncuesta">Guardar</button>
+                </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" id="btnGuardarEncuesta">Guardar</button>
-        </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </main>
 
-
-<%- include common/footer.ejs %>
+    </div>
+    <footer class="app-footer">
+      <div>
+        <a href="https://coreui.io">CoreUI</a>
+        <span>&copy; 2018 creativeLabs.</span>
+      </div>
+      <div class="ml-auto"> 
+        <span>Powered by</span>
+        <a href="https://coreui.io">CoreUI</a>
+      </div>
+    </footer>
+    <script src="/coreui/js/coreui.min.js"></script>
+</body>
+</html>
