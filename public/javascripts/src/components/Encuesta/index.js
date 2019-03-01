@@ -27,7 +27,7 @@ class EncuestasPage extends React.Component {
       uid_org: org,
       nombre : '',
       listafiltrada : [],
-      showPopup: false,
+      showComponent: 1,
       pregunta: '',
       respuesta: '',
 
@@ -43,6 +43,8 @@ class EncuestasPage extends React.Component {
       gridList : [],
       gridListHead : [],
       
+      //mapas
+      queryMap : {},
     };
   }
 
@@ -69,7 +71,7 @@ class EncuestasPage extends React.Component {
     console.log(this.state.uid_org);
 
     let ARRAY = [];
-
+    let LMap  = {};
     console.log('comenzamos');
     let current = this;
     this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
@@ -82,6 +84,9 @@ class EncuestasPage extends React.Component {
             ARRAY = [];
             current.state.queryHash = {};
             control=false;
+             /*- mapa -*/
+             LMap = {};
+             /*- mapa -*/
           }
           
 
@@ -107,6 +112,26 @@ class EncuestasPage extends React.Component {
                 });
               }
           );
+
+          /*- mapa -*/
+
+          let latitude="";
+          let longitude="";
+          let date="";
+          if (childSnapshot.hasChild("latitude") && childSnapshot.hasChild("longitude") && childSnapshot.hasChild("date"))
+          {
+            
+            latitude  = childSnapshot.child("latitude").val();
+            longitude = childSnapshot.child("longitude").val();
+            date      = childSnapshot.child("date").val();
+
+            if(!LMap[childKey] && (latitude!=0 && longitude!=0)){
+              LMap[childKey] = [];
+              LMap[childKey].push({'latitude':latitude,'longitude':longitude,'date':date});
+            }
+          }
+          /*- mapa -*/
+          
          
       });
 
@@ -119,6 +144,7 @@ class EncuestasPage extends React.Component {
             nombre: childData.nombre,
             data : ARRAY,
             listafiltrada: ARRAY,
+            queryMap : LMap,
           },s=>{
                    
                   control=true;
@@ -143,14 +169,45 @@ class EncuestasPage extends React.Component {
                   var mybtnSave = document.getElementById("btn_DropdownSave");
                   mybtnSave.onclick = this.agregarDropDown;
 
-                  /*-------------------------------------------------------------- */
+                  var li_manager = document.getElementById("li_manager");
+                  li_manager.innerHTML ="";
 
-                  try{
-                    $(document).ready( function () {
-                        $('#example11').DataTable();
-                     
-                    });
-                  }catch(exx){}
+                  /*------------------------ Data ---------------------*/
+                  var a_data = document.createElement("a");
+                  a_data.setAttribute("class", "nav-link");
+
+                  var i_data = document.createElement("i");
+                  i_data.setAttribute("class", "nav-icon icon-note");
+
+                  a_data.appendChild(i_data);
+                  a_data.appendChild(document.createTextNode("Data"));
+                  a_data.onclick = onClick =>{ 
+                      this.setState({showComponent:2}); 
+                  };
+
+                  li_manager.appendChild(a_data);
+
+                  /*------------------------ Data ---------------------*/
+                  
+                  /*------------------------ Resumen ---------------------*/
+                  var a_res = document.createElement("a");
+                  a_res.setAttribute("class", "nav-link");
+
+                  var i_res = document.createElement("i");
+                  i_res.setAttribute("class", "nav-icon icon-map");
+
+                  a_res.appendChild(i_res);
+                  a_res.appendChild(document.createTextNode("Resumen"));
+                  a_res.onclick = onClick =>{ 
+                          this.setState({showComponent:1});
+                          this.setState({showComponent:1});
+                        };
+
+                  li_manager.appendChild(a_res);
+
+                  /*------------------------ Resumen ---------------------*/
+                  
+                  
 
                   
 
@@ -164,6 +221,24 @@ class EncuestasPage extends React.Component {
    
     
     
+  }
+
+
+  componentDidUpdate()
+  {
+
+    if(this.state.showComponent==2)
+    {
+      try{
+        $(document).ready( function () {
+            $('#example11').DataTable();
+         
+        });
+      }catch(exx){} 
+    }else if(this.state.showComponent==1)
+    {
+      //this.forceUpdate();
+    }
   }
 
   componentWillUnmount()
@@ -295,7 +370,7 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
     console.log("RENDERIZADO");
 
     let button = null;
@@ -320,31 +395,37 @@ class EncuestasPage extends React.Component {
                : null
              } 
         </div>
+
+      {
+      showComponent==1?
+        <Resumen queryMap ={this.state.queryMap}/>
+      :showComponent==2?
         <div className="card">
              <div className="card-header">
-              {nombre}
-              <div className="card-header-actions">
-                {!loading ?
-                  <div>
-                    <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
-                  </div> : null
-                }
-              </div>
+                {nombre}
+                <div className="card-header-actions">
+                  {!loading ?
+                    <div>
+                      <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                    </div> : null
+                  }
+                </div>
              </div>
-             <div className="card-body" id="TablaRespuestas">
+            <div className="card-body" id="TablaRespuestas">
             <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
             
-             </div>
+            </div>
             <div id="contenedorFunciones">
               {loading && <div style ={{display: 'block'}}  className="text-center">
                               <div className="spinner-border" role="status">
                                   <span className="sr-only">Loading...</span>
                               </div>
                           </div>}
-          </div>
+            </div>
         
           
         </div>
+      :null}
         
       </div>
     );

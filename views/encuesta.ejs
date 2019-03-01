@@ -52,6 +52,11 @@
       <!-- Initialize the Firebase SDK -->
       <script  src="/javascripts/src/components/Firebase/firebase.js" crossorigin></script>
   
+      <!-- Leaflet Maps-->
+      <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+      <!-- Leaflet Maps-->
+
       <main class="main">
         <ol class="breadcrumb">
           
@@ -163,6 +168,11 @@
          var id       = "<%= id %>";
          var org      = "<%= org %>";
        </script>
+
+      <!--mapa!-->
+      <script  type="text/babel" src="/javascripts/src/components/General/Resumen.js" crossorigin></script>
+      <script  type="text/babel" src="/javascripts/src/components/General/Mapa.js" crossorigin></script>
+      <!--mapa!-->
 
       <script  type="text/babel" src="/javascripts/src/components/Organizacion/Listbox.js" crossorigin></script>  
       <script  type="text/jsx" src="/javascripts/src/components/Encuesta/index.js" crossorigin></script>
