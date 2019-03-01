@@ -174,45 +174,45 @@ class EncuestasPage extends React.Component {
                   mybtnSave.onclick = this.agregarDropDown;
 
                   var li_manager = document.getElementById("li_manager");
-                  li_manager.innerHTML ="";
-
-                  /*------------------------ Data ---------------------*/
-                  var a_data = document.createElement("a");
-                  a_data.setAttribute("class", "nav-link");
-
-                  var i_data = document.createElement("i");
-                  i_data.setAttribute("class", "nav-icon icon-note");
-
-                  a_data.appendChild(i_data);
-                  a_data.appendChild(document.createTextNode("Data"));
-                  a_data.onclick = onClick =>{ 
-                      this.setState({showComponent:2}); 
-                  };
-
-                  li_manager.appendChild(a_data);
-
-                  /*------------------------ Data ---------------------*/
                   
-                  /*------------------------ Resumen ---------------------*/
-                  var a_res = document.createElement("a");
-                  a_res.setAttribute("class", "nav-link");
+                  if(li_manager.childNodes.length==3)
+                  {
+                    /*------------------------ Data ---------------------*/
+                    var a_data = document.createElement("a");
+                    a_data.setAttribute("class", "nav-link");
 
-                  var i_res = document.createElement("i");
-                  i_res.setAttribute("class", "nav-icon icon-map");
+                    var i_data = document.createElement("i");
+                    i_data.setAttribute("class", "nav-icon icon-note");
 
-                  a_res.appendChild(i_res);
-                  a_res.appendChild(document.createTextNode("Resumen"));
-                  a_res.onclick = onClick =>{ 
-                          this.setState({showComponent:1});
-                          this.setState({showComponent:1});
-                        };
+                    a_data.appendChild(i_data);
+                    a_data.appendChild(document.createTextNode("Data"));
+                    a_data.onclick = onClick =>{ 
+                        this.setState({showComponent:2}); 
+                    };
 
-                  li_manager.appendChild(a_res);
+                    li_manager.appendChild(a_data);
 
-                  /*------------------------ Resumen ---------------------*/
-                  
-                  
+                    /*------------------------ Data ---------------------*/
+                    
+                    /*------------------------ Resumen ---------------------*/
+                    var a_res = document.createElement("a");
+                    a_res.setAttribute("class", "nav-link");
 
+                    var i_res = document.createElement("i");
+                    i_res.setAttribute("class", "nav-icon icon-map");
+
+                    a_res.appendChild(i_res);
+                    a_res.appendChild(document.createTextNode("Resumen"));
+                    a_res.onclick = onClick =>{ 
+                            this.setState({showComponent:1});
+                            this.setState({showComponent:1});
+                          };
+
+                    li_manager.appendChild(a_res);
+
+                    /*------------------------ Resumen ---------------------*/
+                    
+                  }
                   
 
                }
