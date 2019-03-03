@@ -159,12 +159,14 @@ class EncuestasPage extends React.Component {
                   mydiv.innerHTML ="";
                   this.state.headers.map(item =>
                     {
+                      var li_element = document.createElement('li');
                       var a_element = document.createElement('a');
                       a_element.title = item;
                       var linkText = document.createTextNode(item);
                       a_element.appendChild(linkText);
                       a_element.className = "dropdown-item";
                       a_element.onclick = this.accionDropDown;
+                      li_element.appendChild(a_element);
                       mydiv.appendChild(a_element);
                       
                     }
