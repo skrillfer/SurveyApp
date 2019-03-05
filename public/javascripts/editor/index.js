@@ -1,6 +1,7 @@
 var survey;
 //Funciones para el editor
 function guardarEncuesta(){
+    $('#selOrganizaciones').find('option').remove();
     var listOrgs = globalUserObject['organizaciones'];
     for(var i=0;i<listOrgs.length;i++){
         var objOrg = listOrgs[i];
@@ -16,17 +17,23 @@ function guardarEncuestaFirebase(){
     database.ref('/proyectos/'+organizacion+'/encuestas/'+id).set({
         "nombre":$('#nomEncuesta').val(),
         "encuesta":survey.text
+    }).then(function(){
+        window.location.href='/dashboard/overview';
     });
 }
 
 
 $(document).ready(function(){
-    var editorOptions = {showEmbededSurveyTab: true}; //see examples below
+    var editorOptions = {showEmbededSurveyTab: true,showJSONEditorTab:false,showEmbededSurveyTab:false,locale:'es'}; //see examples below
+    SurveyEditor.editorLocalization.currentLocale='es';
     survey = new SurveyEditor.SurveyEditor("surveyEditorContainer", editorOptions);
+    survey.locale = 'es';
     //set function on save callback
     survey.saveSurveyFunc = guardarEncuesta;
 
     $('#btnGuardarEncuesta').click(function(){
         guardarEncuestaFirebase();
     });
+    $('body').addClass('brand-minimized');
+    $('body').addClass('sidebar-minimized');
 });

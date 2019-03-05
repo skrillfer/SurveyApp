@@ -41,12 +41,6 @@
         <li class="nav-item px-3">
           <a class="nav-link" href="#">Dashboard</a>
         </li>
-        <li class="nav-item px-3">
-          <a class="nav-link" href="#">Users</a>
-        </li>
-        <li class="nav-item px-3">
-          <a class="nav-link" href="#">Settings</a>
-        </li>
       </ul>
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item dropdown">
@@ -55,40 +49,22 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right">
             <div class="dropdown-header text-center">
-              <strong>Account</strong>
+                <span id="nomUsuario"></span>
             </div>
-            <a class="dropdown-item" href="#">
-              <i class="fa fa-bell-o"></i> Plan
-            </a>
-            <a class="dropdown-item" href="#">
-              <span class="glyphicon glyphicon-envelope"></span>
-              <i class="fa fa-envelope-o"></i> Mensajes
-              <span class="badge badge-success">42</span>
-            </a>
-            <div class="dropdown-header text-center">
-              <strong>Settings</strong>
-            </div>
-            <a class="dropdown-item" href="#">
-              <span class="glyphicon glyphicon-user"></span>
-              <i class="fa fa-user"></i> Profile
-            </a>
             <a class="dropdown-item" href="#">
               <span class="glyphicon glyphicon-wrench"></span>
-              <i class="fa fa-wrench"></i> Settings</a>
-            <a class="dropdown-item" href="#">
+              <i class="fa fa-wrench"></i> Configuración</a>
+            <a class="dropdown-item" href="#"  onClick="window.location.assign('/users/logout')">
               <span class="glyphicon glyphicon-lock"></span>
-              <i class="fa fa-lock"></i> Logout</a>
+              <i class="fa fa-lock"></i> Cerrar Sesión</a>
           </div>
         </li>
       </ul>
-      <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" data-toggle="aside-menu-lg-show">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <button class="navbar-toggler aside-menu-toggler d-lg-none" type="button" data-toggle="aside-menu-show">
-        <span class="navbar-toggler-icon"></span>
-      </button>
     </header>
     <div class="app-body">
+        <div style="display:none" id="login">Cargando...</div>
+        <div style="display:none" id="firebaseui-container"></div>
+        <div style="display:none" id="account-details"></div>
       <div class="sidebar">
         <nav class="sidebar-nav">
           <ul class="nav">
