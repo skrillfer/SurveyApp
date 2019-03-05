@@ -153,7 +153,8 @@ var initApp = function() {
             database.ref('/proyectos').once('value').then(function(snapshot){
               var collOrgs = [];
               snapshot.forEach(function(childSnapshot){
-                if(collOrganizaciones.indexOf(childSnapshot.key)){
+                var posicion = collOrganizaciones.indexOf(childSnapshot.key);
+                if(posicion>=0){
                   collOrgs.push(childSnapshot);
                 }
               });
