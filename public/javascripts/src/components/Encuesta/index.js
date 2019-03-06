@@ -179,7 +179,7 @@ class EncuestasPage extends React.Component {
                   
                   if(li_manager.childNodes.length==3)
                   {
-                    /*------------------------ Data ---------------------*/
+                    /*------------------------ Data (Tabla) ---------------------*/
                     var a_data = document.createElement("a");
                     a_data.setAttribute("class", "nav-link");
 
@@ -194,9 +194,9 @@ class EncuestasPage extends React.Component {
 
                     li_manager.appendChild(a_data);
 
-                    /*------------------------ Data ---------------------*/
+                    /*------------------------ Data (Tabla)---------------------*/
                     
-                    /*------------------------ Resumen ---------------------*/
+                    /*------------------------ General (Mapa) ---------------------*/
                     var a_res = document.createElement("a");
                     a_res.setAttribute("class", "nav-link");
 
@@ -207,12 +207,10 @@ class EncuestasPage extends React.Component {
                     a_res.appendChild(document.createTextNode("Resumen"));
                     a_res.onclick = onClick =>{ 
                             this.setState({showComponent:1});
-                            this.setState({showComponent:1});
                           };
 
                     li_manager.appendChild(a_res);
-
-                    /*------------------------ Resumen ---------------------*/
+                    /*------------------------ General (Mapa) ---------------------*/
                     
                   }
                   

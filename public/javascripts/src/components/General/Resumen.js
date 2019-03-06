@@ -9,12 +9,15 @@ var Resumen = React.createClass({
                 
     },
     componentWillReceiveProps:function(props) {
-        this.setState({ 
-            queryMap: props.queryMap,
-            count:props.count,
-            lastdate: this.getLastDate(props.queryMap) 
-        });
-
+        if(Object.keys(props.queryMap).length!=Object.keys(this.state.queryMap).length)
+        {
+            console.log('diferente!!');
+            this.setState({ 
+                queryMap: props.queryMap,
+                count:props.count,
+                lastdate: this.getLastDate(props.queryMap) 
+            });
+        }
     }, 
     getLastDate(queryMap)
     {
@@ -26,12 +29,11 @@ var Resumen = React.createClass({
             var date = new Date( parseFloat( dateVal.substr(6 )));
             return date.toLocaleDateString() + " " + date.toLocaleTimeString();
         }
-        return "";
+        return "sin registro";
     }
     ,
     render()
     {
-        console.log('General renderizado');
         return(
 
             <div className="row">
