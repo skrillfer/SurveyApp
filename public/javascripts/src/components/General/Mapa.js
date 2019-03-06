@@ -11,7 +11,6 @@ var Mapa = React.createClass({
     componentWillReceiveProps:function(nextprops) {
         if(Object.keys(nextprops.queryMap).length!=Object.keys(this.state.queryMap).length)
         {
-            console.log("mmmm");
             this.setState({ queryMap: nextprops.queryMap},()=>{this.renderizarMapa();});
         }
     },
@@ -28,9 +27,7 @@ var Mapa = React.createClass({
     },
     renderizarMapa()
     {
-        console.log('caramba');
         var keys = Object.keys(this.state.queryMap);
-        console.log(keys.length);
         if(keys.length>0)
         {
             var Xpoint = this.state.queryMap[keys[0]][0]; 
