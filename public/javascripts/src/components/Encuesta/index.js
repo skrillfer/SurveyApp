@@ -27,7 +27,7 @@ class EncuestasPage extends React.Component {
       uid_org: org,
       nombre : '',
       listafiltrada : [],
-      showPopup: false,
+      showComponent: 1,
       pregunta: '',
       respuesta: '',
 
@@ -43,6 +43,9 @@ class EncuestasPage extends React.Component {
       gridList : [],
       gridListHead : [],
       
+      //mapas
+      queryMap : {},
+      count    : 0,
     };
   }
 
@@ -69,10 +72,12 @@ class EncuestasPage extends React.Component {
     console.log(this.state.uid_org);
 
     let ARRAY = [];
-
+    let LMap  = {};
+    let Tcount = 0;
     console.log('comenzamos');
     let current = this;
     this.F1=db.ref('proyectos/'+this.state.uid_org+'/respuestas/'+this.state.uid).on('value', xsnapshot => {
+      Tcount=xsnapshot.numChildren();
       xsnapshot.forEach(function(childSnapshot) {
           var childKey = childSnapshot.key;
           var childData = childSnapshot.val();
@@ -82,6 +87,9 @@ class EncuestasPage extends React.Component {
             ARRAY = [];
             current.state.queryHash = {};
             control=false;
+             /*- mapa -*/
+             LMap = {};
+             /*- mapa -*/
           }
           
 
@@ -107,6 +115,26 @@ class EncuestasPage extends React.Component {
                 });
               }
           );
+
+          /*- mapa -*/
+
+          let latitude="";
+          let longitude="";
+          let date="";
+          if (childSnapshot.hasChild("latitude") && childSnapshot.hasChild("longitude") && childSnapshot.hasChild("date"))
+          {
+            
+            latitude  = childSnapshot.child("latitude").val();
+            longitude = childSnapshot.child("longitude").val();
+            date      = childSnapshot.child("date").val();
+
+            if(!LMap[childKey] && (latitude!=0 && longitude!=0)){
+              LMap[childKey] = [];
+              LMap[childKey].push({'latitude':latitude,'longitude':longitude,'date':date});
+            }
+          }
+          /*- mapa -*/
+          
          
       });
 
@@ -119,6 +147,8 @@ class EncuestasPage extends React.Component {
             nombre: childData.nombre,
             data : ARRAY,
             listafiltrada: ARRAY,
+            queryMap : LMap,
+            count : Tcount,
           },s=>{
                    
                   control=true;
@@ -145,15 +175,44 @@ class EncuestasPage extends React.Component {
                   var mybtnSave = document.getElementById("btn_DropdownSave");
                   mybtnSave.onclick = this.agregarDropDown;
 
-                  /*-------------------------------------------------------------- */
+                  var li_manager = document.getElementById("li_manager");
+                  
+                  if(li_manager.childNodes.length==3)
+                  {
+                    /*------------------------ Data (Tabla) ---------------------*/
+                    var a_data = document.createElement("a");
+                    a_data.setAttribute("class", "nav-link");
 
-                  try{
-                    $(document).ready( function () {
-                        $('#example11').DataTable();
-                     
-                    });
-                  }catch(exx){}
+                    var i_data = document.createElement("i");
+                    i_data.setAttribute("class", "nav-icon icon-note");
 
+                    a_data.appendChild(i_data);
+                    a_data.appendChild(document.createTextNode("Data"));
+                    a_data.onclick = onClick =>{ 
+                        this.setState({showComponent:2}); 
+                    };
+
+                    li_manager.appendChild(a_data);
+
+                    /*------------------------ Data (Tabla)---------------------*/
+                    
+                    /*------------------------ General (Mapa) ---------------------*/
+                    var a_res = document.createElement("a");
+                    a_res.setAttribute("class", "nav-link");
+
+                    var i_res = document.createElement("i");
+                    i_res.setAttribute("class", "nav-icon icon-map");
+
+                    a_res.appendChild(i_res);
+                    a_res.appendChild(document.createTextNode("Resumen"));
+                    a_res.onclick = onClick =>{ 
+                            this.setState({showComponent:1});
+                          };
+
+                    li_manager.appendChild(a_res);
+                    /*------------------------ General (Mapa) ---------------------*/
+                    
+                  }
                   
 
                }
@@ -166,6 +225,24 @@ class EncuestasPage extends React.Component {
    
     
     
+  }
+
+
+  componentDidUpdate()
+  {
+
+    if(this.state.showComponent==2)
+    {
+      try{
+        $(document).ready( function () {
+            $('#example11').DataTable();
+         
+        });
+      }catch(exx){} 
+    }else if(this.state.showComponent==1)
+    {
+      //this.forceUpdate();
+    }
   }
 
   componentWillUnmount()
@@ -190,7 +267,6 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
-    alert('buscando');
 
     var QueryHASH = {};
     this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
@@ -202,7 +278,7 @@ class EncuestasPage extends React.Component {
       {
         const v = item.filter(subitem => 
             subitem.respuesta.toString().toLowerCase().search(
-                event.toLowerCase()) !== -1
+                event.toString().toLowerCase()) !== -1
         );
 
         if(v.length>0)
@@ -230,78 +306,75 @@ class EncuestasPage extends React.Component {
 
       
 
-  convertArrayOfObjectsToCSV(args) {
-    var result, headers, lineDelimiter,columnDelimiter, data;
+  convertArrayOfObjectsToCSV(arr, columnCount, initial) {
+    var row = ''; // this will hold data
+    var delimeter = ','; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+    var newLine = '\r\n'; // newline separator for CSV row
 
-    headers = args.headers || null;
-    data = args.data || null;
-    if (data == null || !data.length) {
-        return null;
+    
+    function splitArray(_arr, _count) {
+      var splitted = [];
+      var result = [];
+      _arr.forEach(function(item, idx) {
+        if ((idx + 1) % _count === 0) {
+          splitted.push(item);
+          result.push(splitted);
+          splitted = [];
+        } else {
+          splitted.push(item);
+        }
+      });
+      return result;
     }
-
-    columnDelimiter = args.columnDelimiter || ',';
-    lineDelimiter = args.lineDelimiter || '\n';
-   
-    result = '';
-    var ct = 0;
-    headers.map(item => 
-    {
-      if(ct>0) result += columnDelimiter;
-      ct++;
-      result += item;
+    var plainArr = splitArray(arr, columnCount);
+    
+    plainArr.forEach(function(arrItem) {
+      arrItem.forEach(function(item, idx) {
+        row += item + ((idx + 1) === arrItem.length ? '' : delimeter);
+      });
+      row += newLine;
     });
-    result += lineDelimiter;
-
-    data.map(
-      row => {
-      
-          ct = 0;
-  
-          headers.map(
-            (value,i) => {
-              if(ct>0) result += columnDelimiter
-              ct++;
-              result += this.renderizarColumna(row,i);
-            }
-          )
-          result += lineDelimiter;
-
-      }
-    );
-    return result;
+    return initial + row;
   }
 
 
 
   downloadCSV(args) {
-    var data, filename, link;
-    var csv = this.convertArrayOfObjectsToCSV({
-        data: this.state.data,
-        headers: this.state.headers
+
+    var titles = [];
+    var data = [];
+  
+    $('.dataTable th').each(function() {
+      titles.push($(this).text());
     });
-    if (csv == null) return;
+  
+  
+    $('.dataTable td').each(function() {
+      data.push($(this).text());
+    });
+ 
+    var CSVString = this.convertArrayOfObjectsToCSV(titles, titles.length, '');
+    CSVString = this.convertArrayOfObjectsToCSV(data, titles.length, CSVString);
+  
+    
+    var downloadLink = document.createElement("a");
+    var blob = new Blob(["\ufeff", CSVString]);
+    var url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "data.csv";
+  
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 
-    filename = args.filename || this.state.nombre+'_export.csv';
-
-    if (!csv.match(/^data:text\/csv/i)) {
-        csv = 'data:text/csv;charset=utf-8,' + csv;
-    }
-    data = encodeURI(csv);
-
-    link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', filename);
-    link.click();
+    
   }
 
   
   
   render() {
-    const { nombre,showGraphic,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
-    console.log("RENDERIZADO");
-
-    let button = null;
-    
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    console.log("RENDERIZADO");    
     return (
 
       <div>
@@ -322,31 +395,38 @@ class EncuestasPage extends React.Component {
                : null
              } 
         </div>
+
+      {
+      showComponent==1?
+        <Resumen queryMap ={this.state.queryMap} count = {this.state.count}/>
+      :showComponent==2?
+        
         <div className="card">
              <div className="card-header">
-              {nombre}
-              <div className="card-header-actions">
-                {!loading ?
-                  <div>
-                    <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
-                  </div> : null
-                }
-              </div>
+                {nombre}
+                <div className="card-header-actions">
+                  {!loading ?
+                    <div>
+                      <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                    </div> : null
+                  }
+                </div>
              </div>
-             <div className="card-body" id="TablaRespuestas">
+            <div className="card-body" id="TablaRespuestas">
             <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
             
-             </div>
+            </div>
             <div id="contenedorFunciones">
               {loading && <div style ={{display: 'block'}}  className="text-center">
                               <div className="spinner-border" role="status">
                                   <span className="sr-only">Loading...</span>
                               </div>
                           </div>}
-          </div>
+            </div>
         
           
         </div>
+      :null}
         
       </div>
     );
@@ -411,7 +491,6 @@ class EncuestasPage extends React.Component {
           {
             document.getElementById("Gridloader").style.display = "none";
             document.getElementById("ui-view").style.display = "block";
-            document.getElementById("GridCerrarTodo").style.display = "block";
           }
           
         });

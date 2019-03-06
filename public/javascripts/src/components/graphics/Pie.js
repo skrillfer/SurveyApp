@@ -8,12 +8,13 @@ var PieGraph = React.createClass({
                     cerrarGrafica : this.props.cerrarGrafica,
                     index : this.props.index,
                     _Chart : null,
+                    instanceChart : null,
                 };
     },
     componentDidMount: function()
     {
         try{
-            this.mostrarGraficaDeColumna("histograma");   
+            this.mostrarGraficaDeColumna("");   
         }catch(ex){}
         
     },
@@ -33,7 +34,7 @@ var PieGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function()
+    mostrarGraficaDeColumna(filtro)
     {
         var x = [];
     
@@ -42,6 +43,13 @@ var PieGraph = React.createClass({
         
         
         var ejeX = this.uniq(x);
+        if(filtro!="")
+        {
+            ejeX = ejeX.filter(function(item){
+                return item.toString().toLowerCase().search(
+                  filtro.toString().toLowerCase()) !== -1;
+              });
+        }
 
         var ejeY = [];
         ejeX.map(item =>
@@ -50,16 +58,16 @@ var PieGraph = React.createClass({
             }
         );
         
-        try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex){}
+        try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex)
+        {
+            this.eliminarInstanciaGrafica();
+        }
           
         
     },
     generarGraficaPie(ejeX,ejeY,pregunta)
     {
-        console.log("index");
-        console.log(this.state.index);
         var colors =[] ;
-
         var total=ejeY.reduce(this.getSum);
         var porcentajes = [];
         ejeY.map(
@@ -70,6 +78,7 @@ var PieGraph = React.createClass({
             }
         );
         
+        this.eliminarInstanciaGrafica();            
         var ctx = document.getElementById("graphContainerP"+this.state.index).getContext('2d');
         var template = {
             type: 'pie',
@@ -92,11 +101,12 @@ var PieGraph = React.createClass({
                 },title: {
                     display: true,
                     text: 'Pie de '+pregunta
-                  }
+                }
             }
         };
 
         var myChart = new Chart(ctx, template);
+        this.state.instanceChart = myChart;
         this.state._Chart = template;
     },
     zoomGrafica()
@@ -124,21 +134,34 @@ var PieGraph = React.createClass({
     {
         return total + num;
     },
+    eliminarInstanciaGrafica()
+    {
+        if(this.state.instanceChart!=null)
+        {
+            this.state.instanceChart.destroy();
+            this.state.instanceChart = null;
+        }
+    },
+    filtrar(event)
+    {
+        
+        this.mostrarGraficaDeColumna(event.target.value);
+    },
     render() {
         return (
             <div id ={"contenedorPie"+this.state.index} className = "center-block">
-                <div className="row">
-                    <div className="col-xs-12">
+                <div className="form-group row">
+                    <div className="col-md-6">
                         <div className="text-left">
-                            <button  id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">x</button>
-                            <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-secondary">|<span className="glyphicon glyphicon-zoom-in"></span>|</button>
-
+                            <button   id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-sm btn-danger"><strong id={this.state.index}>QUITAR</strong></button>
+                            <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-sm btn-secondary"><strong>ZOOM</strong><span className="glyphicon glyphicon-zoom-in"></span></button>
                         </div>
                     </div>
-                </div>
-                    
+                    <div className="col-md-4">
+                        <input  className="form-control" id="input1-group2" type="text" name="input1-group2" placeholder="search" style={{width:"164px"}} onChange={this.filtrar} />
+                    </div>
+                </div>                    
                 <canvas  id={"graphContainerP"+this.state.index} >
-
                 </canvas>
                 <hr />
             </div>

@@ -13,29 +13,19 @@ var GridGraphs = React.createClass({
     },
     componentWillMount: function()
     {
-        //$('#modalWait').modal('show');
-        //this.crearGraphEnum();
-        
     },
     componentDidUpdate: function()
-    {
-
-        
-        //console.log("he sido actualizado");
-        //$(".alert").alert('close');
-        
+    {        
     },
     componentDidMount: function()
     {
-        this.crearGraphEnum();        
-        
+        this.crearGraphEnum();
     }
     ,
     cerrar_Todo()
     {
         document.getElementById("Gridloader").style.display = "block";
         document.getElementById("ui-view").style.display = "none";
-        document.getElementById("GridCerrarTodo").style.display = "none";
 
         var current = this;
         setTimeout(function(){ 
@@ -52,7 +42,6 @@ var GridGraphs = React.createClass({
 
         document.getElementById("Gridloader").style.display = "block";
         document.getElementById("ui-view").style.display = "none";
-        document.getElementById("GridCerrarTodo").style.display = "none";
 
         var index = event.target.id;
 
@@ -80,9 +69,6 @@ var GridGraphs = React.createClass({
     },
     crearGraphEnum()
     {
-        console.log('RESPUESTASAAAA');
-        console.log(this.state.respuestas);
-        console.log(this.state.pregunta);
 
         var ARRAY = [];
        
@@ -94,7 +80,7 @@ var GridGraphs = React.createClass({
                     case 0:
 
                     ARRAY.push(
-                            <div id={"card_"+index} className = "card">
+                            <div id={"card_"+index} className = "card col-sm-6">
                                 <div className ="card-header">
                                     Histogram Chart
                                 </div>
@@ -111,34 +97,27 @@ var GridGraphs = React.createClass({
                     case 1:
                     
                     ARRAY.push(
-                            <div id={"card_"+index} className = "card">
-                                <div className ="card-header">
-                                    Pie Chart
+                                <div id={"card_"+index} className = "card col-sm-6">
+                                    <div className ="card-header">
+                                        Pie Chart
+                                    </div>
+                                    <div className ="card-body">
+                                        <PieGraph 
+                                            cerrarGrafica = {this.cerrarGraph} 
+                                            pregunta = {this.state.gridListHead[index]} 
+                                            respuestas = {this.state.respuestas}
+                                            index = {index}
+                                    ></PieGraph>
+                                    </div>
                                 </div>
-                                <div className ="card-body">
-                                    <PieGraph 
-                                        cerrarGrafica = {this.cerrarGraph} 
-                                        pregunta = {this.state.gridListHead[index]} 
-                                        respuestas = {this.state.respuestas}
-                                        index = {index}
-                                ></PieGraph>
-                                </div>
-                            </div>);
+                            );
                     break;        
                 }
             }    
         );
         this.setState({childrenComponents:ARRAY});
         
-    }
-    ,
-    agregarGraph(item)
-    {
-
-        console.log(item.histogram);
-        console.log(item.pie);
-    }
-    ,
+    },
     render() {
         console.log("GRID RENDERIZADO");
         
@@ -151,19 +130,12 @@ var GridGraphs = React.createClass({
                         </div>
                     </div>
                 </div>
-                <div className="row row justify-content-md-center">
-                    <div id="GridCerrarTodo"  className="col text-center">
-                        <button  type="button" className="btn btn-secondary" onClick = {this.cerrar_Todo}>Cerrar Todo</button>
-                    </div>
-                    <hr/>
-                </div>
-                <div className="row">
-                    <div id="ui-view">    
-                        <div>
-                            <div className = "animated fadeIn">
-                                <div id="myform_cards" className = "card-columns cols-2">
-                                    {this.state.childrenComponents}
-                                </div>
+                
+                <div id="ui-view">    
+                    <div>
+                        <div className = "animated fadeIn">
+                            <div id="myform_cards" className = "card-rows">
+                                {this.state.childrenComponents}
                             </div>
                         </div>
                     </div>
