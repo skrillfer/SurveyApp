@@ -7,14 +7,23 @@ var HistogramaGraph = React.createClass({
                     cerrarGrafica : this.props.cerrarGrafica,
                     index : this.props.index,
                     _Chart : null,
+                    instanceChart : null,
                 };
     },
     componentDidMount: function()
     {
         try{
-            this.mostrarGraficaDeColumna("histograma");   
+            this.mostrarGraficaDeColumna("");   
         }catch(ex){}
         
+    },
+    getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
     ,
     uniq(a) {
@@ -24,7 +33,7 @@ var HistogramaGraph = React.createClass({
         });
     },
 
-    mostrarGraficaDeColumna: function()
+    mostrarGraficaDeColumna(filtro)
     {
         var x = [];
     
@@ -34,18 +43,33 @@ var HistogramaGraph = React.createClass({
         
         var ejeX = this.uniq(x);
 
+        if(filtro!="")
+        {
+            ejeX = ejeX.filter(function(item){
+                return item.toString().toLowerCase().search(
+                  filtro.toString().toLowerCase()) !== -1;
+              });
+        }
+
         var ejeY = [];
+        var colors =[] ;
+
         ejeX.map(item =>
             {
                 ejeY.push(x.filter(subitem => subitem === item).length);
+                colors.push(this.getRandomColor());
             }
         );
-        try{this.generarHistograma(ejeX,ejeY,this.state.pregunta);}catch(ex){}
+        try{this.generarHistograma(ejeX,ejeY,this.state.pregunta,colors);}catch(ex)
+        {
+            this.eliminarInstanciaGrafica();
+        }
         
     },
-    generarHistograma(ejeX,ejeY,pregunta)
+    generarHistograma(ejeX,ejeY,pregunta,colors)
     {
         
+        this.eliminarInstanciaGrafica();            
         var ctx = document.getElementById("graphContainerH"+this.state.index).getContext('2d');
         var template = {
             type: 'bar',
@@ -54,20 +78,7 @@ var HistogramaGraph = React.createClass({
               datasets: [{
                 data: ejeY,
                 label:"",
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)',
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
-                ],
+                backgroundColor: colors,
                 borderColor: [
                   'rgba(255,99,132,1)',
                   'rgba(54, 162, 235, 1)',
@@ -108,6 +119,7 @@ var HistogramaGraph = React.createClass({
           };
 
         var myChart = new Chart(ctx, template);
+        this.state.instanceChart = myChart;
         this.state._Chart = template;
 
     },
@@ -131,16 +143,31 @@ var HistogramaGraph = React.createClass({
 
         $('#zoomModal').modal('show');        
     },
+    eliminarInstanciaGrafica()
+    {
+        if(this.state.instanceChart!=null)
+        {
+            this.state.instanceChart.destroy();
+            this.state.instanceChart = null;
+        }
+    },
+    filtrar(event)
+    {
+        this.mostrarGraficaDeColumna(event.target.value);
+    },
     render() {
         return (
             <div id ={"contenedorHistograma"+this.state.index} className = "center-block">
 
-            <div className="row">
-                <div className="col-xs-12">
+            <div className="form-group row">
+                <div className="col-md-6">
                     <div className="text-left">
-                        <button id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-danger">X</button>
-                        <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-secondary">|<span className="glyphicon glyphicon-zoom-in"></span>|</button>
+                        <button id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-sm btn-danger"><strong id={this.state.index} >QUITAR</strong></button>
+                        <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-sm btn-secondary"><strong>ZOOM</strong><span className="glyphicon glyphicon-zoom-in"></span></button>
                     </div>
+                </div>
+                <div className="col-md-4">
+                        <input  className="form-control" id="input1-group2" type="text" name="input1-group2" placeholder="search" style={{width:"164px"}} onChange={this.filtrar} />
                 </div>
             </div>
                 

@@ -267,7 +267,6 @@ class EncuestasPage extends React.Component {
 
   filtrar_respuestas(event)
   {   
-    alert('buscando');
 
     var QueryHASH = {};
     this.state.headers.map( (value,i) =>{QueryHASH[value]=[];});
@@ -279,7 +278,7 @@ class EncuestasPage extends React.Component {
       {
         const v = item.filter(subitem => 
             subitem.respuesta.toString().toLowerCase().search(
-                event.toLowerCase()) !== -1
+                event.toString().toLowerCase()) !== -1
         );
 
         if(v.length>0)
@@ -307,68 +306,68 @@ class EncuestasPage extends React.Component {
 
       
 
-  convertArrayOfObjectsToCSV(args) {
-    var result, headers, lineDelimiter,columnDelimiter, data;
+  convertArrayOfObjectsToCSV(arr, columnCount, initial) {
+    var row = ''; // this will hold data
+    var delimeter = ','; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+    var newLine = '\r\n'; // newline separator for CSV row
 
-    headers = args.headers || null;
-    data = args.data || null;
-    if (data == null || !data.length) {
-        return null;
+    
+    function splitArray(_arr, _count) {
+      var splitted = [];
+      var result = [];
+      _arr.forEach(function(item, idx) {
+        if ((idx + 1) % _count === 0) {
+          splitted.push(item);
+          result.push(splitted);
+          splitted = [];
+        } else {
+          splitted.push(item);
+        }
+      });
+      return result;
     }
-
-    columnDelimiter = args.columnDelimiter || ',';
-    lineDelimiter = args.lineDelimiter || '\n';
-   
-    result = '';
-    var ct = 0;
-    headers.map(item => 
-    {
-      if(ct>0) result += columnDelimiter;
-      ct++;
-      result += item;
+    var plainArr = splitArray(arr, columnCount);
+    
+    plainArr.forEach(function(arrItem) {
+      arrItem.forEach(function(item, idx) {
+        row += item + ((idx + 1) === arrItem.length ? '' : delimeter);
+      });
+      row += newLine;
     });
-    result += lineDelimiter;
-
-    data.map(
-      row => {
-      
-          ct = 0;
-  
-          headers.map(
-            (value,i) => {
-              if(ct>0) result += columnDelimiter
-              ct++;
-              result += this.renderizarColumna(row,i);
-            }
-          )
-          result += lineDelimiter;
-
-      }
-    );
-    return result;
+    return initial + row;
   }
 
 
 
   downloadCSV(args) {
-    var data, filename, link;
-    var csv = this.convertArrayOfObjectsToCSV({
-        data: this.state.data,
-        headers: this.state.headers
+
+    var titles = [];
+    var data = [];
+  
+    $('.dataTable th').each(function() {
+      titles.push($(this).text());
     });
-    if (csv == null) return;
+  
+  
+    $('.dataTable td').each(function() {
+      data.push($(this).text());
+    });
+ 
+    var CSVString = this.convertArrayOfObjectsToCSV(titles, titles.length, '');
+    CSVString = this.convertArrayOfObjectsToCSV(data, titles.length, CSVString);
+  
+    
+    var downloadLink = document.createElement("a");
+    var blob = new Blob(["\ufeff", CSVString]);
+    var url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "data.csv";
+  
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 
-    filename = args.filename || this.state.nombre+'_export.csv';
-
-    if (!csv.match(/^data:text\/csv/i)) {
-        csv = 'data:text/csv;charset=utf-8,' + csv;
-    }
-    data = encodeURI(csv);
-
-    link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', filename);
-    link.click();
+    
   }
 
   
@@ -492,7 +491,6 @@ class EncuestasPage extends React.Component {
           {
             document.getElementById("Gridloader").style.display = "none";
             document.getElementById("ui-view").style.display = "block";
-            document.getElementById("GridCerrarTodo").style.display = "block";
           }
           
         });
