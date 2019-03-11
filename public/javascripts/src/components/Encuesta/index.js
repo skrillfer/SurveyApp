@@ -2,6 +2,7 @@
 
 class EncuestasPage extends React.Component {
   _isMounted = false;
+  _isPicker  = false;
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
@@ -238,10 +239,21 @@ class EncuestasPage extends React.Component {
             $('#example11').DataTable();
          
         });
+
+        
+        if(!this._isPicker)
+        {
+          var datepicker = new ej.calendars.DatePicker({ width: "155px", placeholder: 'Fecha Inicial' });
+          datepicker.appendTo('#datepickerIni');
+          var datepicker = new ej.calendars.DatePicker({ width: "155px", placeholder: 'Fecha Final' });
+          datepicker.appendTo('#datepickerFin');  
+          this._isPicker = true;  
+        }
+        
       }catch(exx){} 
     }else if(this.state.showComponent==1)
     {
-      //this.forceUpdate();
+      this._isPicker=false;
     }
   }
 
@@ -403,15 +415,36 @@ class EncuestasPage extends React.Component {
         
         <div className="card">
              <div className="card-header">
-                {nombre}
-                <div className="card-header-actions">
+                
+                
                   {!loading ?
-                    <div>
-                      <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                    <div className="form-horizontal">
+
+                      <div className="form-group row">
+                          <div className="col-md-4">
+                            {nombre}          
+                          </div>
+                          <div className="col-md-4">
+                                <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                          </div>
+
+                          <div className="col-md-8"><input type="text" id="datepickerIni"/>
+                          </div>
+                          <div className="col-md-4"><input type="text" id="datepickerFin"/>
+                          </div>
+
+                      </div>
+                      
+                      <div className="form-group row">
+                          
+                          
+                      </div>    
+                      
                     </div> : null
                   }
+                  
+
                 </div>
-             </div>
             <div className="card-body" id="TablaRespuestas">
             <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
             
