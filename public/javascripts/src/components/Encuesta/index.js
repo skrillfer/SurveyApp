@@ -243,9 +243,9 @@ class EncuestasPage extends React.Component {
         
         if(!this._isPicker)
         {
-          var datepicker = new ej.calendars.DatePicker({ width: "155px", placeholder: 'Fecha Inicial' });
+          var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Inicial' });
           datepicker.appendTo('#datepickerIni');
-          var datepicker = new ej.calendars.DatePicker({ width: "155px", placeholder: 'Fecha Final' });
+          var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Final' });
           datepicker.appendTo('#datepickerFin');  
           this._isPicker = true;  
         }
@@ -428,9 +428,9 @@ class EncuestasPage extends React.Component {
                                 <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
                           </div>
 
-                          <div className="col-md-8"><input type="text" id="datepickerIni"/>
+                          <div className="col-md-10"><input type="text" id="datepickerIni"/>
                           </div>
-                          <div className="col-md-4"><input type="text" id="datepickerFin"/>
+                          <div className="col-md-2"><input type="text" id="datepickerFin"/>
                           </div>
 
                       </div>
