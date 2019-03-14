@@ -78,7 +78,11 @@ class OrgsPage extends React.Component {
   componentWillUnmount() {
     this.firebaseRef.off();
   }
-   
+
+  openShareModal(e){
+    e.preventDefault();
+    window.showInModal(e.target.href);
+  }
  
   render() {
     const { orgs, loading } = this.state;
@@ -98,7 +102,7 @@ class OrgsPage extends React.Component {
         {!loading ?
           <div>
           <h1>Tus Encuestas</h1>
-          <OrgSList orgs={orgs} />  
+          <OrgSList orgs={orgs} clickFunc = {this.openShareModal} />  
           </div>: null
         }
         
@@ -113,7 +117,7 @@ class OrgsPage extends React.Component {
 
 
 
-const OrgSList = ({ orgs }) => (
+const OrgSList = ({ orgs,clickFunc }) => (
 
   <div className="animated fadeIn">
       <div className ="row">
@@ -134,7 +138,7 @@ const OrgSList = ({ orgs }) => (
                               <i className="icon-settings"></i>
                             </a>
                             <div className="dropdown-menu popup1" aria-labelledby={'dropdownMenuButton'+item.uid} x-placement="bottom-start">
-                              <a className="dropdown-item" href="#">Compartir</a>
+                              <a onClick={clickFunc} className="dropdown-item linkShareEncuesta" href={'http://survy.webymovil.com/encuesta/'+btoa(item.idorg+'|encuestas|'+item.uid)}>Compartir</a>
                             </div>
                           </div>
                       </div>

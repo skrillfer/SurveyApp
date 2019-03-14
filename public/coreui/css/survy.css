@@ -1,5 +1,5 @@
 .popup1 {
-    position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 35px, 0px);
+    position: absolute; will-change: transform; top: 0px; left:auto !important;transform: translate3d(0px, 35px, 0px);
   }
   
   .nav-icon {
@@ -14,3 +14,7 @@
   .graphTypeCheck{
     margin-left:5px !important;
   }
+
+.btn {
+  padding:6px 12px!important;
+}
