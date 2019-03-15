@@ -23,6 +23,7 @@ class EncuestasPage extends React.Component {
 
     //--------------------Segmentar Fecha
     this.segmentar = this.segmentar.bind(this);
+    this.segmentarTodo = this.segmentarTodo.bind(this);
 
     this.state = {
       loading: false,
@@ -52,7 +53,7 @@ class EncuestasPage extends React.Component {
   
       //Dates
       queryDate : {},
-
+      referenceData:[],
     };
   }
 
@@ -75,12 +76,12 @@ class EncuestasPage extends React.Component {
 
     this.setState({ loading: true });
 
-    console.log(this.state.uid);
-    console.log(this.state.uid_org);
+    //console.log(this.state.uid);
+    //console.log(this.state.uid_org);
 
     let ARRAY = [];
     let LMap  = {};
-    let LDate  = {};
+    //let LDate  = {};
 
     let Tcount = 0;
     console.log('comenzamos');
@@ -101,12 +102,12 @@ class EncuestasPage extends React.Component {
              /*- mapa -*/
 
              /*- Segmentacion -*/
-             LDate = {};
+             current.state.queryDate = {};
              /*- Segmentacion -*/
           }
           
 
-          let lista = [];
+          let lista = []; // Cada lista es una respuesta
           ARRAY.push(lista);
 
           
@@ -122,10 +123,14 @@ class EncuestasPage extends React.Component {
             var dateVal ="/Date("+date+")/";
             var mydate = new Date( parseFloat( dateVal.substr(6 )));
             var convertDate = mydate.toLocaleDateString();
+            
             if(!isNaN(mydate))
             {
-              //LDate;
-
+              if(current.state.queryDate[convertDate]){
+                current.state.queryDate[convertDate].push(ARRAY.length);
+              }else{
+                current.state.queryDate[convertDate] = [ARRAY.length];
+              } 
             }
           }
 
@@ -143,9 +148,8 @@ class EncuestasPage extends React.Component {
                       var childKey1 = inSnapshot.key;
                       var childData1 = inSnapshot.val();
                       lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
-                      console.log(lista.length);
                       if(current.state.queryHash[childKey1]){
-                        current.state.queryHash[childKey1].push(childData1);
+                        current.state.queryHash[childKey1].push(lista);
                       }else{
                         current.state.queryHash[childKey1] = [childData1];
                       }
@@ -154,6 +158,7 @@ class EncuestasPage extends React.Component {
                 });
               }
           );
+
           /*- carga de respuestas -*/
 
           /*- mapa -*/
@@ -173,8 +178,10 @@ class EncuestasPage extends React.Component {
 
           
           
-         
+          
       });
+
+      console.log(this.state.queryDate);
 
       this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
         var childKey = xsnapshot.key;
@@ -187,6 +194,7 @@ class EncuestasPage extends React.Component {
             listafiltrada: ARRAY,
             queryMap : LMap,
             count : Tcount,
+            referenceData : ARRAY,
           },s=>{
                    
                   control=true;
@@ -266,19 +274,6 @@ class EncuestasPage extends React.Component {
   }
 
 
-  /*componentWillReceiveProps(props)
-  {
-
-    if(this.state.showComponent==2)
-    {
-      try{
-        $(document).ready( function () {
-            $('#example11').DataTable();
-         
-        });
-      }
-    }
-  }*/
   componentWillUpdate()
   {
     if(this.state.showComponent==2)
@@ -496,6 +491,7 @@ class EncuestasPage extends React.Component {
                       
                       <div className="form-group row">  
                         <a className="btn btn-block btn-success" onClick={this.segmentar}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>Segmentar</a>
+                        <a className="btn btn-block btn-success" onClick={this.segmentarTodo}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>MostrarTodo</a>
                       </div>    
                       
                     </div> : null
@@ -527,12 +523,9 @@ class EncuestasPage extends React.Component {
 
   renderizarColumna(row,i)
   {
-
     var tempElement = row.find(function(element) {
       return element.index == i;
     });
-
-    
     if(tempElement)
     {
       
@@ -542,8 +535,6 @@ class EncuestasPage extends React.Component {
     {
       return "";
     }
-
-    
   }
 
   prueba()
@@ -554,17 +545,41 @@ class EncuestasPage extends React.Component {
   //*Funcion que Segmenta Fecha Ini/Fin
   segmentar()
   {
-    
+      var NUEVO_ARRAY =[];
       var iniDate = new Date(document.getElementById("datepickerIni").value);
       var finDate = new Date(document.getElementById("datepickerFin").value);
 
+      var comp_date ;
       if(!isNaN(iniDate) && !isNaN(finDate))
       {
-        console.log('ini:'+iniDate);
-        console.log('fin:'+finDate);
         if(iniDate<finDate)
         {
+            var keys = Object.keys(this.state.queryDate);
+            keys.map(
+              item =>{
+                console.log('**********   '+item+'   *****************');
+                var numbers = item.match(/\d+/g); 
+                comp_date = new Date(numbers[2], numbers[1]-1, numbers[0]);
 
+                console.log(comp_date);
+                console.log('**********     *****************');
+                if(comp_date>=iniDate && comp_date<=finDate)
+                {
+                  console.log("lo es");
+                  var arr_respuesta =this.state.queryDate[item];
+                  arr_respuesta.map(
+                    index =>{
+                        NUEVO_ARRAY.push(this.state.data[index-1]);
+                    }
+                  );
+                }else
+                {
+                  console.log("NO lo es");
+                }
+                
+                
+              }
+            );
         }else
         {
           alert("Fecha Inicial debe ser Menor a Fecha Final");
@@ -575,6 +590,13 @@ class EncuestasPage extends React.Component {
         document.getElementById("datepickerFin").value = '';
       }
     
+      this.setState({listafiltrada:NUEVO_ARRAY});
+      //console.log(NUEVO_ARRAY);
+  }
+
+  segmentarTodo()
+  {
+    this.setState({listafiltrada:this.state.referenceData});
   }
 
   cerrarTodo()
@@ -664,8 +686,8 @@ class EncuestasPage extends React.Component {
       if(siCheck)
       {        
         this.setState({showGraphic:false});
-        console.log(this.state.gridList);
-        console.log(this.state.gridListHead);
+        //console.log(this.state.gridList);
+        //console.log(this.state.gridListHead);
         $('#exampleModal').modal('hide');
         this.setState({showGraphic:true});
       }else
