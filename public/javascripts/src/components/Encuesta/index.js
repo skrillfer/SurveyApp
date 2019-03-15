@@ -54,6 +54,7 @@ class EncuestasPage extends React.Component {
       //Dates
       queryDate : {},
       referenceData:[],
+      reloadGraph : false,
     };
   }
 
@@ -81,6 +82,7 @@ class EncuestasPage extends React.Component {
 
     let ARRAY = [];
     let LMap  = {};
+    let VQ  = {};
     //let LDate  = {};
 
     let Tcount = 0;
@@ -96,10 +98,13 @@ class EncuestasPage extends React.Component {
           {
             ARRAY = [];
             current.state.queryHash = {};
+            console.log("JODE");
             control=false;
              /*- mapa -*/
              LMap = {};
              /*- mapa -*/
+
+             VQ = {};
 
              /*- Segmentacion -*/
              current.state.queryDate = {};
@@ -109,31 +114,7 @@ class EncuestasPage extends React.Component {
 
           let lista = []; // Cada lista es una respuesta
           ARRAY.push(lista);
-
-          
-          
-          let latitude="";
-          let longitude="";
-          let date="";
-
-          
-          if (childSnapshot.hasChild("date"))
-          {
-            date  = childSnapshot.child("date").val();
-            var dateVal ="/Date("+date+")/";
-            var mydate = new Date( parseFloat( dateVal.substr(6 )));
-            var convertDate = mydate.toLocaleDateString();
-            
-            if(!isNaN(mydate))
-            {
-              if(current.state.queryDate[convertDate]){
-                current.state.queryDate[convertDate].push(ARRAY.length);
-              }else{
-                current.state.queryDate[convertDate] = [ARRAY.length];
-              } 
-            }
-          }
-
+  
           /*- carga de respuestas -*/
           db.ref('proyectos/'+current.state.uid_org+'/respuestas/'+current.state.uid+'/'+childKey+'/body').on('value', 
               bodyxnapshot=>{
@@ -149,17 +130,50 @@ class EncuestasPage extends React.Component {
                       var childData1 = inSnapshot.val();
                       lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
                       if(current.state.queryHash[childKey1]){
-                        current.state.queryHash[childKey1].push(lista);
+                        current.state.queryHash[childKey1].push(childData1);
                       }else{
                         current.state.queryHash[childKey1] = [childData1];
                       }
-                    }
 
+                      if(VQ[childKey1])
+                      {
+                        VQ[childKey1].push(childData1);
+                      }else
+                      {
+                        VQ[childKey1] = [childData1];
+                      }
+
+                    }
                 });
+                
               }
           );
-
           /*- carga de respuestas -*/
+
+          /*- carga Para Segmentar -*/
+          let latitude="";
+          let longitude="";
+          let date="";
+          if (childSnapshot.hasChild("date"))
+          {
+            date  = childSnapshot.child("date").val();
+            var dateVal ="/Date("+date+")/";
+            var mydate = new Date( parseFloat( dateVal.substr(6 )));
+            var convertDate = mydate.toLocaleDateString();
+              
+            if(!isNaN(mydate))
+            {
+              if(current.state.queryDate[convertDate]){
+                current.state.queryDate[convertDate].push({"posicion":ARRAY.length,"key":childKey,"query":$.extend(true,{}, VQ)});
+              }else{
+                current.state.queryDate[convertDate] = [{"posicion":ARRAY.length,"key":childKey,"query":$.extend(true,{}, VQ)}];
+              } 
+            }
+          }
+          VQ = {};
+          /*- carga Para Segmentar -*/
+      
+
 
           /*- mapa -*/
           if (childSnapshot.hasChild("latitude") && childSnapshot.hasChild("longitude") && childSnapshot.hasChild("date"))
@@ -181,7 +195,6 @@ class EncuestasPage extends React.Component {
           
       });
 
-      console.log(this.state.queryDate);
 
       this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
         var childKey = xsnapshot.key;
@@ -190,7 +203,7 @@ class EncuestasPage extends React.Component {
           this.setState({
             loading:false,
             nombre: childData.nombre,
-            data : ARRAY,
+            data : ARRAY.slice(),
             listafiltrada: ARRAY,
             queryMap : LMap,
             count : Tcount,
@@ -439,7 +452,7 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead,reloadGraph } = this.state;
     console.log("RENDERIZADO");    
     return (
 
@@ -457,6 +470,7 @@ class EncuestasPage extends React.Component {
                    respuestas = {queryHash}  
                    children   = {gridList}
                    gridListHead = {gridListHead}
+                   reloadGraph  = {reloadGraph}
                />
                : null
              } 
@@ -545,7 +559,9 @@ class EncuestasPage extends React.Component {
   //*Funcion que Segmenta Fecha Ini/Fin
   segmentar()
   {
+      
       var NUEVO_ARRAY =[];
+      var NUEVA_QUERYHASH = {};
       var iniDate = new Date(document.getElementById("datepickerIni").value);
       var finDate = new Date(document.getElementById("datepickerFin").value);
 
@@ -557,27 +573,44 @@ class EncuestasPage extends React.Component {
             var keys = Object.keys(this.state.queryDate);
             keys.map(
               item =>{
-                console.log('**********   '+item+'   *****************');
                 var numbers = item.match(/\d+/g); 
                 comp_date = new Date(numbers[2], numbers[1]-1, numbers[0]);
-
-                console.log(comp_date);
-                console.log('**********     *****************');
                 if(comp_date>=iniDate && comp_date<=finDate)
                 {
-                  console.log("lo es");
                   var arr_respuesta =this.state.queryDate[item];
                   arr_respuesta.map(
                     index =>{
-                        NUEVO_ARRAY.push(this.state.data[index-1]);
+                        //NUEVA_QUERYHASH[index.key] = this.state.queryHash[index.key];
+                        //console.log(this.state.data[index.posicion-1]);
+                        //console.log(index.query);
+
+                        Object.keys(index.query).map(
+                          it =>
+                          {
+                            if(NUEVA_QUERYHASH[it]){
+                              NUEVA_QUERYHASH[it].push(index.query[it][0]);
+                            }else{
+                              NUEVA_QUERYHASH[it] = [index.query[it][0]];
+                            }
+                            //console.log(index.query[it]);
+                          }
+                        );
+                        /*Object.keys(index.query).map(
+                          it =>
+                          {
+                            if(NUEVA_QUERYHASH[it]){
+                              NUEVA_QUERYHASH[it].push(childData1);
+                            }else{
+                              NUEVA_QUERYHASH[it] = [childData1];
+                            }
+                          }
+                        );*/
+                        
+
+                        NUEVO_ARRAY.push(this.state.data[index.posicion-1]);
                     }
                   );
-                }else
-                {
-                  console.log("NO lo es");
                 }
-                
-                
               }
             );
         }else
@@ -590,7 +623,9 @@ class EncuestasPage extends React.Component {
         document.getElementById("datepickerFin").value = '';
       }
     
-      this.setState({listafiltrada:NUEVO_ARRAY});
+      this.setState({listafiltrada:NUEVO_ARRAY,queryHash:NUEVA_QUERYHASH,reloadGraph:!this.state.reloadGraph});
+      //console.log(this.state.queryHash);
+      //console.log();
       //console.log(NUEVO_ARRAY);
   }
 

@@ -8,14 +8,33 @@ var GridGraphs = React.createClass({
                     cerrarTodo : this.props.cerrarTodo,
                     children      : this.props.children, 
                     childrenComponents : [],     
-                    gridListHead : this.props.gridListHead,   
+                    gridListHead : this.props.gridListHead,  
+                    reloadGraph  : this.props.reloadGraph, 
                 };
+    },
+    componentWillReceiveProps:function(Nextprops) 
+    {
+        if(Nextprops.reloadGraph!=this.state.reloadGraph)
+        {
+
+            this.setState({ 
+                respuestas : Nextprops.respuestas,
+                reloadGraph : Nextprops.reloadGraph
+                },
+                ()=>{  this.crearGraphEnum();}
+            );
+        }
+        
     },
     componentWillMount: function()
     {
     },
+    componentWillUpdate:function()
+    {
+    },
     componentDidUpdate: function()
     {        
+        
     },
     componentDidMount: function()
     {
@@ -69,7 +88,7 @@ var GridGraphs = React.createClass({
     },
     crearGraphEnum()
     {
-
+        
         var ARRAY = [];
        
         this.state.children.map(
