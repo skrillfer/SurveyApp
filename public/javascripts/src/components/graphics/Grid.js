@@ -116,33 +116,15 @@ var GridGraphs = React.createClass({
                                     <div className="card">
                                         <div className ="card-header">
                                             
-                                            {/*<div className = "card-header-actions">/*}
                                                 {/* Segmentar*/}
-                                                <div className="col-md-3">
+                                                <div className="col-md-4">
                                                     Pie Chart
                                                 </div>
                                                 <div className="col-md-4"><input type="text" id={"datepickerIni"+index}/>
                                                 </div>
-                                                <div className="col-md-2"><input type="text" id={"datepickerFin"+index}/>
+                                                <div className="col-md-4"><input type="text" id={"datepickerFin"+index}/>
                                                 </div>
                                                 {/* Segmentar*/}
-
-                                                <div className = "card-header-actions">
-                                                    <div className="btn-group float-right">
-                                                        <button className="btn btn-settings dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i className="icon-settings"></i>
-                                                        </button>
-                                                        <div className="dropdown-menu dropdown-menu-right">
-                                                            <a className="dropdown-item">Mostrar Todo</a>
-                                                            <a className="dropdown-item">Segmentar</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {/*</div>*/}
-                                            
-
-                                            
-                                            
                                         </div>
                                         
                                         <div className ="card-body">

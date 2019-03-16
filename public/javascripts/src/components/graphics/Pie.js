@@ -178,6 +178,17 @@ var PieGraph = React.createClass({
     render() {
         return (
             <div id ={"contenedorPie"+this.state.index} className = "center-block">
+                <div className = "card-header-actions">
+                    <div className="btn-group float-right">
+                        <button className="btn btn-settings dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i className="icon-settings"></i>
+                        </button>
+                        <div className="dropdown-menu dropdown-menu-right">
+                            <a className="dropdown-item">Mostrar Todo</a>
+                            <a className="dropdown-item">Segmentar</a>
+                        </div>
+                    </div>
+                </div>
                 <div className="form-group row">
                     <div className="col-md-8">
                         <div className="text-left">
