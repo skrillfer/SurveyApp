@@ -232,27 +232,34 @@ var PieGraph = React.createClass({
                         }
                     );
                     }
-                }
-                );
+                });
+                document.getElementById("input_pie_search"+this.state.index).value = '';
+                this.state.dataReference = this.state.respuestas;
+                this.state.respuestas = NUEVA_QUERYHASH;
+                this.mostrarGraficaDeColumna("");
             }else
             {
-            alert("Fecha Inicial debe ser Menor a Fecha Final");
+                alert("Fecha Inicial debe ser Menor a Fecha Final");
             }
         }else
         {
             document.getElementById("datepickerIni"+this.state.index).value = '';
             document.getElementById("datepickerFin"+this.state.index).value = '';
         }
-        this.state.dataReference = this.state.respuestas;
-        this.state.respuestas = NUEVA_QUERYHASH;
-        this.mostrarGraficaDeColumna("");
+       
     },segmentarTodo()
     {
-        if (this.state.dataReference==null) {return;}
-        this.state.respuestas = this.state.dataReference;
-        this.state.dataReference = null;
-        this.mostrarGraficaDeColumna("");
-        document.getElementById("input_pie_search"+this.state.index).value = '';
+        if (this.state.dataReference==null) 
+        {
+            return;
+        }
+        else
+        {
+            this.state.respuestas = this.state.dataReference;
+            this.state.dataReference = null;
+            this.mostrarGraficaDeColumna("");
+            document.getElementById("input_pie_search"+this.state.index).value = '';
+        }
         
     },
     render() {
