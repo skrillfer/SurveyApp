@@ -16,15 +16,14 @@ var GridGraphs = React.createClass({
     {
         if(Nextprops.reloadGraph!=this.state.reloadGraph)
         {
-
+            console.log("1x");
             this.setState({ 
                 respuestas : Nextprops.respuestas,
-                reloadGraph : Nextprops.reloadGraph
-                },
-                ()=>{  this.crearGraphEnum();}
+                }
             );
+            console.log("2x");
         }
-        
+        this.crearGraphEnum();
     },
     componentWillMount: function()
     {
@@ -34,7 +33,6 @@ var GridGraphs = React.createClass({
     },
     componentDidUpdate: function()
     {        
-        
     },
     componentDidMount: function()
     {
@@ -90,7 +88,7 @@ var GridGraphs = React.createClass({
     {
         
         var ARRAY = [];
-       
+        this.state.childrenComponents =[];
         this.state.children.map(
             (item,index) =>
             {
@@ -134,8 +132,8 @@ var GridGraphs = React.createClass({
                 }
             }    
         );
-        this.setState({childrenComponents:ARRAY});
-        
+        this.setState({childrenComponents:ARRAY});  
+        console.log("capullo");
     },
     render() {
         console.log("GRID RENDERIZADO");

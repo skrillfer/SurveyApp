@@ -592,21 +592,9 @@ class EncuestasPage extends React.Component {
                             }else{
                               NUEVA_QUERYHASH[it] = [index.query[it][0]];
                             }
-                            //console.log(index.query[it]);
+                          
                           }
                         );
-                        /*Object.keys(index.query).map(
-                          it =>
-                          {
-                            if(NUEVA_QUERYHASH[it]){
-                              NUEVA_QUERYHASH[it].push(childData1);
-                            }else{
-                              NUEVA_QUERYHASH[it] = [childData1];
-                            }
-                          }
-                        );*/
-                        
-
                         NUEVO_ARRAY.push(this.state.data[index.posicion-1]);
                     }
                   );
@@ -624,9 +612,6 @@ class EncuestasPage extends React.Component {
       }
     
       this.setState({listafiltrada:NUEVO_ARRAY,queryHash:NUEVA_QUERYHASH,reloadGraph:!this.state.reloadGraph});
-      //console.log(this.state.queryHash);
-      //console.log();
-      //console.log(NUEVO_ARRAY);
   }
 
   segmentarTodo()
