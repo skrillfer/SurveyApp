@@ -66,9 +66,18 @@ var PieGraph = React.createClass({
     mostrarGraficaDeColumna(filtro)
     {
         var x = [];
-        
+                
         x = this.state.respuestas[this.state.pregunta];
         
+        /*Cantidad de Respuestas  = 0*/
+        if(x==null)
+        {
+            this.eliminarInstanciaGrafica();
+            this.state._Chart = null;
+            return;
+        }
+        /*Cantidad de Respuestas  = 0*/
+
         x = x.sort();
         
         
@@ -88,7 +97,9 @@ var PieGraph = React.createClass({
             }
         );
         
-        try{this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);}catch(ex)
+        try{
+            this.generarGraficaPie(ejeX,ejeY,this.state.pregunta);
+        }catch(ex)
         {
             this.eliminarInstanciaGrafica();
         }
@@ -140,7 +151,8 @@ var PieGraph = React.createClass({
         this.state._Chart = template;
     },
     zoomGrafica()
-    {
+    {   
+
         
         var zoomBody = document.getElementById("zoomBody");
 
@@ -150,13 +162,17 @@ var PieGraph = React.createClass({
 
         document.getElementById("exampleModalLabel").innerText="Pie Chart";;
 
-        var mycanvas = document.createElement("canvas");
-        zoomBody.appendChild(mycanvas);
+        if(this.state._Chart!=null)
+        {
+
+            var mycanvas = document.createElement("canvas");
+            zoomBody.appendChild(mycanvas);
 
 
-        var ctx = mycanvas.getContext('2d');
-        new Chart(ctx, this.state._Chart);
+            var ctx = mycanvas.getContext('2d');
+            new Chart(ctx, this.state._Chart);
 
+        }
         $('#zoomModal').modal('show');        
     }
     ,
@@ -232,9 +248,12 @@ var PieGraph = React.createClass({
         this.mostrarGraficaDeColumna("");
     },segmentarTodo()
     {
+        if (this.state.dataReference==null) {return;}
         this.state.respuestas = this.state.dataReference;
         this.state.dataReference = null;
         this.mostrarGraficaDeColumna("");
+        document.getElementById("input_pie_search"+this.state.index).value = '';
+        
     },
     render() {
         return (
@@ -258,7 +277,7 @@ var PieGraph = React.createClass({
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <input  className="form-control" id="input1-group2" type="text" name="input1-group2" placeholder="search" style={{width:"inherit",heigth:"inherit"}} onChange={this.filtrar} />
+                        <input  className="form-control" id={"input_pie_search"+this.state.index} type="text" name="input1-group2" placeholder="search" style={{width:"inherit",heigth:"inherit"}} onChange={this.filtrar} />
                     </div>
                    
 
