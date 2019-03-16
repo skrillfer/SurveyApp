@@ -9,7 +9,7 @@ var GridGraphs = React.createClass({
                     children      : this.props.children, 
                     childrenComponents : [],     
                     gridListHead : this.props.gridListHead,  
-                    reloadGraph  : this.props.reloadGraph, 
+                    queryDate  : this.props.queryDate, 
                 };
     },
     /*componentWillReceiveProps:function(Nextprops) 
@@ -133,6 +133,7 @@ var GridGraphs = React.createClass({
                                                 pregunta = {this.state.gridListHead[index]} 
                                                 respuestas = {this.state.respuestas}
                                                 index = {index}
+                                                queryDate = {this.state.queryDate}
                                             ></PieGraph>
                                         </div>
                                         

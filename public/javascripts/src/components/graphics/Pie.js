@@ -7,6 +7,8 @@ var PieGraph = React.createClass({
                     respuestas : this.props.respuestas,
                     cerrarGrafica : this.props.cerrarGrafica,
                     index : this.props.index,
+                    queryDate : this.props.queryDate,
+                    dataReference: null,
                     _Chart : null,
                     instanceChart : null,
                     _isPicker : false,
@@ -33,17 +35,16 @@ var PieGraph = React.createClass({
         console.log("DidMount");
         try{
             this.mostrarGraficaDeColumna("");   
-
         }catch(ex){}
         
-            if(!this.state._isPicker)
-            {
-                var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Inicial' });
-                datepicker.appendTo('#datepickerIni'+this.state.index);
-                var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Final' });
-                datepicker.appendTo('#datepickerFin'+this.state.index);  
-                this.state._isPicker = true;
-            }
+        if(!this.state._isPicker)
+        {
+            var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Inicial' });
+            datepicker.appendTo('#datepickerIni'+this.state.index);
+            var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Final' });
+            datepicker.appendTo('#datepickerFin'+this.state.index);  
+            this.state._isPicker = true;
+        }
             
     },
     getRandomColor() {
@@ -65,8 +66,9 @@ var PieGraph = React.createClass({
     mostrarGraficaDeColumna(filtro)
     {
         var x = [];
-    
+        
         x = this.state.respuestas[this.state.pregunta];
+        
         x = x.sort();
         
         
@@ -175,6 +177,65 @@ var PieGraph = React.createClass({
         
         this.mostrarGraficaDeColumna(event.target.value);
     },
+
+    //*Funcion que Segmenta Fecha Ini/Fin
+    segmentar()
+    {
+        
+        //var NUEVO_ARRAY =[];
+        var NUEVA_QUERYHASH = {};
+        var iniDate = new Date(document.getElementById("datepickerIni"+this.state.index).value);
+        var finDate = new Date(document.getElementById("datepickerFin"+this.state.index).value);
+
+        var comp_date ;
+        if(!isNaN(iniDate) && !isNaN(finDate))
+        {
+            if(iniDate<finDate)
+            {
+                var keys = Object.keys(this.state.queryDate);
+                keys.map(
+                item =>{
+                    var numbers = item.match(/\d+/g); 
+                    comp_date = new Date(numbers[2], numbers[1]-1, numbers[0]);
+                    if(comp_date>=iniDate && comp_date<=finDate)
+                    {
+                    var arr_respuesta =this.state.queryDate[item];
+                    arr_respuesta.map(
+                        index =>{
+                            Object.keys(index.query).map(
+                            it =>
+                            {
+                                if(NUEVA_QUERYHASH[it]){
+                                    NUEVA_QUERYHASH[it].push(index.query[it][0]);
+                                }else{
+                                    NUEVA_QUERYHASH[it] = [index.query[it][0]];
+                                }
+                            }
+                            );
+                            //NUEVO_ARRAY.push(this.state.data[index.posicion-1]);
+                        }
+                    );
+                    }
+                }
+                );
+            }else
+            {
+            alert("Fecha Inicial debe ser Menor a Fecha Final");
+            }
+        }else
+        {
+            document.getElementById("datepickerIni"+this.state.index).value = '';
+            document.getElementById("datepickerFin"+this.state.index).value = '';
+        }
+        this.state.dataReference = this.state.respuestas;
+        this.state.respuestas = NUEVA_QUERYHASH;
+        this.mostrarGraficaDeColumna("");
+    },segmentarTodo()
+    {
+        this.state.respuestas = this.state.dataReference;
+        this.state.dataReference = null;
+        this.mostrarGraficaDeColumna("");
+    },
     render() {
         return (
             <div id ={"contenedorPie"+this.state.index} className = "center-block">
@@ -184,8 +245,8 @@ var PieGraph = React.createClass({
                             <i className="icon-settings"></i>
                         </button>
                         <div className="dropdown-menu dropdown-menu-right">
-                            <a className="dropdown-item">Mostrar Todo</a>
-                            <a className="dropdown-item">Segmentar</a>
+                            <a className="dropdown-item" onClick={this.segmentar}     >Segmentar</a>
+                            <a className="dropdown-item" onClick={this.segmentarTodo} >Mostrar Todo</a>
                         </div>
                     </div>
                 </div>

@@ -452,7 +452,7 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead,reloadGraph } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead,queryDate } = this.state;
     console.log("RENDERIZADO");    
     return (
 
@@ -464,13 +464,13 @@ class EncuestasPage extends React.Component {
                
                <GridGraphs 
                    cerrarGrafica = {this.cerrarGrafica} 
-                   cerrarTodo = {this.cerrarTodo} 
-                   gridList = {gridList} 
-                   pregunta = {pregunta} 
-                   respuestas = {queryHash}  
-                   children   = {gridList}
-                   gridListHead = {gridListHead}
-                   reloadGraph  = {reloadGraph}
+                   cerrarTodo    = {this.cerrarTodo} 
+                   gridList      = {gridList} 
+                   pregunta      = {pregunta} 
+                   respuestas    = {queryHash}  
+                   children      = {gridList}
+                   gridListHead  = {gridListHead}
+                   queryDate     = {queryDate}
                />
                : null
              } 
