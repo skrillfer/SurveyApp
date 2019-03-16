@@ -12,7 +12,7 @@ var GridGraphs = React.createClass({
                     reloadGraph  : this.props.reloadGraph, 
                 };
     },
-    componentWillReceiveProps:function(Nextprops) 
+    /*componentWillReceiveProps:function(Nextprops) 
     {
         if(Nextprops.reloadGraph!=this.state.reloadGraph)
         {
@@ -24,7 +24,7 @@ var GridGraphs = React.createClass({
             console.log("2x");
         }
         this.crearGraphEnum();
-    },
+    },*/
     componentWillMount: function()
     {
     },
@@ -86,9 +86,7 @@ var GridGraphs = React.createClass({
     },
     crearGraphEnum()
     {
-        
         var ARRAY = [];
-        this.state.childrenComponents =[];
         this.state.children.map(
             (item,index) =>
             {
@@ -114,18 +112,49 @@ var GridGraphs = React.createClass({
                     case 1:
                     
                     ARRAY.push(
-                                <div id={"card_"+index} className = "card col-sm-6">
-                                    <div className ="card-header">
-                                        Pie Chart
-                                    </div>
-                                    <div className ="card-body">
-                                        <PieGraph 
-                                            cerrarGrafica = {this.cerrarGraph} 
-                                            pregunta = {this.state.gridListHead[index]} 
-                                            respuestas = {this.state.respuestas}
-                                            index = {index}
-                                    ></PieGraph>
-                                    </div>
+                                <div id={"card_"+index} className = "col-sm-6 col-md-6">
+                                    <div className="card">
+                                        <div className ="card-header">
+                                            
+                                            {/*<div className = "card-header-actions">/*}
+                                                {/* Segmentar*/}
+                                                <div className="col-md-3">
+                                                    Pie Chart
+                                                </div>
+                                                <div className="col-md-4"><input type="text" id={"datepickerIni"+index}/>
+                                                </div>
+                                                <div className="col-md-2"><input type="text" id={"datepickerFin"+index}/>
+                                                </div>
+                                                {/* Segmentar*/}
+
+                                                <div className = "card-header-actions">
+                                                    <div className="btn-group float-right">
+                                                        <button className="btn btn-settings dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i className="icon-settings"></i>
+                                                        </button>
+                                                        <div className="dropdown-menu dropdown-menu-right">
+                                                            <a className="dropdown-item">Mostrar Todo</a>
+                                                            <a className="dropdown-item">Segmentar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {/*</div>*/}
+                                            
+
+                                            
+                                            
+                                        </div>
+                                        
+                                        <div className ="card-body">
+                                            <PieGraph 
+                                                cerrarGrafica = {this.cerrarGraph} 
+                                                pregunta = {this.state.gridListHead[index]} 
+                                                respuestas = {this.state.respuestas}
+                                                index = {index}
+                                            ></PieGraph>
+                                        </div>
+                                        
+                                    </div>    
                                 </div>
                             );
                     break;        
@@ -133,7 +162,6 @@ var GridGraphs = React.createClass({
             }    
         );
         this.setState({childrenComponents:ARRAY});  
-        console.log("capullo");
     },
     render() {
         console.log("GRID RENDERIZADO");

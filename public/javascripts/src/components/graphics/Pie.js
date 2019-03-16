@@ -9,14 +9,42 @@ var PieGraph = React.createClass({
                     index : this.props.index,
                     _Chart : null,
                     instanceChart : null,
+                    _isPicker : false,
                 };
     },
+    componentDidUpdate: function()
+    {
+        console.log("DidUpdate");
+        console.log(this.state._isPicker);
+        if(!this.state._isPicker)
+        {
+            var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Inicial' });
+            datepicker.appendTo('#datepickerIni');
+            var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Final' });
+            datepicker.appendTo('#datepickerFin');  
+            this.state._isPicker = true;  
+        }
+    
+    }
+    ,
     componentDidMount: function()
     {
+        console.log(this.state._isPicker);
+        console.log("DidMount");
         try{
             this.mostrarGraficaDeColumna("");   
+
         }catch(ex){}
         
+            if(!this.state._isPicker)
+            {
+                var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Inicial' });
+                datepicker.appendTo('#datepickerIni'+this.state.index);
+                var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Final' });
+                datepicker.appendTo('#datepickerFin'+this.state.index);  
+                this.state._isPicker = true;
+            }
+            
     },
     getRandomColor() {
         var letters = '0123456789ABCDEF'.split('');
@@ -151,15 +179,17 @@ var PieGraph = React.createClass({
         return (
             <div id ={"contenedorPie"+this.state.index} className = "center-block">
                 <div className="form-group row">
-                    <div className="col-md-6">
+                    <div className="col-md-8">
                         <div className="text-left">
                             <button   id={this.state.index} type="button"  onClick = {this.state.cerrarGrafica} className="btn btn-sm btn-danger"><strong id={this.state.index}>QUITAR</strong></button>
                             <button   type="button"  onClick = {this.zoomGrafica} className="btn btn-sm btn-secondary"><strong>ZOOM</strong><span className="glyphicon glyphicon-zoom-in"></span></button>
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <input  className="form-control" id="input1-group2" type="text" name="input1-group2" placeholder="search" style={{width:"164px"}} onChange={this.filtrar} />
+                        <input  className="form-control" id="input1-group2" type="text" name="input1-group2" placeholder="search" style={{width:"inherit",heigth:"inherit"}} onChange={this.filtrar} />
                     </div>
+                   
+
                 </div>                    
                 <canvas  id={"graphContainerP"+this.state.index} >
                 </canvas>
