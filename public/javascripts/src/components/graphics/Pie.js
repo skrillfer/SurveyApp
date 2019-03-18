@@ -255,20 +255,13 @@ var PieGraph = React.createClass({
        
     },segmentarTodo()
     {
-        if (this.state.dataReference==null) 
-        {
-            document.getElementById("input_pie_search"+this.state.index).value = '';
-            this.mostrarGraficaDeColumna("");
-            return;
-        }
-        else
+        if (this.state.dataReference!=null) 
         {
             this.state.respuestas = this.state.dataReference;
             this.state.dataReference = null;
-            this.mostrarGraficaDeColumna("");
-            document.getElementById("input_pie_search"+this.state.index).value = '';
         }
-        
+        document.getElementById("input_pie_search"+this.state.index).value = '';
+        this.mostrarGraficaDeColumna("");
     },
     render() {
         return (
