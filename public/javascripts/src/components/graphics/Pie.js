@@ -39,9 +39,9 @@ var PieGraph = React.createClass({
         
         if(!this.state._isPicker)
         {
-            var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Inicial' });
+            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Inicial' });
             datepicker.appendTo('#datepickerIni'+this.state.index);
-            var datepicker = new ej.calendars.DatePicker({ width: "110px", placeholder: 'Fecha Final' });
+            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Final' });
             datepicker.appendTo('#datepickerFin'+this.state.index);  
             this.state._isPicker = true;
         }
@@ -206,8 +206,14 @@ var PieGraph = React.createClass({
         var comp_date ;
         if(!isNaN(iniDate) && !isNaN(finDate))
         {
+
             if(iniDate<finDate)
             {
+                if (this.state.dataReference!=null) 
+                {
+                    this.state.respuestas = this.state.dataReference;
+                }
+                
                 var keys = Object.keys(this.state.queryDate);
                 keys.map(
                 item =>{
@@ -251,6 +257,8 @@ var PieGraph = React.createClass({
     {
         if (this.state.dataReference==null) 
         {
+            document.getElementById("input_pie_search"+this.state.index).value = '';
+            this.mostrarGraficaDeColumna("");
             return;
         }
         else

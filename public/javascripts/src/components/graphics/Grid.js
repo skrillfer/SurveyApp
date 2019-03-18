@@ -95,8 +95,8 @@ var GridGraphs = React.createClass({
                     case 0:
 
                     ARRAY.push(
-                            <div id={"card_"+index} className = "card col-sm-6">
-                                <div className ="card-header">
+                            <div key={"His"+index} id={"card_"+index} className = "card col-sm-6">
+                                <div   className ="card-header">
                                     Histogram Chart
                                 </div>
                                 <div className ="card-body">
@@ -112,33 +112,33 @@ var GridGraphs = React.createClass({
                     case 1:
                     
                     ARRAY.push(
-                                <div id={"card_"+index} className = "col-sm-6 col-md-6">
-                                    <div className="card">
-                                        <div className ="card-header">
-                                            
-                                                {/* Segmentar*/}
-                                                <div className="col-md-4">
-                                                    Pie Chart
-                                                </div>
-                                                <div className="col-md-4"><input type="text" id={"datepickerIni"+index}/>
-                                                </div>
-                                                <div className="col-md-4"><input type="text" id={"datepickerFin"+index}/>
-                                                </div>
-                                                {/* Segmentar*/}
-                                        </div>
+                            <div key={"Pie"+index} id={"card_"+index} className = "col-sm-6 col-md-6">
+                                <div  className="card">
+                                    <div className ="card-header">
                                         
-                                        <div className ="card-body">
-                                            <PieGraph 
-                                                cerrarGrafica = {this.cerrarGraph} 
-                                                pregunta = {this.state.gridListHead[index]} 
-                                                respuestas = {this.state.respuestas}
-                                                index = {index}
-                                                queryDate = {this.state.queryDate}
-                                            ></PieGraph>
-                                        </div>
-                                        
-                                    </div>    
-                                </div>
+                                            {/* Segmentar*/}
+                                            <div className="col-md-4">
+                                                Pie Chart
+                                            </div>
+                                            <div className="col-md-4"><input type="text" id={"datepickerIni"+index}/>
+                                            </div>
+                                            <div className="col-md-4"><input type="text" id={"datepickerFin"+index}/>
+                                            </div>
+                                            {/* Segmentar*/}
+                                    </div>
+                                    
+                                    <div className ="card-body">
+                                        <PieGraph 
+                                            cerrarGrafica = {this.cerrarGraph} 
+                                            pregunta = {this.state.gridListHead[index]} 
+                                            respuestas = {this.state.respuestas}
+                                            index = {index}
+                                            queryDate = {this.state.queryDate}
+                                        ></PieGraph>
+                                    </div>
+                                    
+                                </div>    
+                            </div>
                             );
                     break;        
                 }
