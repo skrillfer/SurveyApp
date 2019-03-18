@@ -25,6 +25,9 @@ class EncuestasPage extends React.Component {
     this.segmentar = this.segmentar.bind(this);
     this.segmentarTodo = this.segmentarTodo.bind(this);
 
+    //--------------------Set TipoCambio
+    this.setTipoCambio = this.setTipoCambio.bind(this);
+
     this.state = {
       loading: false,
       uid: id,
@@ -60,6 +63,10 @@ class EncuestasPage extends React.Component {
     };
   }
 
+  setTipoCambio(val)
+  {
+    this.state.gridTipoCambio = val;
+  }
 
   generateHead(head){
     if(this.state.headers.includes(head)){
@@ -470,6 +477,7 @@ class EncuestasPage extends React.Component {
               gridAction        = {gridAction} 
               queryDate         = {queryDate}
               gridTipoCambio    = {gridTipoCambio}
+              setTipoCambio     = {this.setTipoCambio}
             ></GridGraphs>
         </div>
 

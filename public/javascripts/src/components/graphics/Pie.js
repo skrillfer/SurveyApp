@@ -8,7 +8,7 @@ var PieGraph = React.createClass({
                     cerrarGrafica :     this.props.cerrarGrafica,
                     index         :     this.props.index,
                     queryDate     :     this.props.queryDate,
-
+                    initParam     :     this.props.initParam,
                     dataReference: null,
                     _Chart : null,
                     instanceChart : null,
@@ -46,6 +46,12 @@ var PieGraph = React.createClass({
             this.state._isPicker = true;
         }
             
+        if(this.state.initParam!=null)
+        {
+            var search = this.state.initParam.search;
+            document.getElementById("input_search"+this.state.index).value = search;
+            this.mostrarGraficaDeColumna(search);
+        }
     },
     getRandomColor() {
         var letters = '0123456789ABCDEF'.split('');
@@ -238,7 +244,7 @@ var PieGraph = React.createClass({
                     );
                     }
                 });
-                document.getElementById("input_pie_search"+this.state.index).value = '';
+                document.getElementById("input_search"+this.state.index).value = '';
                 this.state.dataReference = this.state.respuestas;
                 this.state.respuestas = NUEVA_QUERYHASH;
                 this.mostrarGraficaDeColumna("");
@@ -258,7 +264,7 @@ var PieGraph = React.createClass({
             this.state.respuestas = this.state.dataReference;
             this.state.dataReference = null;
         }
-        document.getElementById("input_pie_search"+this.state.index).value = '';
+        document.getElementById("input_search"+this.state.index).value = '';
         this.mostrarGraficaDeColumna("");
     },
     render() {
@@ -283,7 +289,7 @@ var PieGraph = React.createClass({
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <input  className="form-control" id={"input_pie_search"+this.state.index} type="text" name="input1-group2" placeholder="search" style={{width:"inherit",heigth:"inherit"}} onChange={this.filtrar} />
+                        <input  className="form-control" id={"input_search"+this.state.index} type="text" name="input1-group2" placeholder="search" style={{width:"inherit",heigth:"inherit"}} onChange={this.filtrar} />
                     </div>
                    
 

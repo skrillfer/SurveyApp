@@ -10,6 +10,7 @@ var GridGraphs = React.createClass({
                     childrenComponents : [],     
                     queryDate  : this.props.queryDate, 
                     gridTipoCambio : this.props.gridTipoCambio,
+                    setTipoCambio : this.props.setTipoCambio,
                 };
     },
     componentWillReceiveProps:function(Nextprops) 
@@ -19,31 +20,20 @@ var GridGraphs = React.createClass({
             this.setState({ 
                     gridAction : Nextprops.gridAction,
                 },()=>{
-                    this.crearGraphEnum(true);
+                    this.crearGraphEnum(true,null);
                 }
             );
         }else
         {
-            /*this.setState({childrenComponents:[]},()=>{
-                this.crearGraphEnum();
-            });*/
-
             if(Nextprops.gridTipoCambio==1)
             {
                 //El cambio producido es por la base de datos
                 var tmpComponents = this.state.childrenComponents.slice();
+                this.state.respuestas = Nextprops.respuestas;
                 this.state.childrenComponents = [];
-
                 this.reset(tmpComponents);
-        
+                Nextprops.setTipoCambio(0);
                 
-               
-                /*
-                this.setState({respuestas:Nextprops.respuestas,tipoCambio:1});
-                console.log("Ha cambiado la base de datos");*/
-                /*this.setState({respuestas:Nextprops.respuestas,childrenComponents:[]},()=>{
-                    this.crearGraphEnum();
-                });*/
             }
             console.log("otro tipo de actualizacion:"+Nextprops.gridTipoCambio);
         }
@@ -54,13 +44,18 @@ var GridGraphs = React.createClass({
             (child,i) =>
             {
                 this.state.gridAction ={tipo:child.props.name,pregunta:child.props.title};
+                var search = document.getElementById("input_search"+child.key).value;
+                //console.log(search);
+                //search   = "upp";
+                var obj ={"search":search};
                 if((i+1)== arr.length)
                 {
-                    this.crearGraphEnum(true);
+
+                    this.crearGraphEnum(true,obj);
                     
                 }else
                 {
-                    this.crearGraphEnum(false);
+                    this.crearGraphEnum(false,obj);
                 }
                 
             }
@@ -78,7 +73,7 @@ var GridGraphs = React.createClass({
     },
     componentDidMount: function()
     {
-        this.crearGraphEnum(true);      
+        this.crearGraphEnum(true,null);      
     }
     ,
     cerrar_Todo()
@@ -94,7 +89,7 @@ var GridGraphs = React.createClass({
         this.setState({childrenComponents: hijos});
     },
     
-    crearGraphEnum(actualizar)
+    crearGraphEnum(actualizar,initParam)
     {
         if(this.state.gridAction!=null)
         {
@@ -108,7 +103,7 @@ var GridGraphs = React.createClass({
             {
                     case 0:
                         this.state.childrenComponents.push(
-                                <div key={"His"+index} id={"card_"+index} title={str_pregunta} name ={tipo} className = "card col-sm-6">
+                                <div key={index} id={"card_"+index} title={str_pregunta} name ={tipo} className = "card col-sm-6">
                                     <div   className ="card-header">
                                         Histogram Chart
                                     </div>
@@ -118,6 +113,7 @@ var GridGraphs = React.createClass({
                                             pregunta      = {str_pregunta} 
                                             respuestas    = {this.state.respuestas}
                                             index         = {index}
+                                            initParam     = {initParam}
                                         ></HistogramaGraph>
                                     </div>
                                 </div>
@@ -126,7 +122,7 @@ var GridGraphs = React.createClass({
                     case 1:
                     
                         this.state.childrenComponents.push(
-                            <div key={"Pie"+index} id={"card_"+index} title ={str_pregunta} name ={tipo} className = "col-sm-6 col-md-6">
+                            <div key={index} id={"card_"+index} title ={str_pregunta} name ={tipo} className = "col-sm-6 col-md-6">
                                 <div  className="card">
                                     <div className ="card-header">
                                         
@@ -148,6 +144,7 @@ var GridGraphs = React.createClass({
                                             respuestas    = {this.state.respuestas}
                                             index         = {index}
                                             queryDate     = {this.state.queryDate}
+                                            initParam     = {initParam}
                                         ></PieGraph>
                                     </div>
                                     
