@@ -9,6 +9,7 @@ var GridGraphs = React.createClass({
                     gridAction : this.props.gridAction,
                     childrenComponents : [],     
                     queryDate  : this.props.queryDate, 
+                    gridTipoCambio : this.props.gridTipoCambio,
                 };
     },
     componentWillReceiveProps:function(Nextprops) 
@@ -18,27 +19,66 @@ var GridGraphs = React.createClass({
             this.setState({ 
                     gridAction : Nextprops.gridAction,
                 },()=>{
-                    this.crearGraphEnum();
+                    this.crearGraphEnum(true);
                 }
             );
         }else
         {
-        }
+            /*this.setState({childrenComponents:[]},()=>{
+                this.crearGraphEnum();
+            });*/
+
+            if(Nextprops.gridTipoCambio==1)
+            {
+                //El cambio producido es por la base de datos
+                var tmpComponents = this.state.childrenComponents.slice();
+                this.state.childrenComponents = [];
+
+                this.reset(tmpComponents);
         
+                
+               
+                /*
+                this.setState({respuestas:Nextprops.respuestas,tipoCambio:1});
+                console.log("Ha cambiado la base de datos");*/
+                /*this.setState({respuestas:Nextprops.respuestas,childrenComponents:[]},()=>{
+                    this.crearGraphEnum();
+                });*/
+            }
+            console.log("otro tipo de actualizacion:"+Nextprops.gridTipoCambio);
+        }
+    },
+    reset(arr)
+    {
+        arr.map(
+            (child,i) =>
+            {
+                this.state.gridAction ={tipo:child.props.name,pregunta:child.props.title};
+                if((i+1)== arr.length)
+                {
+                    this.crearGraphEnum(true);
+                    
+                }else
+                {
+                    this.crearGraphEnum(false);
+                }
+                
+            }
+        );
     },
     componentWillMount: function()
     {
     },
     componentWillUpdate:function()
     {
+        console.log("Sera actualizado");
     },
     componentDidUpdate: function()
     {        
     },
     componentDidMount: function()
     {
-
-        this.crearGraphEnum();
+        this.crearGraphEnum(true);      
     }
     ,
     cerrar_Todo()
@@ -53,20 +93,22 @@ var GridGraphs = React.createClass({
         hijos = hijos.filter(v => v.props.id.toString() !== "card_"+id.toString());
         this.setState({childrenComponents: hijos});
     },
-    crearGraphEnum()
+    
+    crearGraphEnum(actualizar)
     {
         if(this.state.gridAction!=null)
         {
             var str_pregunta =  this.state.gridAction.pregunta; 
             var tipo         =  this.state.gridAction.tipo; 
+            tipo =   parseInt(tipo) ;
             
             var d     = new Date();
-            var index =  d.getTime();
+            var index =  d.getTime() + this.state.childrenComponents.length;
             switch(tipo)
             {
                     case 0:
                         this.state.childrenComponents.push(
-                                <div key={"His"+index} id={"card_"+index} className = "card col-sm-6">
+                                <div key={"His"+index} id={"card_"+index} title={str_pregunta} name ={tipo} className = "card col-sm-6">
                                     <div   className ="card-header">
                                         Histogram Chart
                                     </div>
@@ -84,7 +126,7 @@ var GridGraphs = React.createClass({
                     case 1:
                     
                         this.state.childrenComponents.push(
-                            <div key={"Pie"+index} id={"card_"+index} className = "col-sm-6 col-md-6">
+                            <div key={"Pie"+index} id={"card_"+index} title ={str_pregunta} name ={tipo} className = "col-sm-6 col-md-6">
                                 <div  className="card">
                                     <div className ="card-header">
                                         
@@ -114,7 +156,11 @@ var GridGraphs = React.createClass({
                         );
                     break;               
             }
-            this.setState({childrenComponents:this.state.childrenComponents});
+
+            if(actualizar){
+                this.setState({childrenComponents:this.state.childrenComponents});
+            }
+            
         }
     },
     render() {

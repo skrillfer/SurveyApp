@@ -47,6 +47,7 @@ class EncuestasPage extends React.Component {
 
       //Manejo de Graficas Add/Remove
       gridAction : null,
+      gridTipoCambio : 0,
       
       //mapas
       queryMap : {},
@@ -97,6 +98,10 @@ class EncuestasPage extends React.Component {
           
           if(control)
           {
+            /*
+              La variable control me permite controlar los update que se dan en la base de datos 
+            */
+            current.state.gridTipoCambio=1;
             ARRAY = [];
             current.state.queryHash = {};
             console.log("JODE");
@@ -282,9 +287,6 @@ class EncuestasPage extends React.Component {
 
     });
      
-   
-    
-    
   }
 
 
@@ -453,7 +455,7 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,showComponent,loading,pregunta,gridAction,queryHash,queryDate } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridAction,queryHash,queryDate,gridTipoCambio } = this.state;
     console.log("RENDERIZADO");    
     return (
 
@@ -461,12 +463,13 @@ class EncuestasPage extends React.Component {
         
         <div id="graphic" className="graphicss">   
             <GridGraphs 
-              pregunta      = {pregunta} 
-              respuestas    = {queryHash}     
-              cerrarGrafica = {this.cerrarGrafica} 
-              cerrarTodo    = {this.cerrarTodo} 
-              gridAction      = {gridAction} 
-              queryDate     = {queryDate}
+              pregunta          = {pregunta} 
+              respuestas        = {queryHash}     
+              cerrarGrafica     = {this.cerrarGrafica} 
+              cerrarTodo        = {this.cerrarTodo} 
+              gridAction        = {gridAction} 
+              queryDate         = {queryDate}
+              gridTipoCambio    = {gridTipoCambio}
             ></GridGraphs>
         </div>
 
@@ -681,14 +684,14 @@ class EncuestasPage extends React.Component {
       if(document.getElementById("checkHistogram").checked)
       {
         siCheck =true;
-        this.setState({gridAction:{tipo:0,pregunta:mypregunta}});
+        this.setState({gridAction:{tipo:0,pregunta:mypregunta}},()=>{this.state.gridAction=null;});
         /*this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
                       ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }
       if(document.getElementById("checkPie").checked)
       {
         siCheck =true;
-        this.setState({gridAction:{tipo:1,pregunta:mypregunta}});
+        this.setState({gridAction:{tipo:1,pregunta:mypregunta}},()=>{this.state.gridAction=null;});
         /*this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
                       ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }

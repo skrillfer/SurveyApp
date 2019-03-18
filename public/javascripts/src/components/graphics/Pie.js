@@ -3,11 +3,12 @@ var PieGraph = React.createClass({
     
     getInitialState: function() {
         return {    
-                    pregunta: this.props.pregunta, 
-                    respuestas : this.props.respuestas,
-                    cerrarGrafica : this.props.cerrarGrafica,
-                    index : this.props.index,
-                    queryDate : this.props.queryDate,
+                    pregunta      :     this.props.pregunta, 
+                    respuestas    :     this.props.respuestas,
+                    cerrarGrafica :     this.props.cerrarGrafica,
+                    index         :     this.props.index,
+                    queryDate     :     this.props.queryDate,
+
                     dataReference: null,
                     _Chart : null,
                     instanceChart : null,
@@ -16,7 +17,7 @@ var PieGraph = React.createClass({
     },
     componentDidUpdate: function()
     {
-        console.log("DidUpdate");
+        console.log("--P-DidUpdate");
         console.log(this.state._isPicker);
         if(!this.state._isPicker)
         {
@@ -31,8 +32,7 @@ var PieGraph = React.createClass({
     ,
     componentDidMount: function()
     {
-        console.log(this.state._isPicker);
-        console.log("DidMount");
+        console.log("--P-DidMount");
         try{
             this.mostrarGraficaDeColumna("");   
         }catch(ex){}
