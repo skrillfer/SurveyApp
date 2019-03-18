@@ -42,10 +42,11 @@ class EncuestasPage extends React.Component {
       queryHash: {},
       posicion : '',
       HashFilter: {},
-      showGraphic :false,
+      showGraphic :true,
       textSearch : '',
-      gridList : [],
-      gridListHead : [],
+
+      //Manejo de Graficas Add/Remove
+      gridAction : null,
       
       //mapas
       queryMap : {},
@@ -452,28 +453,21 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead,queryDate } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridAction,queryHash,queryDate } = this.state;
     console.log("RENDERIZADO");    
     return (
 
       <div>
         
-        <div id="graphic" className="graphicss">
-            
-            {showGraphic ? 
-               
-               <GridGraphs 
-                   cerrarGrafica = {this.cerrarGrafica} 
-                   cerrarTodo    = {this.cerrarTodo} 
-                   gridList      = {gridList} 
-                   pregunta      = {pregunta} 
-                   respuestas    = {queryHash}  
-                   children      = {gridList}
-                   gridListHead  = {gridListHead}
-                   queryDate     = {queryDate}
-               />
-               : null
-             } 
+        <div id="graphic" className="graphicss">   
+            <GridGraphs 
+              pregunta      = {pregunta} 
+              respuestas    = {queryHash}     
+              cerrarGrafica = {this.cerrarGrafica} 
+              cerrarTodo    = {this.cerrarTodo} 
+              gridAction      = {gridAction} 
+              queryDate     = {queryDate}
+            ></GridGraphs>
         </div>
 
       {
@@ -632,7 +626,8 @@ class EncuestasPage extends React.Component {
     {
     
       try{
-        
+
+        /*
         let gridList1 = this.state.gridList.filter((_,item) => item !== parseInt(index));
         let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         if(gridList1.length==0)
@@ -653,7 +648,7 @@ class EncuestasPage extends React.Component {
           }
           
         });
-        
+        */
       }catch(exx){
         console.log(exx);
       }  
@@ -675,32 +670,34 @@ class EncuestasPage extends React.Component {
   {
     if (this._isMounted && document.getElementById("validationSelectedColum").value!='') {
 
-      try{
+      /*try{
         var FILTER = document.getElementById("example11_filter");
         var inputNodes = FILTER.getElementsByTagName('INPUT');
         this.setState({textSearch:inputNodes[0].value});
-      }catch(exx){}
+      }catch(exx){}*/
       
       var mypregunta = document.getElementById("validationSelectedColum").value;
       var siCheck =false;
       if(document.getElementById("checkHistogram").checked)
       {
         siCheck =true;
-        this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
-                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+        this.setState({gridAction:{tipo:0,pregunta:mypregunta}});
+        /*this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }
       if(document.getElementById("checkPie").checked)
       {
         siCheck =true;
-        this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
-                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+        this.setState({gridAction:{tipo:1,pregunta:mypregunta}});
+        /*this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }
       
       if(siCheck)
       {        
-        this.setState({showGraphic:false});
+        //this.setState({showGraphic:false});
         $('#exampleModal').modal('hide');
-        this.setState({showGraphic:true});
+        //this.setState({showGraphic:true});
       }else
       {
         alert('Tienes que elegir al menos un tipo de grafica');
