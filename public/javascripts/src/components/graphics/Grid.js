@@ -12,9 +12,9 @@ var GridGraphs = React.createClass({
                     queryDate  : this.props.queryDate, 
                 };
     },
-    /*componentWillReceiveProps:function(Nextprops) 
+    componentWillReceiveProps:function(Nextprops) 
     {
-        if(Nextprops.reloadGraph!=this.state.reloadGraph)
+        /*if(Nextprops.reloadGraph!=this.state.reloadGraph)
         {
             console.log("1x");
             this.setState({ 
@@ -22,9 +22,17 @@ var GridGraphs = React.createClass({
                 }
             );
             console.log("2x");
+        }*/
+
+        if(Nextprops.children.length!=this.state.children.length)
+        {
+            console.log("----->Actualizar");
+        }else
+        {
+            console.log("----->No hacerlo");
         }
-        this.crearGraphEnum();
-    },*/
+        //this.crearGraphEnum();
+    },
     componentWillMount: function()
     {
     },

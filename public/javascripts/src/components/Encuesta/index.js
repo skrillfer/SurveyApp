@@ -630,9 +630,9 @@ class EncuestasPage extends React.Component {
     
     if(this._isMounted)
     {
-
+    
       try{
-
+        
         let gridList1 = this.state.gridList.filter((_,item) => item !== parseInt(index));
         let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         if(gridList1.length==0)
@@ -679,13 +679,6 @@ class EncuestasPage extends React.Component {
         var FILTER = document.getElementById("example11_filter");
         var inputNodes = FILTER.getElementsByTagName('INPUT');
         this.setState({textSearch:inputNodes[0].value});
-        /* 
-        OPCIONES:
-        1. Enviar el textSearch y enviar la funcion filtrar para obtener una data filtrada
-        2. refactorizar codigo y entonces tendria que tener una palabra search para que cada
-        grafica sea generada de acuerdo a su search
-        */
-
       }catch(exx){}
       
       var mypregunta = document.getElementById("validationSelectedColum").value;
@@ -706,8 +699,6 @@ class EncuestasPage extends React.Component {
       if(siCheck)
       {        
         this.setState({showGraphic:false});
-        //console.log(this.state.gridList);
-        //console.log(this.state.gridListHead);
         $('#exampleModal').modal('hide');
         this.setState({showGraphic:true});
       }else
@@ -718,13 +709,8 @@ class EncuestasPage extends React.Component {
     }else
     {
       alert('Debes seleccionar al menos una Columna');
-
     }
-    
   }
-
-
-
 }
 
 const ListaRespuestas = ({ headers,matrix ,renderizarColumna }) => (

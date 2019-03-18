@@ -234,7 +234,6 @@ var PieGraph = React.createClass({
                                 }
                             }
                             );
-                            //NUEVO_ARRAY.push(this.state.data[index.posicion-1]);
                         }
                     );
                     }
@@ -249,11 +248,10 @@ var PieGraph = React.createClass({
             }
         }else
         {
-            document.getElementById("datepickerIni"+this.state.index).value = '';
-            document.getElementById("datepickerFin"+this.state.index).value = '';
+            alert("Fechas incorrectas");
         }
-       
-    },segmentarTodo()
+    },
+    segmentarTodo()
     {
         if (this.state.dataReference!=null) 
         {
