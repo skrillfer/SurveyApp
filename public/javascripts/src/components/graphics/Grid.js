@@ -108,18 +108,29 @@ var GridGraphs = React.createClass({
             {
                     case 0:
                         this.state.childrenComponents.push(
-                                <div key={index} id={"card_"+index} title={str_pregunta} name ={tipo} className = "card col-sm-6">
-                                    <div   className ="card-header">
-                                        Histogram Chart
-                                    </div>
-                                    <div className ="card-body">
-                                        <HistogramaGraph 
-                                            cerrarGrafica = {this.cerrarGraph} 
-                                            pregunta      = {str_pregunta} 
-                                            respuestas    = {this.state.respuestas}
-                                            index         = {index}
-                                            initParam     = {initParam}
-                                        ></HistogramaGraph>
+                                <div key={index} id={"card_"+index} title={str_pregunta} name ={tipo} className = "col-sm-6 col-md-6">
+                                    <div  className="card">
+                                        <div className ="card-header">
+                                            {/* Segmentar */}
+                                            <div className="col-md-4">
+                                                Histogram Chart
+                                            </div>
+                                            <div className="col-md-4"><input type="text" id={"datepickerIni"+index}/>
+                                            </div>
+                                            <div className="col-md-4"><input type="text" id={"datepickerFin"+index}/>
+                                            </div>
+                                            {/* Segmentar */}
+                                        </div>
+                                        <div className ="card-body">
+                                            <HistogramaGraph 
+                                                cerrarGrafica = {this.cerrarGraph} 
+                                                pregunta      = {str_pregunta} 
+                                                respuestas    = {this.state.respuestas}
+                                                index         = {index}
+                                                queryDate     = {this.state.queryDate}
+                                                initParam     = {initParam}
+                                            ></HistogramaGraph>
+                                        </div>
                                     </div>
                                 </div>
                         );
@@ -130,7 +141,6 @@ var GridGraphs = React.createClass({
                             <div key={index} id={"card_"+index} title ={str_pregunta} name ={tipo} className = "col-sm-6 col-md-6">
                                 <div  className="card">
                                     <div className ="card-header">
-                                        
                                             {/* Segmentar */}
                                             <div className="col-md-4">
                                                 Pie Chart
@@ -141,7 +151,6 @@ var GridGraphs = React.createClass({
                                             </div>
                                             {/* Segmentar */}
                                     </div>
-                                    
                                     <div className ="card-body">
                                         <PieGraph 
                                             cerrarGrafica = {this.cerrarGraph} 

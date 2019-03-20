@@ -15,21 +15,6 @@ var PieGraph = React.createClass({
                     _isPicker : false,
                 };
     },
-    componentDidUpdate: function()
-    {
-        console.log("--P-DidUpdate");
-        console.log(this.state._isPicker);
-        if(!this.state._isPicker)
-        {
-            var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Inicial' });
-            datepicker.appendTo('#datepickerIni');
-            var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Final' });
-            datepicker.appendTo('#datepickerFin');  
-            this.state._isPicker = true;  
-        }
-    
-    }
-    ,
     componentDidMount: function()
     {
         console.log("--P-DidMount");
@@ -181,8 +166,6 @@ var PieGraph = React.createClass({
     },
     zoomGrafica()
     {   
-
-        
         var zoomBody = document.getElementById("zoomBody");
 
         while (zoomBody.firstChild) {
@@ -219,7 +202,6 @@ var PieGraph = React.createClass({
     },
     filtrar(event)
     {
-        
         this.mostrarGraficaDeColumna(event.target.value);
     },
 
@@ -227,7 +209,6 @@ var PieGraph = React.createClass({
     segmentar()
     {
         
-        //var NUEVO_ARRAY =[];
         var NUEVA_QUERYHASH = {};
         var iniDate = new Date(document.getElementById("datepickerIni"+this.state.index).value);
         var finDate = new Date(document.getElementById("datepickerFin"+this.state.index).value);
