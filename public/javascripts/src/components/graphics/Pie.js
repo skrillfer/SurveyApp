@@ -33,24 +33,47 @@ var PieGraph = React.createClass({
     componentDidMount: function()
     {
         console.log("--P-DidMount");
-        try{
-            this.mostrarGraficaDeColumna("");   
-        }catch(ex){}
+        var ini = '';
+        var fin = '';
+        if(this.state.initParam!=null)
+        {
+            try {
+                ini = new Date(this.state.initParam.dateIni);
+                fin = new Date(this.state.initParam.dateFin);    
+            } catch (error) {
+                ini = new Date();
+                fin = new Date();
+            }
+            
+        }   
         
         if(!this.state._isPicker)
         {
-            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Inicial' });
+            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Inicial', value : ini });
             datepicker.appendTo('#datepickerIni'+this.state.index);
-            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Final' });
+            var datepicker = new ej.calendars.DatePicker({ width: "inherit", placeholder: 'Fecha Final', value : fin });
             datepicker.appendTo('#datepickerFin'+this.state.index);  
             this.state._isPicker = true;
         }
             
         if(this.state.initParam!=null)
         {
+            if(!isNaN(ini) && !isNaN(fin))
+            {
+                this.segmentar();
+            }
+            
+
             var search = this.state.initParam.search;
+            //set input search
             document.getElementById("input_search"+this.state.index).value = search;
             this.mostrarGraficaDeColumna(search);
+
+        }else
+        {
+            try{
+                this.mostrarGraficaDeColumna("");   
+            }catch(ex){}
         }
     },
     getRandomColor() {
@@ -213,7 +236,7 @@ var PieGraph = React.createClass({
         if(!isNaN(iniDate) && !isNaN(finDate))
         {
 
-            if(iniDate<finDate)
+            if(iniDate<=finDate)
             {
                 if (this.state.dataReference!=null) 
                 {

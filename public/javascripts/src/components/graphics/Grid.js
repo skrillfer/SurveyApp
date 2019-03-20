@@ -30,6 +30,8 @@ var GridGraphs = React.createClass({
                 //El cambio producido es por la base de datos
                 var tmpComponents = this.state.childrenComponents.slice();
                 this.state.respuestas = Nextprops.respuestas;
+                this.state.queryDate = Nextprops.queryDate;
+
                 this.state.childrenComponents = [];
                 this.reset(tmpComponents);
                 Nextprops.setTipoCambio(0);
@@ -47,7 +49,10 @@ var GridGraphs = React.createClass({
                 var search = document.getElementById("input_search"+child.key).value;
                 //console.log(search);
                 //search   = "upp";
-                var obj ={"search":search};
+                var search = document.getElementById("input_search"+child.key).value;
+                var dateIni = document.getElementById("datepickerIni"+child.key).value;
+                var dateFin = document.getElementById("datepickerFin"+child.key).value;
+                var obj ={"search":search,"dateIni":dateIni,"dateFin":dateFin};
                 if((i+1)== arr.length)
                 {
 
