@@ -5,7 +5,11 @@ function guardarEncuesta(){
     var listOrgs = globalUserObject['organizaciones'];
     for(var i=0;i<listOrgs.length;i++){
         var objOrg = listOrgs[i];
-        $('#selOrganizaciones').append('<option value="'+objOrg.key+'">'+objOrg.child('nombre').val()+'</option>');
+        var selected='';
+        if((objOrg.key==glbOrganizacion)&&(glbOrganizacion!='')){
+            selected='selected="selected"';
+        }
+        $('#selOrganizaciones').append('<option value="'+objOrg.key+'" '+selected+'>'+objOrg.child('nombre').val()+'</option>');
     }
     $('#modalGuardar').modal();
 }
@@ -13,7 +17,10 @@ function guardarEncuesta(){
 function guardarEncuestaFirebase(){
     var organizacion = $('#selOrganizaciones').val();
     var fecha = new Date();
-    var id = fecha.getFullYear()+fecha.getMonth()+fecha.getDay()+'_'+fecha.getHours()+fecha.getMinutes();
+    var id = glbIdEncuesta;
+    if(id==''){
+        fecha.getFullYear()+fecha.getMonth()+fecha.getDay()+'_'+fecha.getHours()+fecha.getMinutes();
+    }
     database.ref('/proyectos/'+organizacion+'/encuestas/'+id).set({
         "nombre":$('#nomEncuesta').val(),
         "encuesta":survey.text
@@ -30,6 +37,10 @@ $(document).ready(function(){
     survey.locale = 'es';
     //set function on save callback
     survey.saveSurveyFunc = guardarEncuesta;
+
+    if(glbEncuestaJSON !=""){
+        survey.text = glbEncuestaJSON;
+    }
 
     $('#btnGuardarEncuesta').click(function(){
         guardarEncuestaFirebase();

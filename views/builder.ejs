@@ -6,6 +6,18 @@
 <%- include header/survey.ejs %>
     <main class="main">
         <div class="container-fluid" style="margin:0px;padding:0px;">
+        <script type="text/javascript">
+            var glbEncuestaJSON = "";
+            var glbIdEncuesta='';
+            var glbTituloEncuesta='';
+            var glbOrganizacion='';
+            <% if(encuesta!=''){ %>
+                glbEncuestaJSON= <%- encuesta %>;
+                glbIdEncuesta = '<%= intIdEncuesta %>';
+                glbTituloEncusta = '<%= titulo %>';
+                glbOrganizacion = '<%= organizacion %>';
+            <% } %>
+        </script>
         <div id="surveyEditorContainer"></div>
 
         <div id="modalGuardar" class="modal" tabindex="-1" role="dialog">
@@ -19,7 +31,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="tituloEncuesta">Título de encuesta</label>
-                                <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)">
+                                <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)" value="<%= titulo %>">
                             </div>
                             <div class="form-group">
                                 <label for="organizacionEncuesta">Organización</label>
@@ -36,6 +48,5 @@
         </div><!-- /.modal -->
         </div>
     </main>
-
     </div>
 <%- include common/footerDashboard.ejs %>

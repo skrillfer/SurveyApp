@@ -14,6 +14,7 @@ var loginRouter = require('./routes/login');
 var dashboardRouter = require('./routes/dashboard');
 var builderRouter = require('./routes/builder');
 var encuestaRouter = require('./routes/encuesta');
+var usuarioRouter = require('./routes/usuarios');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use("/users",loginRouter);
 app.use("/dashboard",dashboardRouter);
 app.use("/builder",builderRouter);
 app.use("/encuesta",encuestaRouter);
+app.use("/organizacion",usuarioRouter);
 
 // Initialize Admin SDK.
 admin.initializeApp({
