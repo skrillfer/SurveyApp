@@ -2,6 +2,7 @@
 
 class EncuestasPage extends React.Component {
   _isMounted = false;
+  _isPicker  = false;
   constructor(props) {
     super(props);
     this.filtrar_respuestas = this.filtrar_respuestas.bind(this);
@@ -20,6 +21,12 @@ class EncuestasPage extends React.Component {
     this.agregarDropDown = this.agregarDropDown.bind(this);
     this.prueba = this.prueba.bind(this);
 
+    //--------------------Segmentar Fecha
+    this.segmentar = this.segmentar.bind(this);
+    this.segmentarTodo = this.segmentarTodo.bind(this);
+
+    //--------------------Set TipoCambio
+    this.setTipoCambio = this.setTipoCambio.bind(this);
 
     this.state = {
       loading: false,
@@ -38,17 +45,28 @@ class EncuestasPage extends React.Component {
       queryHash: {},
       posicion : '',
       HashFilter: {},
-      showGraphic :false,
+      showGraphic :true,
       textSearch : '',
-      gridList : [],
-      gridListHead : [],
+
+      //Manejo de Graficas Add/Remove
+      gridAction : null,
+      gridTipoCambio : 0,
       
       //mapas
       queryMap : {},
       count    : 0,
+  
+      //Dates
+      queryDate : {},
+      referenceData:[],
+      reloadGraph : false,
     };
   }
 
+  setTipoCambio(val)
+  {
+    this.state.gridTipoCambio = val;
+  }
 
   generateHead(head){
     if(this.state.headers.includes(head)){
@@ -68,11 +86,14 @@ class EncuestasPage extends React.Component {
 
     this.setState({ loading: true });
 
-    console.log(this.state.uid);
-    console.log(this.state.uid_org);
+    //console.log(this.state.uid);
+    //console.log(this.state.uid_org);
 
     let ARRAY = [];
     let LMap  = {};
+    let VQ  = {};
+    //let LDate  = {};
+
     let Tcount = 0;
     console.log('comenzamos');
     let current = this;
@@ -84,20 +105,36 @@ class EncuestasPage extends React.Component {
           
           if(control)
           {
+            /*
+              La variable control me permite controlar los update que se dan en la base de datos 
+            */
+            current.state.gridTipoCambio=1;
             ARRAY = [];
             current.state.queryHash = {};
+            console.log("JODE");
             control=false;
              /*- mapa -*/
              LMap = {};
              /*- mapa -*/
+
+             VQ = {};
+
+             /*- Segmentacion -*/
+             current.state.queryDate = {};
+             /*- Segmentacion -*/
           }
           
 
-          let lista = [];
+          let lista = []; // Cada lista es una respuesta
           ARRAY.push(lista);
-          
+  
+          /*- carga de respuestas -*/
           db.ref('proyectos/'+current.state.uid_org+'/respuestas/'+current.state.uid+'/'+childKey+'/body').on('value', 
               bodyxnapshot=>{
+                if(lista.length>0)
+                {
+                  lista=[];
+                }
                 bodyxnapshot.forEach(function(inSnapshot) {
                     if(inSnapshot.exists())
                     {
@@ -110,17 +147,48 @@ class EncuestasPage extends React.Component {
                       }else{
                         current.state.queryHash[childKey1] = [childData1];
                       }
-                    }
 
+                      if(VQ[childKey1])
+                      {
+                        VQ[childKey1].push(childData1);
+                      }else
+                      {
+                        VQ[childKey1] = [childData1];
+                      }
+
+                    }
                 });
+                
               }
           );
+          /*- carga de respuestas -*/
 
-          /*- mapa -*/
-
+          /*- carga Para Segmentar -*/
           let latitude="";
           let longitude="";
           let date="";
+          if (childSnapshot.hasChild("date"))
+          {
+            date  = childSnapshot.child("date").val();
+            var dateVal ="/Date("+date+")/";
+            var mydate = new Date( parseFloat( dateVal.substr(6 )));
+            var convertDate = mydate.toLocaleDateString();
+              
+            if(!isNaN(mydate))
+            {
+              if(current.state.queryDate[convertDate]){
+                current.state.queryDate[convertDate].push({"posicion":ARRAY.length,"key":childKey,"query":$.extend(true,{}, VQ)});
+              }else{
+                current.state.queryDate[convertDate] = [{"posicion":ARRAY.length,"key":childKey,"query":$.extend(true,{}, VQ)}];
+              } 
+            }
+          }
+          VQ = {};
+          /*- carga Para Segmentar -*/
+      
+
+
+          /*- mapa -*/
           if (childSnapshot.hasChild("latitude") && childSnapshot.hasChild("longitude") && childSnapshot.hasChild("date"))
           {
             
@@ -134,9 +202,12 @@ class EncuestasPage extends React.Component {
             }
           }
           /*- mapa -*/
+
           
-         
+          
+          
       });
+
 
       this.F2=db.ref('proyectos/'+this.state.uid_org+'/encuestas/'+this.state.uid).on('value', xsnapshot => {
         var childKey = xsnapshot.key;
@@ -145,10 +216,11 @@ class EncuestasPage extends React.Component {
           this.setState({
             loading:false,
             nombre: childData.nombre,
-            data : ARRAY,
+            data : ARRAY.slice(),
             listafiltrada: ARRAY,
             queryMap : LMap,
             count : Tcount,
+            referenceData : ARRAY,
           },s=>{
                    
                   control=true;
@@ -222,12 +294,18 @@ class EncuestasPage extends React.Component {
 
     });
      
-   
-    
-    
   }
 
 
+  componentWillUpdate()
+  {
+    if(this.state.showComponent==2)
+    {
+      $(document).ready( function () {
+        $('#example11').DataTable().destroy();
+      });
+    }    
+  }
   componentDidUpdate()
   {
 
@@ -235,15 +313,26 @@ class EncuestasPage extends React.Component {
     {
       try{
         $(document).ready( function () {
+
             $('#example11').DataTable();
-         
         });
+
+        if(!this._isPicker)
+        {
+          var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Inicial' });
+          datepicker.appendTo('#datepickerIni');
+          var datepicker = new ej.calendars.DatePicker({ width: "120px", placeholder: 'Fecha Final' });
+          datepicker.appendTo('#datepickerFin');  
+          this._isPicker = true;  
+        }
+        
       }catch(exx){} 
     }else if(this.state.showComponent==1)
     {
-      //this.forceUpdate();
+      this._isPicker=false;
     }
   }
+
 
   componentWillUnmount()
   {
@@ -373,27 +462,23 @@ class EncuestasPage extends React.Component {
   
   
   render() {
-    const { nombre,showGraphic,showComponent,loading,pregunta,gridList,queryHash,gridListHead } = this.state;
+    const { nombre,showGraphic,showComponent,loading,pregunta,gridAction,queryHash,queryDate,gridTipoCambio } = this.state;
     console.log("RENDERIZADO");    
     return (
 
       <div>
         
-        <div id="graphic" className="graphicss">
-            
-            {showGraphic ? 
-               
-               <GridGraphs 
-                   cerrarGrafica = {this.cerrarGrafica} 
-                   cerrarTodo = {this.cerrarTodo} 
-                   gridList = {gridList} 
-                   pregunta = {pregunta} 
-                   respuestas = {queryHash}  
-                   children   = {gridList}
-                   gridListHead = {gridListHead}
-               />
-               : null
-             } 
+        <div id="graphic" className="graphicss">   
+            <GridGraphs 
+              pregunta          = {pregunta} 
+              respuestas        = {queryHash}     
+              cerrarGrafica     = {this.cerrarGrafica} 
+              cerrarTodo        = {this.cerrarTodo} 
+              gridAction        = {gridAction} 
+              queryDate         = {queryDate}
+              gridTipoCambio    = {gridTipoCambio}
+              setTipoCambio     = {this.setTipoCambio}
+            ></GridGraphs>
         </div>
 
       {
@@ -403,15 +488,36 @@ class EncuestasPage extends React.Component {
         
         <div className="card">
              <div className="card-header">
-                {nombre}
-                <div className="card-header-actions">
+                
+                
                   {!loading ?
-                    <div>
-                      <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                    <div className="form-horizontal">
+
+                      <div className="form-group row">
+                          <div className="col-md-4">
+                            {nombre}          
+                          </div>
+                          <div className="col-md-4">
+                                <button href="#" onClick={this.downloadCSV} className="btn btn-block btn-link"><i className="icon-arrow-down-circle btnDescargaCSV"></i>Descargar CSV</button>
+                          </div>
+
+                          <div className="col-md-10"><input type="text" id="datepickerIni"/>
+                          </div>
+                          <div className="col-md-2"><input type="text" id="datepickerFin"/>
+                          </div>
+
+                      </div>
+                      
+                      <div className="form-group row">  
+                        <a className="btn btn-block btn-success" onClick={this.segmentar}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>Segmentar</a>
+                        <a className="btn btn-block btn-success" onClick={this.segmentarTodo}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>MostrarTodo</a>
+                      </div>    
+                      
                     </div> : null
                   }
+                  
+
                 </div>
-             </div>
             <div className="card-body" id="TablaRespuestas">
             <ListaRespuestas headers={this.state.headers} matrix={this.state.listafiltrada}  renderizarColumna ={this.renderizarColumna}/>
             
@@ -436,12 +542,9 @@ class EncuestasPage extends React.Component {
 
   renderizarColumna(row,i)
   {
-
     var tempElement = row.find(function(element) {
       return element.index == i;
     });
-
-    
     if(tempElement)
     {
       
@@ -451,13 +554,74 @@ class EncuestasPage extends React.Component {
     {
       return "";
     }
-
-    
   }
 
   prueba()
   {
     console.log("TERMINE");
+  }
+
+  //*Funcion que Segmenta Fecha Ini/Fin
+  segmentar()
+  {
+      
+      var NUEVO_ARRAY =[];
+      var NUEVA_QUERYHASH = {};
+      var iniDate = new Date(document.getElementById("datepickerIni").value);
+      var finDate = new Date(document.getElementById("datepickerFin").value);
+
+      var comp_date ;
+      if(!isNaN(iniDate) && !isNaN(finDate))
+      {
+        if(iniDate<finDate)
+        {
+            var keys = Object.keys(this.state.queryDate);
+            keys.map(
+              item =>{
+                var numbers = item.match(/\d+/g); 
+                comp_date = new Date(numbers[2], numbers[1]-1, numbers[0]);
+                if(comp_date>=iniDate && comp_date<=finDate)
+                {
+                  var arr_respuesta =this.state.queryDate[item];
+                  arr_respuesta.map(
+                    index =>{
+                        //NUEVA_QUERYHASH[index.key] = this.state.queryHash[index.key];
+                        //console.log(this.state.data[index.posicion-1]);
+                        //console.log(index.query);
+
+                        Object.keys(index.query).map(
+                          it =>
+                          {
+                            if(NUEVA_QUERYHASH[it]){
+                              NUEVA_QUERYHASH[it].push(index.query[it][0]);
+                            }else{
+                              NUEVA_QUERYHASH[it] = [index.query[it][0]];
+                            }
+                          
+                          }
+                        );
+                        NUEVO_ARRAY.push(this.state.data[index.posicion-1]);
+                    }
+                  );
+                }
+              }
+            );
+        }else
+        {
+          alert("Fecha Inicial debe ser Menor a Fecha Final");
+        }
+      }else
+      {
+        document.getElementById("datepickerIni").value = '';
+        document.getElementById("datepickerFin").value = '';
+      }
+    
+      this.setState({listafiltrada:NUEVO_ARRAY,queryHash:NUEVA_QUERYHASH,reloadGraph:!this.state.reloadGraph});
+  }
+
+  segmentarTodo()
+  {
+    this.setState({listafiltrada:this.state.referenceData});
   }
 
   cerrarTodo()
@@ -471,9 +635,10 @@ class EncuestasPage extends React.Component {
     
     if(this._isMounted)
     {
-
+    
       try{
 
+        /*
         let gridList1 = this.state.gridList.filter((_,item) => item !== parseInt(index));
         let gridListHead1 = this.state.gridListHead.filter((_,item) => item !== parseInt(index));
         if(gridList1.length==0)
@@ -494,7 +659,7 @@ class EncuestasPage extends React.Component {
           }
           
         });
-        
+        */
       }catch(exx){
         console.log(exx);
       }  
@@ -516,41 +681,34 @@ class EncuestasPage extends React.Component {
   {
     if (this._isMounted && document.getElementById("validationSelectedColum").value!='') {
 
-      try{
+      /*try{
         var FILTER = document.getElementById("example11_filter");
         var inputNodes = FILTER.getElementsByTagName('INPUT');
         this.setState({textSearch:inputNodes[0].value});
-        /* 
-        OPCIONES:
-        1. Enviar el textSearch y enviar la funcion filtrar para obtener una data filtrada
-        2. refactorizar codigo y entonces tendria que tener una palabra search para que cada
-        grafica sea generada de acuerdo a su search
-        */
-
-      }catch(exx){}
+      }catch(exx){}*/
       
       var mypregunta = document.getElementById("validationSelectedColum").value;
       var siCheck =false;
       if(document.getElementById("checkHistogram").checked)
       {
         siCheck =true;
-        this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
-                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+        this.setState({gridAction:{tipo:0,pregunta:mypregunta}},()=>{this.state.gridAction=null;});
+        /*this.setState({gridList:this.state.gridList.concat(0),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }
       if(document.getElementById("checkPie").checked)
       {
         siCheck =true;
-        this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
-                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});
+        this.setState({gridAction:{tipo:1,pregunta:mypregunta}},()=>{this.state.gridAction=null;});
+        /*this.setState({gridList:this.state.gridList.concat(1),pregunta:mypregunta
+                      ,gridListHead:this.state.gridListHead.concat(mypregunta)});*/
       }
       
       if(siCheck)
       {        
-        this.setState({showGraphic:false});
-        console.log(this.state.gridList);
-        console.log(this.state.gridListHead);
+        //this.setState({showGraphic:false});
         $('#exampleModal').modal('hide');
-        this.setState({showGraphic:true});
+        //this.setState({showGraphic:true});
       }else
       {
         alert('Tienes que elegir al menos un tipo de grafica');
@@ -559,13 +717,8 @@ class EncuestasPage extends React.Component {
     }else
     {
       alert('Debes seleccionar al menos una Columna');
-
     }
-    
   }
-
-
-
 }
 
 const ListaRespuestas = ({ headers,matrix ,renderizarColumna }) => (

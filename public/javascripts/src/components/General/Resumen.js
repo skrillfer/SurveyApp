@@ -3,7 +3,7 @@ var Resumen = React.createClass({
         return {    
                     queryMap: this.props.queryMap, 
                     count   : this.props.count,
-                    lastdate : '', 
+                    lastdate : this.getLastDate(this.props.queryMap), 
                 };
 
                 
@@ -11,11 +11,10 @@ var Resumen = React.createClass({
     componentWillReceiveProps:function(props) {
         if(Object.keys(props.queryMap).length!=Object.keys(this.state.queryMap).length)
         {
-            console.log('diferente!!');
             this.setState({ 
                 queryMap: props.queryMap,
                 count:props.count,
-                lastdate: this.getLastDate(props.queryMap) 
+                lastdate: this.getLastDate(props.queryMap), 
             });
         }
     }, 
