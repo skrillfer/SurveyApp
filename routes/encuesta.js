@@ -44,4 +44,21 @@ router.post('/:id', function(req, res, next) {
     }
 });
 
+router.get('/usuarios/:id',function(req,res,next){
+    var base64Id = req.params.id;
+    var token = Buffer.from(base64Id,'base64').toString('ascii');
+    var arrData = token.split('|');
+    console.log(arrData);
+    if(arrData['1']=='encuestas'){
+        var database = firebase.database().ref('proyectos/'+arrData[0]+'/'+arrData[1]+'/'+arrData[2]).once('value').then(function(snapshot){
+            var jsonEncuesta = snapshot.val().encuesta;
+            var tituloEncuesta = snapshot.val().nombre;
+            
+            res.render('encuesta/usuarios', { title: 'Encuesta pública',encuesta:jsonEncuesta,titulo:tituloEncuesta,idencuesta:base64Id});
+        });
+    }else{
+        res.redirect('/');
+    }
+});
+
 module.exports = router;

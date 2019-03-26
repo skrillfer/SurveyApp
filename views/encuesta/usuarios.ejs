@@ -1,0 +1,45 @@
+<% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
+<%- include ../common/headerDashboard.ejs %>
+<% }else{%>
+<%- include ../common/header.ejs %>
+<% } %>
+
+<main class="main">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-menu d-md-down-none">
+                <div class="btn-group" role="group" aria-label="Button group">
+                    <div align="right">
+                        <a class="btn btn-block btn-success" href="/builder/"><i class="icon-plus icons" style="margin-right:5px"></i>Agregar usuario</a>
+                    </div>
+                </div>
+            </li>
+        </ol>
+    <div class="container-fluid">
+        <div id="ui-view">
+        <div class="card">
+            <div class="card-header">
+                Usuarios
+            </div>
+            <div class="card-body">
+                <table id="tablaUsuarios">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="#" title="Eliminar" style="margin-right:10px"><i class="icons icon-close"></i></a>Ricardo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
+</div>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+<script type="text/javascript" src="/javascripts/encuesta.usuarios.js"></script>
+
+<%- include ../common/footerDashboard.ejs %>

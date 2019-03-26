@@ -80,8 +80,10 @@ class OrgsPage extends React.Component {
   }
 
   openShareModal(e){
-    e.preventDefault();
-    window.showInModal(e.target.href);
+    if(e.target.className.indexOf('linkShareEncuesta')){
+      e.preventDefault();
+      window.showInModal(e.target.href);
+    }
   }
  
   render() {
@@ -138,6 +140,8 @@ const OrgSList = ({ orgs,clickFunc }) => (
                               <i className="icon-settings"></i>
                             </a>
                             <div className="dropdown-menu popup1" aria-labelledby={'dropdownMenuButton'+item.uid} x-placement="bottom-start">
+                            <a className="dropdown-item linkUsuarios" href={'/encuesta/usuarios/'+btoa(item.idorg+'|encuestas|'+item.uid)}>Usuarios</a>
+                              <a className="dropdown-item linkEditEncuesta" href={'/builder/edit/'+btoa(item.idorg+'|encuestas|'+item.uid)}>Editar</a>
                               <a onClick={clickFunc} className="dropdown-item linkShareEncuesta" href={'http://survy.webymovil.com/encuesta/'+btoa(item.idorg+'|encuestas|'+item.uid)}>Compartir</a>
                             </div>
                           </div>
