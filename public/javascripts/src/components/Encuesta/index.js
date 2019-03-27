@@ -573,7 +573,7 @@ class EncuestasPage extends React.Component {
       var comp_date ;
       if(!isNaN(iniDate) && !isNaN(finDate))
       {
-        if(iniDate<finDate)
+        if(iniDate<=finDate)
         {
             var keys = Object.keys(this.state.queryDate);
             keys.map(
