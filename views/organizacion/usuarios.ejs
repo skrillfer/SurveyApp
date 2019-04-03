@@ -1,1 +1,94 @@
-<h1>Usuarios</h1>
+<% if((typeof(localsSessionCookie)!='undefined')&&(localsSessionCookie != "")){ %>
+<%- include ../common/headerDashboard.ejs %>
+<% }else{%>
+<%- include ../common/header.ejs %>
+<% } %>
+    <main class="main">
+            <ol class="breadcrumb">
+                    <li class="breadcrumb-menu d-md-down-none">
+                      <div class="btn-group" role="group" aria-label="Button group">
+                          <div align="right">
+                            
+                          </div>
+                      </div>
+                    </li>
+                  </ol>
+        <div class="container-fluid">
+            <div id="ui-fluid">
+                <% if(typeof usuarioNuevo!= 'undefined') {%>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Agregar Usuario
+                            </div>
+                            <div class="card-body" align="center">
+                                <form method="post" action="/organizacion">
+                                    <p align="center">¿Desea agregar al usuario a la organización?</p>
+                                    <div>
+                                        <p>
+                                        <label>Email:</label><%= usuarioNuevo.email %><br/>
+                                        <label>Nombre:</label><%= usuarioNuevo.displayName %><br/>
+                                        <input type="hidden" name="uidNuevoUsuario" value="<%= usuarioNuevo.uid %>"/>
+                                        <input type="hidden" name="nameNuevoUsuario" value="<%= usuarioNuevo.displayName %>"/>
+                                        <input type="hidden" name="nomOrg" value="<%= usuarioNuevo.nomOrganizacion %>"/>
+                                        <input type="submit" value="Si" name="nomAgregar"/>
+                                        <input type="submit" value="No" name="nomAgregar"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <% for(var u in usuarios){ 
+                    var arrUsuarios = usuarios[u];
+                    %>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="col-xs-12 col-md-8">Organizacion: <%= u %></div>
+                                <div class="col-xs-12 col-md-4">
+                                        <form method="post" action="/organizacion">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="(email)" name="emailUsuario">
+                                                <input type="hidden" value="<%= u %>" name="nomOrganizacion">
+                                                <span class="input-group-btn">
+                                                    <input type="submit" class="btn btn-primary" value="Agregar usuario"/>
+                                                </span>
+                                            </div><!-- /input-group -->
+                                        </form>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Email</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% arrUsuarios.forEach(function(usuario){ %>
+                                        <tr>
+                                            <td><%= usuario.displayName %></td>
+                                            <td><%= usuario.email %></td>
+                                            <% if(usuario.issame==false){ %>
+                                            <td><a href="/organizacion/ban/<%= usuario.uid %>" title="Desactivar"><i class="icon-user-unfollow icons"></i></a></td>
+                                            <% } %>
+                                        </tr>
+                                        <% })%>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+</div>
+<%- include ../common/footerDashboard.ejs %>
