@@ -577,7 +577,7 @@ class EncuestasPage extends React.Component {
     {
       if(tempElement.esimagen)
       {
-        return <button name={tempElement.respuesta} onClick={this.cargarImagenStorage}>ver</button>;
+        return <button className="btn btn-pill btn-block btn-link" name={tempElement.respuesta} onClick={this.cargarImagenStorage}>ver imagen</button>;
       }else
       {
         return tempElement.respuesta;
