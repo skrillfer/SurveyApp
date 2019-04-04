@@ -8,6 +8,8 @@ const config = {
 };
 firebase.initializeApp(config);
 
+const storage = firebase.storage().ref();
+
 this.db = firebase.database();
 this.auth = firebase.auth();
 

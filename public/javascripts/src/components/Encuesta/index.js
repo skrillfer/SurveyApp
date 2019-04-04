@@ -25,6 +25,9 @@ class EncuestasPage extends React.Component {
     this.segmentar = this.segmentar.bind(this);
     this.segmentarTodo = this.segmentarTodo.bind(this);
 
+    //--------------------Mostrar Imagen de Storage
+    this.cargarImagenStorage = this.cargarImagenStorage.bind(this);
+
     //--------------------Set TipoCambio
     this.setTipoCambio = this.setTipoCambio.bind(this);
 
@@ -138,24 +141,49 @@ class EncuestasPage extends React.Component {
                 bodyxnapshot.forEach(function(inSnapshot) {
                     if(inSnapshot.exists())
                     {
-        
-                      var childKey1 = inSnapshot.key;
-                      var childData1 = inSnapshot.val();
-                      lista.push({'index':current.generateHead(childKey1),'respuesta':childData1});
-                      if(current.state.queryHash[childKey1]){
-                        current.state.queryHash[childKey1].push(childData1);
-                      }else{
-                        current.state.queryHash[childKey1] = [childData1];
-                      }
+                      //console.log(inSnapshot.key);
 
-                      if(VQ[childKey1])
+                      //console.log();
+                      var childKey1;
+                      var childData1;
+                      if(!inSnapshot.hasChild("0"))
                       {
-                        VQ[childKey1].push(childData1);
+                        childKey1 = inSnapshot.key;
+                        childData1 = inSnapshot.val();
+                        lista.push({'index':current.generateHead(childKey1),'respuesta':childData1,'esimagen':false});
+                        if(current.state.queryHash[childKey1]){
+                          current.state.queryHash[childKey1].push(childData1);
+                        }else{
+                          current.state.queryHash[childKey1] = [childData1];
+                        }
+
+                        if(VQ[childKey1])
+                        {
+                          VQ[childKey1].push(childData1);
+                        }else
+                        {
+                          VQ[childKey1] = [childData1];
+                        }
                       }else
                       {
-                        VQ[childKey1] = [childData1];
-                      }
+                        childKey1  = "$$_Imagen";
+                        childData1 = inSnapshot.child("0").val().name;
 
+                        lista.push({'index':current.generateHead(childKey1),'respuesta':childData1,'esimagen':true});
+                        if(current.state.queryHash[childKey1]){
+                          current.state.queryHash[childKey1].push(childData1);
+                        }else{
+                          current.state.queryHash[childKey1] = [childData1];
+                        }
+
+                        if(VQ[childKey1])
+                        {
+                          VQ[childKey1].push(childData1);
+                        }else
+                        {
+                          VQ[childKey1] = [childData1];
+                        }
+                      }
                     }
                 });
                 
@@ -547,8 +575,14 @@ class EncuestasPage extends React.Component {
     });
     if(tempElement)
     {
+      if(tempElement.esimagen)
+      {
+        return <button name={tempElement.respuesta} onClick={this.cargarImagenStorage}>ver</button>;
+      }else
+      {
+        return tempElement.respuesta;
+      }
       
-      return tempElement.respuesta;
     }
     else
     {
@@ -556,6 +590,17 @@ class EncuestasPage extends React.Component {
     }
   }
 
+  cargarImagenStorage(event)
+  {
+    var urlImagen = event.target.name;
+    urlImagen = String(urlImagen).trim();
+    storage.child('SurveyImages/'+urlImagen).getDownloadURL().then((url) => {
+      document.getElementById("srcBodyIMG").src = url;
+      $('#zoomModalIMG').modal('show');
+    }).catch((error) => {
+      alert("Imagen no encontrada");
+    });    
+  }
   prueba()
   {
     console.log("TERMINE");
