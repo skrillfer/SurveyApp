@@ -651,6 +651,7 @@ class EncuestasPage extends React.Component {
                 }
               }
             );
+            this.setState({listafiltrada:NUEVO_ARRAY,queryHash:NUEVA_QUERYHASH,reloadGraph:!this.state.reloadGraph});
         }else
         {
           alert("Fecha Inicial debe ser Menor a Fecha Final");
@@ -661,7 +662,7 @@ class EncuestasPage extends React.Component {
         document.getElementById("datepickerFin").value = '';
       }
     
-      this.setState({listafiltrada:NUEVO_ARRAY,queryHash:NUEVA_QUERYHASH,reloadGraph:!this.state.reloadGraph});
+      
   }
 
   segmentarTodo()
