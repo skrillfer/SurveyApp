@@ -536,10 +536,13 @@ class EncuestasPage extends React.Component {
 
                       </div>
                       
-                      <div className="form-group row">  
-                        <a className="btn btn-block btn-success" onClick={this.segmentar}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>Segmentar</a>
-                        <a className="btn btn-block btn-success" onClick={this.segmentarTodo}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>MostrarTodo</a>
-                      </div>    
+                      
+                        <div className="row align-items-center">
+                          <div className="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button className="btn btn-ghost-success" onClick={this.segmentar}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>Segmentar</button>
+                            <button className="btn btn-ghost-success" onClick={this.segmentarTodo}><i className="icon-shuffle icons" style={{margin_right:"5px"}} onClick={this.segmentar}> </i>MostrarTodo</button>
+                          </div>
+                        </div>
                       
                     </div> : null
                   }
