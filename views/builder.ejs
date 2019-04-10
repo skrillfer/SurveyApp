@@ -31,7 +31,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="tituloEncuesta">Título de encuesta</label>
-                                <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)" value="<%= titulo %>">
+                                <input class="form-control" id="nomEncuesta" name="nomEncuesta" placeholder="(título de encuesta)" value="<%= (typeof(titulo)!='undefined') ? titulo : '' %>">
                             </div>
                             <div class="form-group">
                                 <label for="organizacionEncuesta">Organización</label>
